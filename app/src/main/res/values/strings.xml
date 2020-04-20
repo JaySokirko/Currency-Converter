@@ -1,0 +1,118 @@
+<resources>
+    <string name="app_name">Currency Converter</string>
+
+    <string name="inter_bank_title">Межбанк Украины</string>
+    <string name="inter_bank_subtitle">Валютный межбанковский рынок.
+        К нему подключены все банки, имеющие лицензию НБУ на осуществление валютных операций.
+    </string>
+
+    <string name="nbu_title">Национальный банк Украины</string>
+    <string name="nbu_subtitle">Независимая государственная организация, призванная обеспечивать
+        ценовую и финансовую стабильность в государстве и способствовать экономическому росту Украины.
+    </string>
+
+    <string name="banks_title">Коммерческие банки Украины</string>
+    <string name="banks_subtitle">Курс валют в коммерческих банках Украины.
+    </string>
+
+    <string name="bid">Покупка</string>
+    <string name="ask">Продажа</string>
+
+    //Currencies name
+    <string name="uae_dirhams">дирхамы ОАЭ</string>
+    <string name="armenian_dramas">армянские драмы</string>
+    <string name="australian_dollars">австралийские доллары</string>
+    <string name="azerbaijani_manats">азербайджанские манаты</string>
+    <string name="bulgarian_lev">болгарские левы</string>
+    <string name="brazilian_reals">бразильские реалы</string>
+    <string name="belorussian_rubles">беларуские рубли</string>
+    <string name="canadian_dollars">канадские доллары</string>
+    <string name="swiss_francs">швейцарские франки</string>
+    <string name="chilean_pesos">чилийские песо</string>
+    <string name="yuan">юани</string>
+    <string name="czech_crowns">чешские кроны</string>
+    <string name="danish_kroner">датские кроны</string>
+    <string name="algerian_dinars">алжирские динары</string>
+    <string name="egyptian_pounds">египетские фунты</string>
+    <string name="euro">евро</string>
+    <string name="pounds">фунты стерлингов</string>
+    <string name="georgian_lari">грузинские лари</string>
+    <string name="hong_kong_dollars">гонконгские доллары</string>
+    <string name="croatian_coons">хорватские куны</string>
+    <string name="hungarian_forints">венгерские форинты</string>
+    <string name="israeli_shekels">израильские шекели</string>
+    <string name="indian_rupees">индийские рупии</string>
+    <string name="iraqi_dinars">иракские динары</string>
+    <string name="japanese_yen">японские иены</string>
+    <string name="kgs_of_kyrgyzstan">сомы Кыргызстана</string>
+    <string name="south_korean_won">воны Южной Кореи</string>
+    <string name="kuwaiti_dinars">кувейтские динары</string>
+    <string name="kazakh_tenge">казахские тенге</string>
+    <string name="lebanese_pounds">ливанские фунты</string>
+    <string name="moldovan_lei">молдавские леи</string>
+    <string name="mexican_new_pesos">мексиканские новые песо</string>
+    <string name="norwegian_kroner">норвежские кроны</string>
+    <string name="new_zealand_dollars">новозеландские доллары</string>
+    <string name="pakistani_rupees">пакистанские рупии</string>
+    <string name="polish_zloty">польские злотые</string>
+    <string name="new_romanian_leu">новые румынские леи</string>
+    <string name="rub">российские рубли</string>
+    <string name="rials_of_saudi_arabia">риалы Саудовской Аравии</string>
+    <string name="swedish_kroner">шведские кроны</string>
+    <string name="singapore_dollars">сингапурские доллары</string>
+    <string name="thai_baht">таиландские баты</string>
+    <string name="tajik_somons">таджикские сомоны</string>
+    <string name="turkish_lira">турецкие лиры</string>
+    <string name="taiwan_dollars">тайваньские доллары</string>
+    <string name="usd">доллары США</string>
+    <string name="vietnamese_dongs">вьетнамские донги</string>
+
+    //Currencies abr
+    <string name="AED">AED</string>
+    <string name="AMD">AMD</string>
+    <string name="AUD">AUD</string>
+    <string name="AZN">AZN</string>
+    <string name="BGN">BGN</string>
+    <string name="BRL">BRL</string>
+    <string name="BYN">BYN</string>
+    <string name="CAD">CAD</string>
+    <string name="CHF">CHF</string>
+    <string name="CLP">CLP</string>
+    <string name="CNY">CNY</string>
+    <string name="CZK">CZK</string>
+    <string name="DKK">DKK</string>
+    <string name="DZD">DZD</string>
+    <string name="EGP">EGP</string>
+    <string name="EUR">EUR</string>
+    <string name="GBP">GBP</string>
+    <string name="GEL">GEL</string>
+    <string name="HKD">HKD</string>
+    <string name="HRK">HRK</string>
+    <string name="HUF">HUF</string>
+    <string name="ILS">ILS</string>
+    <string name="INR">INR</string>
+    <string name="IQD">IQD</string>
+    <string name="JPY">JPY</string>
+    <string name="KGS">KGS</string>
+    <string name="KRW">KRW</string>
+    <string name="KWD">KWD</string>
+    <string name="KZT">KZT</string>
+    <string name="LBP">LBP</string>
+    <string name="MDL">MDL</string>
+    <string name="MXN">MXN</string>
+    <string name="NOK">NOK</string>
+    <string name="NZD">NZD</string>
+    <string name="PKR">PKR</string>
+    <string name="PLN">PLN</string>
+    <string name="RON">RON</string>
+    <string name="RUB">RUB</string>
+    <string name="SAR">SAR</string>
+    <string name="SEK">SEK</string>
+    <string name="SGD">SGD</string>
+    <string name="THB">THB</string>
+    <string name="TJS">TJS</string>
+    <string name="TRY">TRY</string>
+    <string name="TWD">TWD</string>
+    <string name="USD">USD</string>
+    <string name="VND">VND</string>
+</resources>
