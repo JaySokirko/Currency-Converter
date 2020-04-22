@@ -2,11 +2,13 @@ package com.jay.currencyconverter.model.currencyExchange.currency
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.os.Parcel
+import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.jay.currencyconverter.R
 
-class ILS : Currency() {
+class ILS() : Currency() {
     @SerializedName("ask")
     @Expose
     override var ask: String? = null
@@ -14,6 +16,11 @@ class ILS : Currency() {
     @SerializedName("bid")
     @Expose
     override var bid: String? = null
+
+    constructor(parcel: Parcel) : this() {
+        ask = parcel.readString()
+        bid = parcel.readString()
+    }
 
     override fun getName(context: Context): String? {
         return context.resources.getString(R.string.israeli_shekels)
@@ -25,5 +32,24 @@ class ILS : Currency() {
 
     override fun getAbr(context: Context): String? {
         return context.resources.getString(R.string.ILS)
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(ask)
+        parcel.writeString(bid)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<ILS> {
+        override fun createFromParcel(parcel: Parcel): ILS {
+            return ILS(parcel)
+        }
+
+        override fun newArray(size: Int): Array<ILS?> {
+            return arrayOfNulls(size)
+        }
     }
 }

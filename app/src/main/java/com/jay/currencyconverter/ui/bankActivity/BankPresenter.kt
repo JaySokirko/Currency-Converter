@@ -32,6 +32,5 @@ class BankPresenter(private val view: IBankView) : IPresenter, IExchangeRatePres
     override fun onDestroy() {
         disposable.dispose()
         disposable.clear()
-        view.onDestroy()
     }
 }

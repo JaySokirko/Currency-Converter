@@ -1,13 +1,18 @@
 package com.jay.currencyconverter.ui.bankActivity
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.currencyExchange.Organization
+import com.jay.currencyconverter.ui.CalculatorActivity
 import com.jay.currencyconverter.ui.adapter.BankExchangeAdapter
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_banks.*
 
 class BankActivity : AppCompatActivity(), IBankView {
@@ -23,6 +28,8 @@ class BankActivity : AppCompatActivity(), IBankView {
 
         banksPresenter = BankPresenter(view = this)
         banksPresenter.getExchangeRate()
+
+        onRecyclerItemClickHandler()
     }
 
     override fun onDestroy() {
@@ -51,5 +58,13 @@ class BankActivity : AppCompatActivity(), IBankView {
         banks_exchange_rate_list.setHasFixedSize(true)
         banks_exchange_rate_list.layoutManager = LinearLayoutManager(this)
         banks_exchange_rate_list.adapter = banksExchangeAdapter
+    }
+
+    private fun onRecyclerItemClickHandler() {
+        banksExchangeAdapter.clickEvent.observe(this, Observer { organizations ->
+            startActivity(Intent(this, CalculatorActivity::class.java)
+                    .putExtra("organization", organizations)
+                    .putExtra("currencies", organizations.currencies))
+        })
     }
 }

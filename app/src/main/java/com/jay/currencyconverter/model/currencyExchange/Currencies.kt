@@ -1,12 +1,14 @@
 package com.jay.currencyconverter.model.currencyExchange
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.jay.currencyconverter.model.currencyExchange.currency.*
 import com.jay.currencyconverter.model.currencyExchange.currency.Currency
 import java.util.*
 
-class Currencies {
+class Currencies() : Parcelable {
 
     @SerializedName("EUR")
     @Expose
@@ -248,4 +250,30 @@ class Currencies {
             currenciesList.add(tJS)
             return currenciesList
         }
+
+    constructor(parcel: Parcel) : this() {
+        eUR = parcel.readParcelable(EUR::class.java.classLoader)
+        aED = parcel.readParcelable(AED::class.java.classLoader)
+        aMD = parcel.readParcelable(AMD::class.java.classLoader)
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeParcelable(eUR, flags)
+        parcel.writeParcelable(aED, flags)
+        parcel.writeParcelable(aMD, flags)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Currencies> {
+        override fun createFromParcel(parcel: Parcel): Currencies {
+            return Currencies(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Currencies?> {
+            return arrayOfNulls(size)
+        }
+    }
 }

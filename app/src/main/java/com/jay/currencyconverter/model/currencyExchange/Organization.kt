@@ -1,9 +1,14 @@
 package com.jay.currencyconverter.model.currencyExchange
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
+import java.io.Serializable
 
-class Organization {
+
+class Organization() : Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -49,4 +54,43 @@ class Organization {
     @Expose
     var currencies: Currencies? = null
 
+    constructor(parcel: Parcel) : this() {
+        id = parcel.readString()
+        oldId = parcel.readInt()
+        orgType = parcel.readInt()
+        isBranch = parcel.readByte() != 0.toByte()
+        title = parcel.readString()
+        regionId = parcel.readString()
+        cityId = parcel.readString()
+        phone = parcel.readString()
+        address = parcel.readString()
+        link = parcel.readString()
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(id)
+        parcel.writeInt(oldId)
+        parcel.writeInt(orgType)
+        parcel.writeByte(if (isBranch) 1 else 0)
+        parcel.writeString(title)
+        parcel.writeString(regionId)
+        parcel.writeString(cityId)
+        parcel.writeString(phone)
+        parcel.writeString(address)
+        parcel.writeString(link)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Organization> {
+        override fun createFromParcel(parcel: Parcel): Organization {
+            return Organization(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Organization?> {
+            return arrayOfNulls(size)
+        }
+    }
 }
