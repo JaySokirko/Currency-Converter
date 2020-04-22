@@ -1,8 +1,9 @@
-package com.jay.currencyconverter.ui
+package com.jay.currencyconverter.ui.nbuActivity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.jay.currencyconverter.R
+import com.jay.currencyconverter.model.currencyExchange.Banks
 
 class NbuActivity : AppCompatActivity() {
 
@@ -10,4 +11,6 @@ class NbuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nbu)
     }
+
+
 }

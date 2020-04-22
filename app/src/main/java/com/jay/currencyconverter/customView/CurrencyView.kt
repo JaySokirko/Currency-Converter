@@ -1,4 +1,4 @@
-package com.jay.currencyconverter.ui.view
+package com.jay.currencyconverter.customView
 
 import android.content.Context
 import android.graphics.drawable.Drawable
