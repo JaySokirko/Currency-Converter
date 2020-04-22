@@ -14,13 +14,13 @@ interface CurrencyExchangeRateApi {
 
     companion object Factory{
 
-        private const val BASE_URL = "https://resources.finance.ua"
+        const val BANKS_EXCHANGE_URL = "https://resources.finance.ua"
 
-        fun create(): CurrencyExchangeRateApi {
+        fun create(url: String): CurrencyExchangeRateApi {
             return Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(BASE_URL)
+                .baseUrl(url)
                 .build()
                 .create(CurrencyExchangeRateApi::class.java);
         }
