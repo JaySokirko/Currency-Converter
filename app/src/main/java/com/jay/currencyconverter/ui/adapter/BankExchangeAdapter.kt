@@ -9,8 +9,9 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.currencyExchange.Organization
+import com.jay.currencyconverter.model.currencyExchange.currency.Currency
 import com.jay.currencyconverter.ui.adapter.BankExchangeAdapter.BankViewHolder
-import com.jay.currencyconverter.ui.view.CurrencyView
+import com.jay.currencyconverter.customView.CurrencyView
 import java.util.*
 
 class BankExchangeAdapter(private val context: Context) : RecyclerView.Adapter<BankViewHolder>() {
@@ -59,7 +60,7 @@ class BankExchangeAdapter(private val context: Context) : RecyclerView.Adapter<B
             clearViews()
             bankTitle.text = organization.title
 
-            for (currency in organization.currencies!!.allAvailableCurrencies) {
+            for (currency: Currency? in organization.currencies!!.allAvailableCurrencies) {
 
                 if (currency != null) {
                     val currencyView = CurrencyView(context)
