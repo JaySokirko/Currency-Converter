@@ -6,7 +6,7 @@ import android.os.Bundle
 import com.jay.currencyconverter.R
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class ChoiceServiceActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,7 +18,6 @@ class MainActivity : AppCompatActivity() {
 
         nbu_card_view.setOnClickListener {
             startActivity(Intent(this, NbuActivity::class.java))
-
         }
 
         banks_card_view.setOnClickListener {

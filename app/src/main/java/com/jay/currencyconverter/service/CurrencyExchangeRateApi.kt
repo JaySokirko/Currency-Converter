@@ -14,7 +14,7 @@ interface CurrencyExchangeRateApi {
 
     companion object Factory{
 
-        private const val BASE_URL = "http://resources.finance.ua"
+        private const val BASE_URL = "https://resources.finance.ua"
 
         fun create(): CurrencyExchangeRateApi {
             return Retrofit.Builder()
