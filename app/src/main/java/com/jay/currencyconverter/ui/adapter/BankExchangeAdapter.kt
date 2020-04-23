@@ -21,7 +21,7 @@ class BankExchangeAdapter(private val context: Context) : RecyclerView.Adapter<V
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.recycler_bank_list, parent, false)
+            .inflate(R.layout.list_bank, parent, false)
 
         return ViewHolder(view)
     }
@@ -44,11 +44,6 @@ class BankExchangeAdapter(private val context: Context) : RecyclerView.Adapter<V
 
     fun setItems(organizations: Collection<Organization>?) {
         organizationList.addAll(organizations!!)
-        notifyDataSetChanged()
-    }
-
-    fun clearItems() {
-        organizationList.clear()
         notifyDataSetChanged()
     }
 

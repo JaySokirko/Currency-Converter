@@ -12,6 +12,7 @@ import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.currencyExchange.Organization
 import com.jay.currencyconverter.ui.CalculatorActivity
 import com.jay.currencyconverter.ui.adapter.BankExchangeAdapter
+import com.jay.currencyconverter.util.Constant
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_banks.*
 
@@ -62,9 +63,10 @@ class BankActivity : AppCompatActivity(), IBankView {
 
     private fun onRecyclerItemClickHandler() {
         banksExchangeAdapter.clickEvent.observe(this, Observer { organizations ->
+            val organizationTitle: String = organizations.title!!
             startActivity(Intent(this, CalculatorActivity::class.java)
-                    .putExtra("organization", organizations)
-                    .putExtra("currencies", organizations.currencies))
+                    .putExtra(Constant.ORGANIZATION_NAME, organizationTitle)
+                    .putExtra(Constant.CURRENCIES, organizations.currencies))
         })
     }
 }

@@ -19,6 +19,7 @@
     <string name="ask">Продажа</string>
 
     //Currencies name
+    <string name="uah">Гривня</string>
     <string name="uae_dirhams">дирхамы ОАЭ</string>
     <string name="armenian_dramas">армянские драмы</string>
     <string name="australian_dollars">австралийские доллары</string>
@@ -68,6 +69,7 @@
     <string name="vietnamese_dongs">вьетнамские донги</string>
 
     //Currencies abr
+    <string name="UAH">UAH</string>
     <string name="AED">AED</string>
     <string name="AMD">AMD</string>
     <string name="AUD">AUD</string>
