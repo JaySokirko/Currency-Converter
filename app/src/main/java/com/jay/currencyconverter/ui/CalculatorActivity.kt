@@ -1,39 +1,35 @@
 package com.jay.currencyconverter.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.databinding.ActivityCalculatorBinding
-import com.jay.currencyconverter.databinding.ActivityCalculatorBindingImpl
-import com.jay.currencyconverter.model.Subject
 import com.jay.currencyconverter.model.currencyExchange.Currencies
 import com.jay.currencyconverter.model.currencyExchange.currency.Currency
 import com.jay.currencyconverter.model.currencyExchange.currency.UAH
 import com.jay.currencyconverter.ui.adapter.CurrencyChoiceAdapter
 import com.jay.currencyconverter.util.Constant
 import com.jay.currencyconverter.viewModel.CalculatorModel
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_calculator.*
 
 
 class CalculatorActivity : AppCompatActivity() {
 
     private val currenciesList: MutableList<Currency?> = mutableListOf()
-    private val fromCurrencyAdapter: CurrencyChoiceAdapter = CurrencyChoiceAdapter(context = this)
-    private val toCurrencyAdapter: CurrencyChoiceAdapter = CurrencyChoiceAdapter(context = this)
-    private val disposable: CompositeDisposable = CompositeDisposable()
+    private val baseCurrencyAdapter: CurrencyChoiceAdapter = CurrencyChoiceAdapter(this)
+    private val conversionCurrencyAdapter: CurrencyChoiceAdapter = CurrencyChoiceAdapter(this)
     private var currencies: Currencies? = null
     private var organizationTitle: String? = null
-    private lateinit var binding: ActivityCalculatorBinding
+    private val calculatorModel: CalculatorModel = CalculatorModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_calculator)
-        binding.calculator = CalculatorModel()
+        val binding: ActivityCalculatorBinding =
+            DataBindingUtil.setContentView(this, R.layout.activity_calculator)
+        binding.calculator = calculatorModel
 
         organizationTitle = intent.getStringExtra(Constant.ORGANIZATION_NAME)
         currencies = intent.getParcelableExtra(Constant.CURRENCIES)
@@ -42,39 +38,38 @@ class CalculatorActivity : AppCompatActivity() {
 
         setupRecyclerViews()
 
-        fromCurrencyAdapter.setItems(currenciesList)
-        toCurrencyAdapter.setItems(currenciesList)
+        baseCurrencyAdapter.setItems(currenciesList)
+        conversionCurrencyAdapter.setItems(currenciesList)
 
         onAdapterItemClick()
     }
 
     override fun onDestroy() {
-        disposable.dispose()
-        disposable.clear()
+        calculatorModel.onDestroy()
         super.onDestroy()
     }
 
     private fun setupRecyclerViews() {
-        from_currencies_list.setHasFixedSize(true)
-        from_currencies_list.layoutManager =
+//        base_currencies_list.setHasFixedSize(true)
+        base_currencies_list.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        from_currencies_list.adapter = fromCurrencyAdapter
+        base_currencies_list.adapter = baseCurrencyAdapter
 
-        to_currencies_list.setHasFixedSize(true)
-        to_currencies_list.layoutManager =
+//        conversion_currencies_list.setHasFixedSize(true)
+        conversion_currencies_list.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        to_currencies_list.adapter = toCurrencyAdapter
+        conversion_currencies_list.adapter = conversionCurrencyAdapter
     }
 
     private fun onAdapterItemClick() {
-        disposable.addAll(
-            fromCurrencyAdapter.clickEvent.subscribe { subject: Subject ->
-                toCurrencyAdapter.hideItemAtPosition(subject.integerValue!!)
-                binding.calculator!!.currencyFrom.set(subject.currency)
+        calculatorModel.disposable.addAll(
+            baseCurrencyAdapter.clickEvent.subscribe { helper: CurrencyChoiceAdapter.Helper ->
+                conversionCurrencyAdapter.displayItemAtPositionByState(helper.selectedPosition!!, helper.state!!)
+                calculatorModel.baseCurrencyObserver.onNext(helper.selectedCurrency!!)
             },
-            toCurrencyAdapter.clickEvent.subscribe { subject: Subject ->
-                fromCurrencyAdapter.hideItemAtPosition(subject.integerValue!!)
-                binding.calculator!!.currencyTo.set(subject.currency)
+            conversionCurrencyAdapter.clickEvent.subscribe { helper: CurrencyChoiceAdapter.Helper ->
+                baseCurrencyAdapter.displayItemAtPositionByState(helper.selectedPosition!!, helper.state!!)
+                calculatorModel.conversionCurrencyObserver.onNext(helper.selectedCurrency!!)
             }
         )
     }

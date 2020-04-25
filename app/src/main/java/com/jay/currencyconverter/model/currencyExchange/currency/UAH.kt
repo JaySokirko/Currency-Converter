@@ -8,8 +8,8 @@ import com.jay.currencyconverter.R
 
 class UAH() : Currency() {
 
-    override var ask: String? = null
-    override var bid: String? = null
+    override var ask: String? = "1"
+    override var bid: String? = "1"
 
     constructor(parcel: Parcel) : this() {
         ask = parcel.readString()

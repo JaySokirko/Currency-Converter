@@ -1,21 +1,36 @@
 package com.jay.currencyconverter.viewModel
 
-import androidx.databinding.ObservableDouble
+import android.util.Log
 import androidx.databinding.ObservableField
 import com.jay.currencyconverter.model.currencyExchange.currency.Currency
 import com.jay.currencyconverter.util.CurrencyCalculator
-import java.lang.StringBuilder
+import com.jay.currencyconverter.util.CustomObservableField
+import com.jay.currencyconverter.util.removeLastChar
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.Observables
+import io.reactivex.subjects.PublishSubject
 
 class CalculatorModel {
 
-    var result: ObservableDouble = ObservableDouble()
-    var inputValue: ObservableField<String> = ObservableField()
-    var currencyFrom: ObservableField<Currency> = ObservableField()
-    var currencyTo: ObservableField<Currency> = ObservableField()
+    val disposable = CompositeDisposable()
+    val baseCurrencyObserver: PublishSubject<Currency> = PublishSubject.create()
+    val conversionCurrencyObserver: PublishSubject<Currency> = PublishSubject.create()
+    val result: ObservableField<String> = ObservableField()
+    val currencyCoefficient: ObservableField<String> = ObservableField()
+    val inputValue: CustomObservableField<String> = CustomObservableField()
+
+    val tag = "TAG"
 
     init {
-        result.set(0.0)
-        inputValue.set("0")
+        result.set("0")
+        inputValue.setField("0")
+        observeCurrencies()
+        observeInput()
+    }
+
+    fun onDestroy() {
+        disposable.dispose()
+        disposable.clear()
     }
 
     fun onOneClick() {
@@ -58,10 +73,42 @@ class CalculatorModel {
         setInputValue("0")
     }
 
-    fun onEraseClick() {}
-
     fun onDotClick() {
         setInputValue(".")
+    }
+
+    fun onEraseClick() {
+        erase()
+    }
+
+    private fun observeInput() {
+        disposable.add(inputValue.publishSubject.subscribe { value ->
+            result.set(
+                CurrencyCalculator.calculate(
+                    currencyCoefficient.get()!!.toDouble(),
+                    value.toDouble()
+                ).toString()
+            )
+        })
+    }
+
+    private fun observeCurrencies() {
+        Observables.combineLatest(baseCurrencyObserver, conversionCurrencyObserver)
+        { baseCurrency, conversionCurrency ->
+
+            val baseCurrencyBid: Double = baseCurrency.bid!!.toDouble()
+            val conversionCurrencyBid: Double = conversionCurrency.bid!!.toDouble()
+            val coefficient: Double = baseCurrencyBid.div(conversionCurrencyBid)
+            currencyCoefficient.set(coefficient.toString())
+
+            result.set(
+                CurrencyCalculator.calculate(
+                    currencyCoefficient.get()!!.toDouble(),
+                    inputValue.get()!!.toDouble()
+                ).toString()
+            )
+
+        }.subscribe()
     }
 
     private fun setInputValue(input: String) {
@@ -69,22 +116,38 @@ class CalculatorModel {
         val current: String = inputValue.get().toString()
         val dot = "."
 
-        if (current == "0.0" || current == "0" && input != dot) {
-            inputValue.set(input)
-        }
-
-        if (current.contains(dot) && input == dot){
+        if (current == "0" && input != dot) {
+            inputValue.setField(input)
             return
         }
 
-        if (current.last().toString() == dot && input == dot){
+        if (current.contains(dot) && input == dot) {
             return
         }
 
-        else {
-            builder.append(inputValue.get())
+        if (current.last().toString() == dot && input == dot) {
+            return
+        }
+
+        //TODO implement correct
+        if (current.length >= 12) {
+            return
+
+        } else {
+            builder.append(current)
             builder.append(input)
-            inputValue.set(builder.toString())
+            inputValue.setField(builder.toString())
+        }
+    }
+
+    private fun erase() {
+        val current: String = inputValue.get().toString()
+
+        if (current.length == 1) {
+            inputValue.set("0")
+
+        } else {
+            inputValue.setField(current.removeLastChar(current)!!)
         }
     }
 }
