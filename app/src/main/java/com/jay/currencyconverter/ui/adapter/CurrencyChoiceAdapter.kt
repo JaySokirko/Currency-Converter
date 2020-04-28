@@ -15,7 +15,8 @@ import io.reactivex.subjects.BehaviorSubject
 class CurrencyChoiceAdapter(private val context: Context) :
     RecyclerView.Adapter<BaseViewHolder<Currency>>() {
 
-    private val currencyList: MutableList<Currency> = ArrayList()
+    private val baseCurrencyList: MutableList<Currency> = ArrayList()
+    private val conversionCurrencyList: MutableList<Currency> = ArrayList()
     private val baseCurrencyVHList: MutableList<BaseViewHolder<Currency>> = mutableListOf()
     private val conversionCurrencyVHList: MutableList<BaseViewHolder<Currency>> = mutableListOf()
     val clickEvent: BehaviorSubject<Helper> = BehaviorSubject.create()
@@ -25,23 +26,15 @@ class CurrencyChoiceAdapter(private val context: Context) :
         val view: View =
             LayoutInflater.from(context).inflate(R.layout.list_currency_choice, parent, false)
 
-        return when (viewType) {
-            BASE_CURRENCY -> {
-                BaseCurrencyVH(view)
-            }
-            CONVERSION_CURRENCY -> {
-                ConversionCurrencyVH(view)
-            }
-            else -> throw IllegalArgumentException("invalid view type")
-        }
+         return BaseCurrencyVH(view)
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder<Currency>, position: Int) {
-        holder.bind(currencyList[position])
+        holder.bind(baseCurrencyList[position], conversionCurrencyList[position])
     }
 
     override fun getItemCount(): Int {
-        return currencyList.size
+        return baseCurrencyList.size
     }
 
     override fun getItemId(position: Int): Long {
@@ -49,7 +42,7 @@ class CurrencyChoiceAdapter(private val context: Context) :
     }
 
     override fun getItemViewType(position: Int): Int {
-        val currency: Currency = currencyList[position]
+        val currency: Currency = baseCurrencyList[position]
 
         return when (currency.type) {
             CurrencyType.BASE -> BASE_CURRENCY
@@ -59,8 +52,8 @@ class CurrencyChoiceAdapter(private val context: Context) :
     }
 
     fun setItems(currencies: List<Currency?>) {
-        currencyList.clear()
-        fillCurrencyList(currencies)
+        baseCurrencyList.clear()
+        fillCurrencyLists(currencies)
         notifyDataSetChanged()
     }
 
@@ -91,70 +84,65 @@ class CurrencyChoiceAdapter(private val context: Context) :
         baseCurrencyVHList[position].itemView.animate().alpha(1f).setDuration(500).start()
     }
 
-    /**
-     * To fill ViewHolders
-     * @see BaseCurrencyVH
-     * @see ConversionCurrencyVH
-     * need to duplicate each item in
-     * @see currencyList
-     * Also each item should have own type
-     * @see CurrencyType.BASE
-     * or
-     * @see CurrencyType.CONVERSION
-     */
-    private fun fillCurrencyList(currencies: List<Currency?>) {
+    private fun fillCurrencyLists(currencies: List<Currency?>) {
         currencies.forEach { currency ->
             if (currency != null) {
 
                 val duplicateItem: Currency = currency.clone() as Currency
                 duplicateItem.type = CurrencyType.BASE
-                currencyList.add(duplicateItem)
+                baseCurrencyList.add(duplicateItem)
 
                 currency.type = CurrencyType.CONVERSION
-                currencyList.add(currency)
+                conversionCurrencyList.add(currency)
             }
         }
     }
 
     inner class BaseCurrencyVH(itemView: View) : BaseViewHolder<Currency>(itemView) {
 
-        private val parent: ConstraintLayout = itemView.findViewById(R.id.parent)
         private val baseCurrencyBtn: MaterialButton = itemView.findViewById(R.id.base_currency_btn)
+        private val conversionCurrencyBtn: MaterialButton = itemView.findViewById(R.id.conversion_currency_btn)
 
         init {
-
             baseCurrencyBtn.setOnClickListener { onBaseCurrencyBtnClick() }
+            conversionCurrencyBtn.setOnClickListener { onConversionCurrencyBtnClick() }
         }
 
-        override fun bind(item: Currency) {
-            baseCurrencyBtn.text = item.getAbr(context)
-            baseCurrencyBtn.icon = item.getImage(context)
+        override fun bind(vararg item: Currency) {
+            baseCurrencyBtn.text = item[0].getAbr(context)
+            baseCurrencyBtn.icon = item[0].getImage(context)
+            conversionCurrencyBtn.text = item[1].getAbr(context)
+            conversionCurrencyBtn.icon = item[1].getImage(context)
         }
 
         private fun onBaseCurrencyBtnClick() {
-            clickEvent.onNext(Helper(layoutPosition, currencyList[layoutPosition], state))
+            clickEvent.onNext(Helper(layoutPosition, baseCurrencyList[layoutPosition], state))
+        }
+
+        private fun onConversionCurrencyBtnClick() {
+            clickEvent.onNext(Helper(layoutPosition, conversionCurrencyList[layoutPosition], state))
         }
     }
 
-    inner class ConversionCurrencyVH(itemView: View) : BaseViewHolder<Currency>(itemView) {
-
-        private val parent: ConstraintLayout = itemView.findViewById(R.id.parent)
-        private val conversionCurrencyBtn: MaterialButton =
-            itemView.findViewById(R.id.conversion_currency_btn)
-
-        init {
-
-        }
-
-        override fun bind(item: Currency) {
-            conversionCurrencyBtn.text = item.getAbr(context)
-            conversionCurrencyBtn.icon = item.getImage(context)
-        }
-
-        private fun onConversionBtnClick() {
-            clickEvent.onNext(Helper(layoutPosition, currencyList[layoutPosition], state))
-        }
-    }
+//    inner class ConversionCurrencyVH(itemView: View) : BaseViewHolder<Currency>(itemView) {
+//
+//        private val parent: ConstraintLayout = itemView.findViewById(R.id.parent)
+//        private val conversionCurrencyBtn: MaterialButton =
+//            itemView.findViewById(R.id.conversion_currency_btn)
+//
+//        init {
+//
+//        }
+//
+//        override fun bind(item: Currency) {
+//            conversionCurrencyBtn.text = item.getAbr(context)
+//            conversionCurrencyBtn.icon = item.getImage(context)
+//        }
+//
+//        private fun onConversionBtnClick() {
+//            clickEvent.onNext(Helper(layoutPosition, baseCurrencyList[layoutPosition], state))
+//        }
+//    }
 
     class Helper(
         var selectedPosition: Int? = null, var selectedCurrency: Currency? = null,

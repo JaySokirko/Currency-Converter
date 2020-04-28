@@ -44,7 +44,7 @@ class CalculatorActivity : AppCompatActivity() {
     }
 
     private fun setupCurrencyChoiceList() {
-        base_currencies_list.setHasFixedSize(true)
+//        base_currencies_list.setHasFixedSize(true)
         base_currencies_list.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         base_currencies_list.adapter = currencyChoiceAdapter
