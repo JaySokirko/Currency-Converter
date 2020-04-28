@@ -17,7 +17,7 @@ object Animator {
 
     }
 
-    fun setViewBackgroundColor(view: View, color: Int, context: Context){
-        view.backgroundTintList = ContextCompat.getColorStateList(context, color)
+    fun setViewBackgroundColor(view: View, color: Int){
+        view.backgroundTintList = ContextCompat.getColorStateList(view.context, color)
     }
 }

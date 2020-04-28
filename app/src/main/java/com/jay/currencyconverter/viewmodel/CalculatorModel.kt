@@ -83,6 +83,7 @@ class CalculatorModel {
 
     private fun observeInput() {
         disposable.add(inputValue.publishSubject.subscribe { value ->
+            currencyCoefficient.get() ?: return@subscribe
             result.set(
                 CurrencyCalculator.calculate(
                     currencyCoefficient.get()!!.toDouble(),
@@ -100,14 +101,12 @@ class CalculatorModel {
             val conversionCurrencyBid: Double = conversionCurrency.bid!!.toDouble()
             val coefficient: Double = baseCurrencyBid.div(conversionCurrencyBid)
             currencyCoefficient.set(coefficient.toString())
-
             result.set(
                 CurrencyCalculator.calculate(
                     currencyCoefficient.get()!!.toDouble(),
                     inputValue.get()!!.toDouble()
                 ).toString()
             )
-
         }.subscribe()
     }
 
