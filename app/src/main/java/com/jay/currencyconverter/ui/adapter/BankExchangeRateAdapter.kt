@@ -12,9 +12,9 @@ import com.jay.currencyconverter.R
 import com.jay.currencyconverter.customView.CurrencyView
 import com.jay.currencyconverter.model.currencyExchange.Organization
 import com.jay.currencyconverter.model.currencyExchange.currency.Currency
-import com.jay.currencyconverter.ui.adapter.BankExchangeAdapter.ViewHolder
+import com.jay.currencyconverter.ui.adapter.BankExchangeRateAdapter.ViewHolder
 
-class BankExchangeAdapter(private val context: Context) : RecyclerView.Adapter<ViewHolder>() {
+class BankExchangeRateAdapter(private val context: Context) : RecyclerView.Adapter<ViewHolder>() {
 
     private val organizationList: MutableList<Organization> = ArrayList()
     val clickEvent: MutableLiveData<Organization> = MutableLiveData()

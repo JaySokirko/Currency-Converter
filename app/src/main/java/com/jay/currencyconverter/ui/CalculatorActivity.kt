@@ -18,8 +18,7 @@ import kotlinx.android.synthetic.main.activity_calculator.*
 class CalculatorActivity : AppCompatActivity() {
 
     private val currenciesList: MutableList<Currency?> = mutableListOf()
-    private val baseCurrencyAdapter: CurrencyChoiceAdapter = CurrencyChoiceAdapter(this)
-    private val conversionCurrencyAdapter: CurrencyChoiceAdapter = CurrencyChoiceAdapter(this)
+    private val currencyChoiceAdapter: CurrencyChoiceAdapter = CurrencyChoiceAdapter(this)
     private var currencies: Currencies? = null
     private var organizationTitle: String? = null
     private val calculatorModel: CalculatorModel = CalculatorModel()
@@ -35,13 +34,8 @@ class CalculatorActivity : AppCompatActivity() {
         currencies = intent.getParcelableExtra(Constant.CURRENCIES)
 
         fillCurrenciesList()
-
-        setupRecyclerViews()
-
-        baseCurrencyAdapter.setItems(currenciesList)
-        conversionCurrencyAdapter.setItems(currenciesList)
-
-        onAdapterItemClick()
+        setupCurrencyChoiceList()
+        onCurrencyChoiceListItemClick()
     }
 
     override fun onDestroy() {
@@ -49,27 +43,18 @@ class CalculatorActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    private fun setupRecyclerViews() {
-//        base_currencies_list.setHasFixedSize(true)
+    private fun setupCurrencyChoiceList() {
+        base_currencies_list.setHasFixedSize(true)
         base_currencies_list.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        base_currencies_list.adapter = baseCurrencyAdapter
-
-//        conversion_currencies_list.setHasFixedSize(true)
-        conversion_currencies_list.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        conversion_currencies_list.adapter = conversionCurrencyAdapter
+        base_currencies_list.adapter = currencyChoiceAdapter
+        currencyChoiceAdapter.setItems(currenciesList)
     }
 
-    private fun onAdapterItemClick() {
-        calculatorModel.disposable.addAll(
-            baseCurrencyAdapter.clickEvent.subscribe { helper: CurrencyChoiceAdapter.Helper ->
-                conversionCurrencyAdapter.displayItemAtPositionByState(helper.selectedPosition!!, helper.state!!)
+    private fun onCurrencyChoiceListItemClick() {
+        calculatorModel.disposable.add(
+            currencyChoiceAdapter.clickEvent.subscribe { helper: CurrencyChoiceAdapter.Helper ->
                 calculatorModel.baseCurrencyObserver.onNext(helper.selectedCurrency!!)
-            },
-            conversionCurrencyAdapter.clickEvent.subscribe { helper: CurrencyChoiceAdapter.Helper ->
-                baseCurrencyAdapter.displayItemAtPositionByState(helper.selectedPosition!!, helper.state!!)
-                calculatorModel.conversionCurrencyObserver.onNext(helper.selectedCurrency!!)
             }
         )
     }
