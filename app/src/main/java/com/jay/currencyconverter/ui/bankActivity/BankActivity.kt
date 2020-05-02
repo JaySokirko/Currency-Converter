@@ -53,7 +53,7 @@ class BankActivity : AppCompatActivity(), IBankView {
     }
 
     private fun setupBanksExchangeRateAdapter() {
-        bankExchangeRateAdapter = BankExchangeRateAdapter(context = this)
+        bankExchangeRateAdapter = BankExchangeRateAdapter()
         banks_exchange_rate_list.setHasFixedSize(true)
         banks_exchange_rate_list.layoutManager = LinearLayoutManager(this)
         banks_exchange_rate_list.adapter = bankExchangeRateAdapter

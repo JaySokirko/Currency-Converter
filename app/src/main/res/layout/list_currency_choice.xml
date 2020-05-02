@@ -7,7 +7,7 @@
     android:animateLayoutChanges="true"
     android:id="@+id/parent">
 
-    <com.google.android.material.button.MaterialButton
+    <com.jay.currencyconverter.customView.CustomMaterialButton
         android:id="@+id/base_currency_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
+    <com.jay.currencyconverter.customView.CustomMaterialButton
         android:id="@+id/conversion_currency_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

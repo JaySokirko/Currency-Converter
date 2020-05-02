@@ -5,4 +5,8 @@ object ViewState {
         VISIBLE,
         INVISIBLE
     }
+    enum class ButtonPress{
+        PRESSED,
+        NO_PRESSED
+    }
 }

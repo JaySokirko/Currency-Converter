@@ -1,6 +1,5 @@
 package com.jay.currencyconverter.viewModel
 
-import android.util.Log
 import androidx.databinding.ObservableField
 import com.jay.currencyconverter.model.currencyExchange.currency.Currency
 import com.jay.currencyconverter.util.CurrencyCalculator
@@ -24,7 +23,7 @@ class CalculatorModel {
     init {
         result.set("0")
         inputValue.setField("0")
-        observeCurrencies()
+        observeCurrenciesChoice()
         observeInput()
     }
 
@@ -84,6 +83,7 @@ class CalculatorModel {
     private fun observeInput() {
         disposable.add(inputValue.publishSubject.subscribe { value ->
             currencyCoefficient.get() ?: return@subscribe
+
             result.set(
                 CurrencyCalculator.calculate(
                     currencyCoefficient.get()!!.toDouble(),
@@ -93,7 +93,7 @@ class CalculatorModel {
         })
     }
 
-    private fun observeCurrencies() {
+    private fun observeCurrenciesChoice() {
         Observables.combineLatest(baseCurrencyObserver, conversionCurrencyObserver)
         { baseCurrency, conversionCurrency ->
 
