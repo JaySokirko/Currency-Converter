@@ -1,6 +1,5 @@
 package com.jay.currencyconverter.ui.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,16 +11,16 @@ import com.jay.currencyconverter.R
 import com.jay.currencyconverter.customView.CurrencyView
 import com.jay.currencyconverter.model.currencyExchange.Organization
 import com.jay.currencyconverter.model.currencyExchange.currency.Currency
-import com.jay.currencyconverter.ui.adapter.BankExchangeAdapter.ViewHolder
+import com.jay.currencyconverter.ui.adapter.BankExchangeRateAdapter.ViewHolder
 
-class BankExchangeAdapter(private val context: Context) : RecyclerView.Adapter<ViewHolder>() {
+class BankExchangeRateAdapter : RecyclerView.Adapter<ViewHolder>() {
 
     private val organizationList: MutableList<Organization> = ArrayList()
     val clickEvent: MutableLiveData<Organization> = MutableLiveData()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.recycler_bank_list, parent, false)
+        val view: View = LayoutInflater.from(parent.context)
+            .inflate(R.layout.list_bank, parent, false)
 
         return ViewHolder(view)
     }
@@ -42,13 +41,9 @@ class BankExchangeAdapter(private val context: Context) : RecyclerView.Adapter<V
         return position
     }
 
-    fun setItems(organizations: Collection<Organization>?) {
-        organizationList.addAll(organizations!!)
-        notifyDataSetChanged()
-    }
-
-    fun clearItems() {
+    fun setItems(organizations: Collection<Organization?>) {
         organizationList.clear()
+        organizationList.addAll(organizations.filterNotNull())
         notifyDataSetChanged()
     }
 
@@ -70,9 +65,9 @@ class BankExchangeAdapter(private val context: Context) : RecyclerView.Adapter<V
             for (currency: Currency? in organization.currencies!!.allAvailableCurrencies) {
 
                 if (currency != null) {
-                    val currencyView = CurrencyView(context)
-                    currencyView.setTitle(currency.getName(context)!!)
-                    currencyView.setImage(currency.getImage(context)!!)
+                    val currencyView = CurrencyView(itemView.context)
+                    currencyView.setTitle(currency.getName(itemView.context)!!)
+                    currencyView.setImage(currency.getImage(itemView.context)!!)
                     currencyView.setBid(currency.bid!!)
                     currencyView.setAsk(currency.ask!!)
                     container.addView(currencyView)
