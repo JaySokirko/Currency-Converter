@@ -12,6 +12,9 @@ import com.jay.currencyconverter.R
 
 class CurrencyView : LinearLayoutCompat {
 
+    private val inflater: LayoutInflater
+            = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+
     private lateinit var rootLayout: ViewGroup
     private lateinit var currencyTitle: AppCompatTextView
     private lateinit var currencyImage: AppCompatImageView
@@ -44,7 +47,6 @@ class CurrencyView : LinearLayoutCompat {
     }
 
     private fun init() {
-        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         rootLayout = inflater.inflate(R.layout.view_currency_layout, this, false) as ViewGroup
         addView(rootLayout)
 

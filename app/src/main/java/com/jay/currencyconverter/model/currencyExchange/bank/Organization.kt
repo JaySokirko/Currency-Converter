@@ -1,11 +1,10 @@
-package com.jay.currencyconverter.model.currencyExchange
+package com.jay.currencyconverter.model.currencyExchange.bank
 
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import kotlinx.android.parcel.Parcelize
-import java.io.Serializable
+import com.jay.currencyconverter.model.currencyExchange.currency.Currencies
 
 
 class Organization() : Parcelable {
@@ -86,7 +85,9 @@ class Organization() : Parcelable {
 
     companion object CREATOR : Parcelable.Creator<Organization> {
         override fun createFromParcel(parcel: Parcel): Organization {
-            return Organization(parcel)
+            return Organization(
+                parcel
+            )
         }
 
         override fun newArray(size: Int): Array<Organization?> {

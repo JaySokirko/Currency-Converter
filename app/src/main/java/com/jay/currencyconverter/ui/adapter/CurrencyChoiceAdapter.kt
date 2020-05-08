@@ -96,7 +96,7 @@ class CurrencyChoiceAdapter : RecyclerView.Adapter<BaseViewHolder<Currency>>() {
     }
 
     inner class Helper(
-        var selectedCurrency: Currency? = null,
+        val selectedCurrency: Currency? = null,
         val currencyType: CurrencyType? = null
     )
 

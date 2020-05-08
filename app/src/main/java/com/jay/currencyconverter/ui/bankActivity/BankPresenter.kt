@@ -1,6 +1,6 @@
 package com.jay.currencyconverter.ui.bankActivity
 
-import com.jay.currencyconverter.model.currencyExchange.Banks
+import com.jay.currencyconverter.model.currencyExchange.bank.Banks
 import com.jay.currencyconverter.service.CurrencyExchangeRateApi
 import com.jay.currencyconverter.ui.presenter.IExchangeRatePresenter
 import com.jay.currencyconverter.ui.presenter.IPresenter
@@ -15,15 +15,13 @@ class BankPresenter(private val view: IBankView) : IPresenter, IExchangeRatePres
     override fun getExchangeRate() {
         view.showProgress()
         disposable.add(
-            CurrencyExchangeRateApi.create(CurrencyExchangeRateApi.BANKS_EXCHANGE_URL)
+            CurrencyExchangeRateApi.createRequest(CurrencyExchangeRateApi.BANKS_EXCHANGE_URL)
                 .getBanksExchangeRate()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                     { result: Banks? -> view.onExchangeRateLoadFinish(result?.organizations!!) },
-
                     { error: Throwable -> view.onExchangeRateLoadError(error) },
-
                     { view.hideProgress() }
                 )
         )
