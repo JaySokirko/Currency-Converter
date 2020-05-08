@@ -1,11 +1,12 @@
-package com.jay.currencyconverter.model.currencyExchange
+package com.jay.currencyconverter.model.currencyExchange.currency
 
+import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.jay.currencyconverter.model.currencyExchange.currency.*
-import com.jay.currencyconverter.model.currencyExchange.currency.Currency
+import com.jay.currencyconverter.R
 import java.util.*
 
 class Currencies() : Parcelable {
@@ -198,58 +199,125 @@ class Currencies() : Parcelable {
     @Expose
     var tJS: TJS? = null
 
-    val allAvailableCurrencies: List<Currency?>
-        get() {
-            val currenciesList: MutableList<Currency?> = ArrayList()
-            currenciesList.add(uSD)
-            currenciesList.add(eUR)
-            currenciesList.add(rUB)
-            currenciesList.add(aED)
-            currenciesList.add(aMD)
-            currenciesList.add(aUD)
-            currenciesList.add(aZN)
-            currenciesList.add(bGN)
-            currenciesList.add(bRL)
-            currenciesList.add(bYN)
-            currenciesList.add(cAD)
-            currenciesList.add(cHF)
-            currenciesList.add(cLP)
-            currenciesList.add(cNY)
-            currenciesList.add(cZK)
-            currenciesList.add(dKK)
-            currenciesList.add(eGP)
-            currenciesList.add(gBP)
-            currenciesList.add(gEL)
-            currenciesList.add(hKD)
-            currenciesList.add(hRK)
-            currenciesList.add(hUF)
-            currenciesList.add(iLS)
-            currenciesList.add(iNR)
-            currenciesList.add(jPY)
-            currenciesList.add(kRW)
-            currenciesList.add(kWD)
-            currenciesList.add(kZT)
-            currenciesList.add(lBP)
-            currenciesList.add(mDL)
-            currenciesList.add(mXN)
-            currenciesList.add(nOK)
-            currenciesList.add(nZD)
-            currenciesList.add(pLN)
-            currenciesList.add(rON)
-            currenciesList.add(sAR)
-            currenciesList.add(sEK)
-            currenciesList.add(sGD)
-            currenciesList.add(tHB)
-            currenciesList.add(tRY)
-            currenciesList.add(tWD)
-            currenciesList.add(vND)
-            currenciesList.add(dZD)
-            currenciesList.add(iQD)
-            currenciesList.add(kGS)
-            currenciesList.add(pKR)
-            currenciesList.add(tJS)
-            return currenciesList
+    fun getAllNotNullCurrencies(): List<Currency> {
+        val currenciesList: MutableList<Currency?> = ArrayList()
+        currenciesList.add(uSD)
+        currenciesList.add(eUR)
+        currenciesList.add(rUB)
+        currenciesList.add(aED)
+        currenciesList.add(aMD)
+        currenciesList.add(aUD)
+        currenciesList.add(aZN)
+        currenciesList.add(bGN)
+        currenciesList.add(bRL)
+        currenciesList.add(bYN)
+        currenciesList.add(cAD)
+        currenciesList.add(cHF)
+        currenciesList.add(cLP)
+        currenciesList.add(cNY)
+        currenciesList.add(cZK)
+        currenciesList.add(dKK)
+        currenciesList.add(eGP)
+        currenciesList.add(gBP)
+        currenciesList.add(gEL)
+        currenciesList.add(hKD)
+        currenciesList.add(hRK)
+        currenciesList.add(hUF)
+        currenciesList.add(iLS)
+        currenciesList.add(iNR)
+        currenciesList.add(jPY)
+        currenciesList.add(kRW)
+        currenciesList.add(kWD)
+        currenciesList.add(kZT)
+        currenciesList.add(lBP)
+        currenciesList.add(mDL)
+        currenciesList.add(mXN)
+        currenciesList.add(nOK)
+        currenciesList.add(nZD)
+        currenciesList.add(pLN)
+        currenciesList.add(rON)
+        currenciesList.add(sAR)
+        currenciesList.add(sEK)
+        currenciesList.add(sGD)
+        currenciesList.add(tHB)
+        currenciesList.add(tRY)
+        currenciesList.add(tWD)
+        currenciesList.add(vND)
+        currenciesList.add(dZD)
+        currenciesList.add(iQD)
+        currenciesList.add(kGS)
+        currenciesList.add(pKR)
+        currenciesList.add(tJS)
+        return currenciesList.filterNotNull()
+    }
+
+    fun getAllCurrencies(): List<Currency> {
+        val list: MutableList<Currency> = mutableListOf()
+        list.add(USD())
+        list.add(EUR())
+        list.add(RUB())
+        list.add(AED())
+        list.add(AMD())
+        list.add(AUD())
+        list.add(AZN())
+        list.add(BGN())
+        list.add(BRL())
+        list.add(BYN())
+        list.add(CAD())
+        list.add(CHF())
+        list.add(CLP())
+        list.add(CNY())
+        list.add(CZK())
+        list.add(DKK())
+        list.add(DZD())
+        list.add(EGP())
+        list.add(GBP())
+        list.add(GEL())
+        list.add(HKD())
+        list.add(HRK())
+        list.add(HUF())
+        list.add(ILS())
+        list.add(INR())
+        list.add(IQD())
+        list.add(JPY())
+        list.add(KGS())
+        list.add(KRW())
+        list.add(KWD())
+        list.add(KZT())
+        list.add(LBP())
+        list.add(MDL())
+        list.add(MXN())
+        list.add(NOK())
+        list.add(NZD())
+        list.add(PKR())
+        list.add(PLN())
+        list.add(RON())
+        list.add(SAR())
+        list.add(SEK())
+        list.add(SGD())
+        list.add(THB())
+        list.add(TJS())
+        list.add(TRY())
+        list.add(TWD())
+        list.add(UAH())
+        list.add(VND())
+        return list
+    }
+
+    fun checkCurrencyExistingByAbr(abr: String?, context: Context): Boolean {
+        if (abr == null) return false
+        getAllCurrencies().forEach { currency -> if (abr == currency.getAbr(context)) return true }
+        return false
+    }
+
+    fun getCurrencyImageByAbr(abr: String, context: Context): Drawable? {
+        getAllCurrencies().forEach { currency ->
+            if (abr == currency.getAbr(context)) {
+                return currency.getImage(context)
+            }
         }
+        return null
+    }
 
     constructor(parcel: Parcel) : this() {
         eUR = parcel.readParcelable(EUR::class.java.classLoader)
@@ -357,7 +425,9 @@ class Currencies() : Parcelable {
 
     companion object CREATOR : Parcelable.Creator<Currencies> {
         override fun createFromParcel(parcel: Parcel): Currencies {
-            return Currencies(parcel)
+            return Currencies(
+                parcel
+            )
         }
 
         override fun newArray(size: Int): Array<Currencies?> {

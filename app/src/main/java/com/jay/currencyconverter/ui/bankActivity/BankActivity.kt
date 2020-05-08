@@ -8,27 +8,29 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jay.currencyconverter.R
-import com.jay.currencyconverter.model.currencyExchange.Organization
+import com.jay.currencyconverter.model.currencyExchange.bank.Organization
 import com.jay.currencyconverter.ui.CalculatorActivity
 import com.jay.currencyconverter.ui.adapter.BankExchangeRateAdapter
 import com.jay.currencyconverter.util.Constant
 import kotlinx.android.synthetic.main.activity_banks.*
+import kotlinx.android.synthetic.main.activity_nbu.*
+import kotlinx.android.synthetic.main.activity_nbu.progress_bar
 
 class BankActivity : AppCompatActivity(), IBankView {
 
-    private lateinit var bankExchangeRateAdapter: BankExchangeRateAdapter
+    private val bankExchangeRateAdapter: BankExchangeRateAdapter = BankExchangeRateAdapter()
     private lateinit var bankPresenter: BankPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_banks)
 
-        setupBanksExchangeRateAdapter()
+        setupBanksExchangeRateList()
 
         bankPresenter = BankPresenter(view = this)
         bankPresenter.getExchangeRate()
 
-        onBankExchangeRateAdapterItemClick()
+        onBankExchangeRateListItemClick()
     }
 
     override fun onDestroy() {
@@ -52,16 +54,15 @@ class BankActivity : AppCompatActivity(), IBankView {
         Toast.makeText(this, error.message, Toast.LENGTH_LONG).show()
     }
 
-    private fun setupBanksExchangeRateAdapter() {
-        bankExchangeRateAdapter = BankExchangeRateAdapter()
+    private fun setupBanksExchangeRateList() {
         banks_exchange_rate_list.setHasFixedSize(true)
         banks_exchange_rate_list.layoutManager = LinearLayoutManager(this)
         banks_exchange_rate_list.adapter = bankExchangeRateAdapter
     }
 
-    private fun onBankExchangeRateAdapterItemClick() {
+    private fun onBankExchangeRateListItemClick() {
         bankExchangeRateAdapter.clickEvent.observe(this, Observer { organizations ->
-            val organizationTitle: String = organizations.title!!
+            val organizationTitle: String? = organizations.title
             startActivity(Intent(this, CalculatorActivity::class.java)
                     .putExtra(Constant.ORGANIZATION_NAME, organizationTitle)
                     .putExtra(Constant.CURRENCIES, organizations.currencies))

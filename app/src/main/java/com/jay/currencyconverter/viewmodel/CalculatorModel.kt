@@ -1,9 +1,10 @@
-package com.jay.currencyconverter.viewModel
+package com.jay.currencyconverter.viewmodel
 
 import androidx.databinding.ObservableField
 import com.jay.currencyconverter.model.currencyExchange.currency.Currency
 import com.jay.currencyconverter.util.CurrencyCalculator
 import com.jay.currencyconverter.util.CustomObservableField
+import com.jay.currencyconverter.util.letBlock
 import com.jay.currencyconverter.util.removeLastChar
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.Observables
@@ -82,14 +83,8 @@ class CalculatorModel {
 
     private fun observeInput() {
         disposable.add(inputValue.publishSubject.subscribe { value ->
-            currencyCoefficient.get() ?: return@subscribe
 
-            result.set(
-                CurrencyCalculator.calculate(
-                    currencyCoefficient.get()!!.toDouble(),
-                    value.toDouble()
-                ).toString()
-            )
+            setupResult(inputValue = value)
         })
     }
 
@@ -97,20 +92,13 @@ class CalculatorModel {
         Observables.combineLatest(baseCurrencyObserver, conversionCurrencyObserver)
         { baseCurrency, conversionCurrency ->
 
-            val baseCurrencyBid: Double = baseCurrency.bid!!.toDouble()
-            val conversionCurrencyBid: Double = conversionCurrency.bid!!.toDouble()
-            val coefficient: Double = baseCurrencyBid.div(conversionCurrencyBid)
-            currencyCoefficient.set(coefficient.toString())
-            result.set(
-                CurrencyCalculator.calculate(
-                    currencyCoefficient.get()!!.toDouble(),
-                    inputValue.get()!!.toDouble()
-                ).toString()
-            )
+            setupCurrencyCoefficient(baseCurrency.bid, conversionCurrency.bid)
+            setupResult()
+
         }.subscribe()
     }
 
-    private fun setInputValue(input: String) {
+    private fun setInputValue(input: String)  {
         val builder = StringBuilder()
         val current: String = inputValue.get().toString()
         val dot = "."
@@ -146,7 +134,28 @@ class CalculatorModel {
             inputValue.set("0")
 
         } else {
-            inputValue.setField(current.removeLastChar(current)!!)
+            inputValue.setField(current.removeLastChar())
+        }
+    }
+
+    private fun setupCurrencyCoefficient(baseCurrencyBid: String?, conversionCurrencyBid: String?){
+        letBlock(baseCurrencyBid, conversionCurrencyBid) { baseBid, conversionBid ->
+            currencyCoefficient.set(CurrencyCalculator.calculateExchangeCoefficient(
+                baseBid.toDouble(), conversionBid.toDouble()).toString())
+        }
+    }
+
+    private fun setupResult(){
+        letBlock(currencyCoefficient.get(), inputValue.get()) { coefficient, value ->
+            result.set(CurrencyCalculator.calculateExchangeRate(coefficient.toDouble(),
+            value.toDouble()).toString())
+        }
+    }
+
+    private fun setupResult(inputValue: String){
+        currencyCoefficient.get()?.let { coefficient ->
+            result.set(CurrencyCalculator.calculateExchangeRate(coefficient.toDouble(),
+                inputValue.toDouble()).toString())
         }
     }
 }

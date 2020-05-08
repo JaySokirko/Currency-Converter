@@ -3,7 +3,11 @@ package com.jay.currencyconverter.util
 
 object CurrencyCalculator {
 
-    fun calculate(currencyCoefficient: Double, inputValue: Double): Double {
+    fun calculateExchangeRate(currencyCoefficient: Double, inputValue: Double): Double {
         return currencyCoefficient.times(inputValue)
+    }
+
+    fun calculateExchangeCoefficient(baseCurrencyBid: Double, conversionCurrencyBid: Double) : Double {
+        return baseCurrencyBid.div(conversionCurrencyBid)
     }
 }

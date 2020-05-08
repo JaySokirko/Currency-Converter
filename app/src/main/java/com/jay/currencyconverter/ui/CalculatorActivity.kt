@@ -1,26 +1,29 @@
 package com.jay.currencyconverter.ui
 
 import android.os.Bundle
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.databinding.ActivityCalculatorBinding
-import com.jay.currencyconverter.model.currencyExchange.Currencies
+import com.jay.currencyconverter.model.currencyExchange.currency.Currencies
 import com.jay.currencyconverter.model.currencyExchange.currency.Currency
 import com.jay.currencyconverter.model.currencyExchange.currency.CurrencyType
 import com.jay.currencyconverter.model.currencyExchange.currency.UAH
 import com.jay.currencyconverter.ui.adapter.CurrencyChoiceAdapter
 import com.jay.currencyconverter.util.Constant
-import com.jay.currencyconverter.viewModel.CalculatorModel
+import com.jay.currencyconverter.viewmodel.CalculatorModel
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_calculator.*
+import java.lang.NullPointerException
+import kotlin.system.measureTimeMillis
 
 
 class CalculatorActivity : AppCompatActivity() {
 
     private val currenciesList: MutableList<Currency?> = mutableListOf()
-    private val currencyChoiceAdapter: CurrencyChoiceAdapter = CurrencyChoiceAdapter()
+    private val currencyChoiceAdapter:
+            CurrencyChoiceAdapter = CurrencyChoiceAdapter()
     private var currencies: Currencies? = null
     private var organizationTitle: String? = null
     private val calculatorModel: CalculatorModel = CalculatorModel()
@@ -54,23 +57,33 @@ class CalculatorActivity : AppCompatActivity() {
     }
 
     private fun onCurrencyChoiceListItemClick() {
-        calculatorModel.disposable.add(
+        val subscribe: Disposable =
             currencyChoiceAdapter.clickEvent.subscribe { helper: CurrencyChoiceAdapter.Helper ->
-                when(helper.currencyType){
+                when (helper.currencyType) {
                     CurrencyType.BASE -> {
-                        calculatorModel.baseCurrencyObserver.onNext(helper.selectedCurrency!!)
+                        helper.selectedCurrency?.let {
+                            calculatorModel.baseCurrencyObserver.onNext(it)
+                        }
                     }
                     CurrencyType.CONVERSION -> {
-                        calculatorModel.conversionCurrencyObserver.onNext(helper.selectedCurrency!!)
+                        helper.selectedCurrency?.let {
+                            calculatorModel.conversionCurrencyObserver.onNext(it)
+                        }
+                    }
+                    null -> {
+                        throw NullPointerException("currencyType should not be null")
                     }
                 }
             }
-        )
+
+        calculatorModel.disposable.add(subscribe)
     }
 
     private fun fillCurrenciesList() {
         currenciesList.clear()
-        currenciesList.add(UAH())
-        currenciesList.addAll(currencies?.allAvailableCurrencies!!)
+        currencies?.let {
+            currenciesList.add(UAH())
+            currenciesList.addAll(it.getAllNotNullCurrencies())
+        }
     }
 }
