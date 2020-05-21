@@ -33,7 +33,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta6'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.material:material:1.2.0-alpha06'
@@ -52,6 +52,14 @@ dependencies {
     // lifecycle
     implementation "android.arch.lifecycle:extensions:1.1.1"
     annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
+
+    //dagger
+    def dagger_ver = 2.26
+    api "com.google.dagger:dagger:$dagger_ver"
+    api "com.google.dagger:dagger-android:$dagger_ver"
+    api "com.google.dagger:dagger-android-support:$dagger_ver"
+    kapt "com.google.dagger:dagger-compiler:$dagger_ver"
+    kapt "com.google.dagger:dagger-android-processor:$dagger_ver"
 
     kapt 'com.android.databinding:compiler:3.1.4'
 

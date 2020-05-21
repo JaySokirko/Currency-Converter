@@ -15,15 +15,12 @@ import com.jay.currencyconverter.util.Constant
 import com.jay.currencyconverter.viewmodel.CalculatorModel
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_calculator.*
-import java.lang.NullPointerException
-import kotlin.system.measureTimeMillis
 
 
 class CalculatorActivity : AppCompatActivity() {
 
     private val currenciesList: MutableList<Currency?> = mutableListOf()
-    private val currencyChoiceAdapter:
-            CurrencyChoiceAdapter = CurrencyChoiceAdapter()
+    private val currencyChoiceAdapter: CurrencyChoiceAdapter = CurrencyChoiceAdapter()
     private var currencies: Currencies? = null
     private var organizationTitle: String? = null
     private val calculatorModel: CalculatorModel = CalculatorModel()
@@ -33,6 +30,7 @@ class CalculatorActivity : AppCompatActivity() {
 
         val binding: ActivityCalculatorBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_calculator)
+
         binding.calculator = calculatorModel
 
         organizationTitle = intent.getStringExtra(Constant.ORGANIZATION_NAME)
