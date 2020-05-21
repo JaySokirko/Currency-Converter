@@ -8,26 +8,29 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jay.currencyconverter.R
+import com.jay.currencyconverter.di.DaggerBankActivityComponent
 import com.jay.currencyconverter.model.currencyExchange.bank.Organization
 import com.jay.currencyconverter.ui.CalculatorActivity
 import com.jay.currencyconverter.ui.adapter.BankExchangeRateAdapter
 import com.jay.currencyconverter.util.Constant
 import kotlinx.android.synthetic.main.activity_banks.*
-import kotlinx.android.synthetic.main.activity_nbu.*
 import kotlinx.android.synthetic.main.activity_nbu.progress_bar
+import javax.inject.Inject
 
 class BankActivity : AppCompatActivity(), IBankView {
 
-    private val bankExchangeRateAdapter: BankExchangeRateAdapter = BankExchangeRateAdapter()
-    private lateinit var bankPresenter: BankPresenter
+    @Inject
+    lateinit var bankExchangeRateAdapter: BankExchangeRateAdapter
+    @Inject
+    lateinit var bankPresenter: BankPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        DaggerBankActivityComponent.builder().bankPresenter(this).build().inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_banks)
 
         setupBanksExchangeRateList()
 
-        bankPresenter = BankPresenter(view = this)
         bankPresenter.getExchangeRate()
 
         onBankExchangeRateListItemClick()

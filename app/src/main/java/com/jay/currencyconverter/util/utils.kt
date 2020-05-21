@@ -7,7 +7,7 @@ fun String.removeLastChar(): String {
 }
 
 /**
- *  This fun allows work with multiple potential null params like
+ *  This fun allows to work with multiple potential null params like
  *  @see kotlin.let
  */
 inline fun <T1 : Any, T2 : Any, R : Any> letBlock(p1: T1?, p2: T2?, block: (T1, T2) -> R?): R? {

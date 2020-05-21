@@ -16,8 +16,8 @@ class CurrencyView : LinearLayoutCompat {
             = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
     private lateinit var rootLayout: ViewGroup
-    private lateinit var currencyTitle: AppCompatTextView
-    private lateinit var currencyImage: AppCompatImageView
+    private lateinit var title: AppCompatTextView
+    private lateinit var image: AppCompatImageView
     private lateinit var bid: AppCompatTextView
     private lateinit var ask: AppCompatTextView
 
@@ -31,11 +31,11 @@ class CurrencyView : LinearLayoutCompat {
     }
 
     fun setTitle(text: String) {
-        currencyTitle.text = text
+        title.text = text
     }
 
     fun setImage(image: Drawable) {
-        currencyImage.setImageDrawable(image)
+        this.image.setImageDrawable(image)
     }
 
     fun setBid(text: String) {
@@ -50,8 +50,8 @@ class CurrencyView : LinearLayoutCompat {
         rootLayout = inflater.inflate(R.layout.view_currency_layout, this, false) as ViewGroup
         addView(rootLayout)
 
-        currencyTitle = rootLayout.findViewById(R.id.currency_title)
-        currencyImage = rootLayout.findViewById(R.id.currency_image)
+        title = rootLayout.findViewById(R.id.currency_title)
+        image = rootLayout.findViewById(R.id.currency_image)
         bid = rootLayout.findViewById(R.id.bid)
         ask = rootLayout.findViewById(R.id.ask)
     }
