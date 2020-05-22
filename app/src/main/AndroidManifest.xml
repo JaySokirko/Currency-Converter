@@ -14,8 +14,8 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ui.CalculatorActivity"/>
         <!-- android:networkSecurityConfig="@xml/network_security_config" -->
-        <activity android:name=".ui.bankActivity.BankActivity" />
-        <activity android:name=".ui.nbuActivity.NbuActivity" />
+        <activity android:name=".ui.BankActivity" />
+        <activity android:name=".ui.NbuActivity" />
         <activity android:name=".ui.interBankActivity.InterBankActivity" />
         <activity android:name=".ui.ChoiceServiceActivity">
             <intent-filter>

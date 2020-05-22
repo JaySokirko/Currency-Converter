@@ -3,7 +3,7 @@ package com.jay.currencyconverter.util
 import androidx.databinding.ObservableField
 import io.reactivex.subjects.PublishSubject
 
-class CustomObservableField<T> : ObservableField<T>() {
+class ObservableFieldWrapper<T> : ObservableField<T>() {
 
     private var field: T? = null
 

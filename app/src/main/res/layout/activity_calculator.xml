@@ -7,7 +7,7 @@
 
         <variable
             name="calculator"
-            type="com.jay.currencyconverter.viewmodel.CalculatorModel" />
+            type="com.jay.currencyconverter.viewModel.CalculatorActivityVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
