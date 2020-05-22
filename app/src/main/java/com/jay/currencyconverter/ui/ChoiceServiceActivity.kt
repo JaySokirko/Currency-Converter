@@ -4,8 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.jay.currencyconverter.R
-import com.jay.currencyconverter.ui.bankActivity.BankActivity
-import com.jay.currencyconverter.ui.nbuActivity.NbuActivity
 import kotlinx.android.synthetic.main.activity_choice_service.*
 
 class ChoiceServiceActivity : AppCompatActivity() {

@@ -1,36 +1,27 @@
-package com.jay.currencyconverter.viewmodel
+package com.jay.currencyconverter.viewModel
 
 import androidx.databinding.ObservableField
 import com.jay.currencyconverter.model.currencyExchange.currency.Currency
 import com.jay.currencyconverter.util.CurrencyCalculator
-import com.jay.currencyconverter.util.CustomObservableField
+import com.jay.currencyconverter.util.ObservableFieldWrapper
 import com.jay.currencyconverter.util.letBlock
 import com.jay.currencyconverter.util.removeLastChar
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.PublishSubject
 
-class CalculatorModel {
+class CalculatorActivityVM : BaseViewModel() {
 
-    val disposable = CompositeDisposable()
     val baseCurrencyObserver: PublishSubject<Currency> = PublishSubject.create()
     val conversionCurrencyObserver: PublishSubject<Currency> = PublishSubject.create()
     val result: ObservableField<String> = ObservableField()
     val currencyCoefficient: ObservableField<String> = ObservableField()
-    val inputValue: CustomObservableField<String> = CustomObservableField()
-
-    val tag = "TAG"
+    val inputValue: ObservableFieldWrapper<String> = ObservableFieldWrapper()
 
     init {
         result.set("0")
         inputValue.setField("0")
         observeCurrenciesChoice()
         observeInput()
-    }
-
-    fun onDestroy() {
-        disposable.dispose()
-        disposable.clear()
     }
 
     fun onOneClick() {
@@ -98,7 +89,7 @@ class CalculatorModel {
         }.subscribe()
     }
 
-    private fun setInputValue(input: String)  {
+    private fun setInputValue(input: String) {
         val builder = StringBuilder()
         val current: String = inputValue.get().toString()
         val dot = "."
@@ -138,24 +129,35 @@ class CalculatorModel {
         }
     }
 
-    private fun setupCurrencyCoefficient(baseCurrencyBid: String?, conversionCurrencyBid: String?){
+    private fun setupCurrencyCoefficient(baseCurrencyBid: String?, conversionCurrencyBid: String?) {
         letBlock(baseCurrencyBid, conversionCurrencyBid) { baseBid, conversionBid ->
-            currencyCoefficient.set(CurrencyCalculator.calculateExchangeCoefficient(
-                baseBid.toDouble(), conversionBid.toDouble()).toString())
+            currencyCoefficient.set(
+                CurrencyCalculator.calculateExchangeCoefficient(
+                    baseBid.toDouble(), conversionBid.toDouble()
+                ).toString()
+            )
         }
     }
 
-    private fun setupResult(){
+    private fun setupResult() {
         letBlock(currencyCoefficient.get(), inputValue.get()) { coefficient, value ->
-            result.set(CurrencyCalculator.calculateExchangeRate(coefficient.toDouble(),
-            value.toDouble()).toString())
+            result.set(
+                CurrencyCalculator.calculateExchangeRate(
+                    coefficient.toDouble(),
+                    value.toDouble()
+                ).toString()
+            )
         }
     }
 
-    private fun setupResult(inputValue: String){
+    private fun setupResult(inputValue: String) {
         currencyCoefficient.get()?.let { coefficient ->
-            result.set(CurrencyCalculator.calculateExchangeRate(coefficient.toDouble(),
-                inputValue.toDouble()).toString())
+            result.set(
+                CurrencyCalculator.calculateExchangeRate(
+                    coefficient.toDouble(),
+                    inputValue.toDouble()
+                ).toString()
+            )
         }
     }
 }

@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.customView.CurrencyView
 import com.jay.currencyconverter.model.currencyExchange.bank.Organization
-import com.jay.currencyconverter.model.currencyExchange.currency.Currency
 import com.jay.currencyconverter.ui.adapter.BankExchangeRateAdapter.ViewHolder
 
 class BankExchangeRateAdapter : RecyclerView.Adapter<ViewHolder>() {
@@ -42,7 +41,7 @@ class BankExchangeRateAdapter : RecyclerView.Adapter<ViewHolder>() {
         return position
     }
 
-    fun setItems(organizations: Collection<Organization?>) {
+    fun setItems(organizations: List<Organization?>) {
         organizationList.clear()
         organizationList.addAll(organizations.filterNotNull())
         notifyDataSetChanged()
