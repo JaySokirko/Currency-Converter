@@ -6,4 +6,6 @@
     <color name="white">#FFFFFF</color>
     <color name="transparent">#00000000</color>
     <color name="gray_300">#E0E0E0</color>
+    <color name="red_400">#EF5350</color>
+    <color name="amber_400">#FFCA28</color>
 </resources>

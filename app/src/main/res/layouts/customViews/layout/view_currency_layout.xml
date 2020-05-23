@@ -4,50 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
-    android:layout_marginEnd="8dp">
+    android:layout_margin="@dimen/x2">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/currency_image"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="@dimen/x8"
+        android:layout_height="@dimen/x8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@drawable/ic_usa_flag" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/currency_abr"
-        android:layout_width="wrap_content"
+        android:id="@+id/currency_title"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
+        android:layout_marginStart="@dimen/x"
+        android:layout_marginEnd="@dimen/x"
         app:layout_constraintBottom_toBottomOf="@+id/currency_image"
         app:layout_constraintEnd_toStartOf="@+id/guideline1"
         app:layout_constraintStart_toEndOf="@+id/currency_image"
         app:layout_constraintTop_toTopOf="@+id/currency_image"
-        tools:text="USD" />
+        tools:text="Доллар США" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.20" />
+        app:layout_constraintGuide_percent="0.5" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/currency_name"
+        android:id="@+id/bid"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="@dimen/x"
         app:layout_constraintBottom_toBottomOf="@+id/currency_image"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintStart_toEndOf="@+id/currency_abr"
         app:layout_constraintStart_toStartOf="@+id/guideline1"
         app:layout_constraintTop_toTopOf="@+id/currency_image"
-        tools:text="Доллар США" />
+        tools:text="27.000" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -56,10 +51,11 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.75" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/rate"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/ask"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/x"
         app:layout_constraintBottom_toBottomOf="@+id/currency_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline2"

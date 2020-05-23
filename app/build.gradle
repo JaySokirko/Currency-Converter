@@ -26,6 +26,49 @@ android {
     dataBinding {
         enabled = true
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(RELEASE_STORE_FILE)
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+        }
+    }
+
+    final String packageSuffixCommon = 'com.jay.currencyconverter'
+
+    // for each of the flavours should be added configuration for signingConfig
+    flavorDimensions "default"
+    productFlavors {
+        prod {
+            applicationId = "$packageSuffixCommon"
+            signingConfig signingConfigs.release
+            versionCode = 1
+            versionName = "1.0.0"
+        }
+    }
+
+    sourceSets {
+        prod {
+            res.srcDirs =
+                    [
+                            file("src/main/res/layouts/").listFiles(),
+                            'src/main/res/layouts',
+                            'src/main/res/layouts/activities/navigationActivity',
+                            'src/main/res'
+                    ]
+        }
+    }
 }
 
 dependencies {
@@ -51,6 +94,11 @@ dependencies {
 
     // lifecycle
     implementation "android.arch.lifecycle:extensions:1.1.1"
+    implementation 'androidx.navigation:navigation-fragment:2.1.0'
+    implementation 'androidx.navigation:navigation-ui:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.1.0'
     annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
 
     //dagger

@@ -10,12 +10,13 @@ import com.jay.currencyconverter.R
 import com.jay.currencyconverter.databinding.ActivityBanksBinding
 import com.jay.currencyconverter.di.DaggerBankActivityComponent
 import com.jay.currencyconverter.ui.adapter.BankExchangeRateAdapter
+import com.jay.currencyconverter.ui.dialog.ErrorDialog
 import com.jay.currencyconverter.util.Constant
 import com.jay.currencyconverter.viewModel.BankActivityVM
 import kotlinx.android.synthetic.main.activity_banks.*
 import javax.inject.Inject
 
-class BankActivity : AppCompatActivity() {
+class BankActivity : AppCompatActivity(), ErrorDialog.ErrorDialogClickListener {
 
     @Inject
     lateinit var bankExchangeRateAdapter: BankExchangeRateAdapter
@@ -23,9 +24,14 @@ class BankActivity : AppCompatActivity() {
     @Inject
     lateinit var bankActivityVM: BankActivityVM
 
+    private val errorDialog = ErrorDialog()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         DaggerBankActivityComponent.builder().activity(this).build().inject(this)
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_banks)
+
+        errorDialog.setOnErrorDialogClickListener(this)
 
         initBinding()
         setupBanksExchangeRateList()
@@ -41,13 +47,27 @@ class BankActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    /**
+     * @see ErrorDialog.ErrorDialogClickListener.onReload
+     */
+    override fun onReload() {
+        bankActivityVM.getExchangeRate()
+    }
+
+    /**
+     * @see ErrorDialog.ErrorDialogClickListener.onExit
+     */
+    override fun onExit() {
+        onBackPressed()
+    }
+
     private fun observeExchangeRate() {
         bankActivityVM.exchangeObserver.observe(this, Observer { response ->
 
             if (response.error == null) {
                 bankExchangeRateAdapter.setItems(response.data!!)
             } else {
-                //todo handle error
+                errorDialog.show(supportFragmentManager, this.localClassName)
             }
         })
     }

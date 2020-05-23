@@ -9,11 +9,12 @@ import com.jay.currencyconverter.R
 import com.jay.currencyconverter.databinding.ActivityNbuBinding
 import com.jay.currencyconverter.di.DaggerNbuActivityComponent
 import com.jay.currencyconverter.ui.adapter.NbuExchangeAdapter
+import com.jay.currencyconverter.ui.dialog.ErrorDialog
 import com.jay.currencyconverter.viewModel.NbuActivityMV
 import kotlinx.android.synthetic.main.activity_nbu.*
 import javax.inject.Inject
 
-class NbuActivity : AppCompatActivity() {
+class NbuActivity : AppCompatActivity(), ErrorDialog.ErrorDialogClickListener {
 
     @Inject
     lateinit var nbuExchangeAdapter: NbuExchangeAdapter
@@ -21,9 +22,13 @@ class NbuActivity : AppCompatActivity() {
     @Inject
     lateinit var nbuActivityVM: NbuActivityMV
 
+    private val errorDialog: ErrorDialog = ErrorDialog()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         DaggerNbuActivityComponent.builder().activity(this).build().inject(this)
         super.onCreate(savedInstanceState)
+
+        errorDialog.setOnErrorDialogClickListener(this)
 
         initBinding()
         setupNbuExchangeList()
@@ -38,13 +43,27 @@ class NbuActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    /**
+     * @see ErrorDialog.ErrorDialogClickListener.onReload
+     */
+    override fun onReload() {
+        nbuActivityVM.getExchangeRate()
+    }
+
+    /**
+     * @see ErrorDialog.ErrorDialogClickListener.onExit
+     */
+    override fun onExit() {
+        onBackPressed()
+    }
+
     private fun observeExchangeRate() {
         nbuActivityVM.exchangeObserver.observe(this, Observer { response ->
 
             if (response.error == null) {
                 nbuExchangeAdapter.setItems(response.data!!)
             } else {
-                //todo handle error
+                errorDialog.show(supportFragmentManager, this.localClassName)
             }
         })
     }
