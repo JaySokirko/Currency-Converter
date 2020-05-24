@@ -1,7 +1,6 @@
 package com.jay.currencyconverter.ui
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,7 +13,7 @@ import com.jay.currencyconverter.viewModel.NbuActivityMV
 import kotlinx.android.synthetic.main.activity_nbu.*
 import javax.inject.Inject
 
-class NbuActivity : AppCompatActivity(), ErrorDialog.ErrorDialogClickListener {
+class NbuActivity : NavigationActivity(), ErrorDialog.ErrorDialogClickListener {
 
     @Inject
     lateinit var nbuExchangeAdapter: NbuExchangeAdapter
@@ -27,10 +26,12 @@ class NbuActivity : AppCompatActivity(), ErrorDialog.ErrorDialogClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         DaggerNbuActivityComponent.builder().activity(this).build().inject(this)
         super.onCreate(savedInstanceState)
+        initContent(R.layout.activity_nbu, R.layout.default_toolbar)
+
+        initBinding()
 
         errorDialog.setOnErrorDialogClickListener(this)
 
-        initBinding()
         setupNbuExchangeList()
 
         nbuActivityVM.getExchangeRate()
@@ -69,9 +70,8 @@ class NbuActivity : AppCompatActivity(), ErrorDialog.ErrorDialogClickListener {
     }
 
     private fun initBinding() {
-        val binding: ActivityNbuBinding =
-            DataBindingUtil.setContentView(this, R.layout.activity_nbu)
-        binding.nbuVM = nbuActivityVM
+        val binding: ActivityNbuBinding? = DataBindingUtil.bind(mainContentView)
+        binding?.nbuVM = nbuActivityVM
     }
 
     private fun setupNbuExchangeList() {

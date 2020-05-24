@@ -2,7 +2,6 @@ package com.jay.currencyconverter.ui
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,7 +15,7 @@ import com.jay.currencyconverter.viewModel.BankActivityVM
 import kotlinx.android.synthetic.main.activity_banks.*
 import javax.inject.Inject
 
-class BankActivity : AppCompatActivity(), ErrorDialog.ErrorDialogClickListener {
+class BankActivity : NavigationActivity(), ErrorDialog.ErrorDialogClickListener {
 
     @Inject
     lateinit var bankExchangeRateAdapter: BankExchangeRateAdapter
@@ -29,7 +28,7 @@ class BankActivity : AppCompatActivity(), ErrorDialog.ErrorDialogClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         DaggerBankActivityComponent.builder().activity(this).build().inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_banks)
+        initContent(R.layout.activity_banks, R.layout.default_toolbar)
 
         errorDialog.setOnErrorDialogClickListener(this)
 
@@ -73,9 +72,8 @@ class BankActivity : AppCompatActivity(), ErrorDialog.ErrorDialogClickListener {
     }
 
     private fun initBinding() {
-        val binding: ActivityBanksBinding =
-            DataBindingUtil.setContentView(this, R.layout.activity_banks)
-        binding.bankVM = bankActivityVM
+        val binding: ActivityBanksBinding? = DataBindingUtil.bind(mainContentView)
+        binding?.bankVM = bankActivityVM
     }
 
     private fun setupBanksExchangeRateList() {

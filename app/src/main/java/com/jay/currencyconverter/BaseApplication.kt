@@ -6,7 +6,7 @@ import com.jay.currencyconverter.di.*
 class BaseApplication : Application() {
 
     override fun onCreate() {
-        baseComponent = DaggerBaseComponent.builder().baseModule(BaseModule(this)).build()
+        baseComponent = DaggerBaseComponent.builder().baseModule(BaseModule(application = this)).build()
         networkComponent = DaggerNetworkComponent.create()
         super.onCreate()
     }
@@ -14,6 +14,5 @@ class BaseApplication : Application() {
     companion object {
         lateinit var baseComponent: BaseComponent
         lateinit var networkComponent: NetworkComponent
-
     }
 }
