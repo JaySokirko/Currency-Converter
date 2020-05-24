@@ -7,12 +7,21 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <attr format="reference" name="cardStyle"/>
+    <attr name="cardStyle" format="reference" />
 
     <style name="CardViewCustom" parent="CardView">
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
     </style>
+
+    <style name="BaseTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="BaseTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="BaseTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>
