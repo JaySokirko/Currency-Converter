@@ -1,7 +1,7 @@
 package com.jay.currencyconverter.viewModel
 
 import androidx.databinding.ObservableField
-import com.jay.currencyconverter.model.currencyExchange.currency.Currency
+import com.jay.currencyconverter.model.exchangeRate.currency.Currency
 import com.jay.currencyconverter.util.CurrencyCalculator
 import com.jay.currencyconverter.util.ObservableFieldWrapper
 import com.jay.currencyconverter.util.letBlock

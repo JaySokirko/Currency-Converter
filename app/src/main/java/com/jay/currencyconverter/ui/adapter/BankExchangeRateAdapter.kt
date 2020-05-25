@@ -10,7 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.customView.CurrencyView
-import com.jay.currencyconverter.model.currencyExchange.bank.Organization
+import com.jay.currencyconverter.model.exchangeRate.bank.Organization
 import com.jay.currencyconverter.ui.adapter.BankExchangeRateAdapter.ViewHolder
 
 class BankExchangeRateAdapter : RecyclerView.Adapter<ViewHolder>() {

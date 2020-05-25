@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.databinding.ActivityCalculatorBinding
 import com.jay.currencyconverter.di.DaggerCalculatorActivityComponent
-import com.jay.currencyconverter.model.currencyExchange.currency.Currencies
-import com.jay.currencyconverter.model.currencyExchange.currency.Currency
-import com.jay.currencyconverter.model.currencyExchange.currency.CurrencyType
-import com.jay.currencyconverter.model.currencyExchange.currency.UAH
+import com.jay.currencyconverter.model.exchangeRate.currency.Currencies
+import com.jay.currencyconverter.model.exchangeRate.currency.Currency
+import com.jay.currencyconverter.model.exchangeRate.currency.CurrencyType
+import com.jay.currencyconverter.model.exchangeRate.currency.UAH
 import com.jay.currencyconverter.ui.adapter.CurrencyChoiceAdapter
 import com.jay.currencyconverter.util.Constant
 import com.jay.currencyconverter.viewModel.CalculatorActivityVM
