@@ -1,8 +1,8 @@
 package com.jay.currencyconverter.repository
 
 import com.jay.currencyconverter.BaseApplication
-import com.jay.currencyconverter.model.currencyExchange.bank.Banks
-import com.jay.currencyconverter.service.CurrencyExchangeRateApi
+import com.jay.currencyconverter.model.exchangeRate.bank.Banks
+import com.jay.currencyconverter.api.CurrencyExchangeRateApi
 import io.reactivex.Observable
 
 class BankExchangeRate {

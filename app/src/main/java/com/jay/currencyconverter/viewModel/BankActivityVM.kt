@@ -3,8 +3,8 @@ package com.jay.currencyconverter.viewModel
 import android.view.View
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.MutableLiveData
-import com.jay.currencyconverter.model.currencyExchange.bank.Banks
-import com.jay.currencyconverter.model.currencyExchange.bank.Organization
+import com.jay.currencyconverter.model.exchangeRate.bank.Banks
+import com.jay.currencyconverter.model.exchangeRate.bank.Organization
 import com.jay.currencyconverter.repository.BankExchangeRate
 import com.jay.currencyconverter.util.ResponseWrapper
 import io.reactivex.android.schedulers.AndroidSchedulers

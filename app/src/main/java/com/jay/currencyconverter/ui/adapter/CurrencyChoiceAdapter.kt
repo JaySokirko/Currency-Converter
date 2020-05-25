@@ -7,8 +7,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.customView.CustomMaterialButton
-import com.jay.currencyconverter.model.currencyExchange.currency.Currency
-import com.jay.currencyconverter.model.currencyExchange.currency.CurrencyType
+import com.jay.currencyconverter.model.exchangeRate.currency.Currency
+import com.jay.currencyconverter.model.exchangeRate.currency.CurrencyType
 import com.jay.currencyconverter.util.ViewState
 import io.reactivex.subjects.BehaviorSubject
 

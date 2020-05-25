@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.databinding.ActivityNbuBinding
 import com.jay.currencyconverter.di.DaggerNbuActivityComponent
+import com.jay.currencyconverter.util.LineChartSetup
 import com.jay.currencyconverter.ui.adapter.NbuExchangeAdapter
 import com.jay.currencyconverter.ui.dialog.ErrorDialog
 import com.jay.currencyconverter.viewModel.NbuActivityMV
@@ -35,8 +36,11 @@ class NbuActivity : NavigationActivity(), ErrorDialog.ErrorDialogClickListener {
         setupNbuExchangeList()
 
         nbuActivityVM.getExchangeRate()
+        nbuActivityVM.getPreviousExchangeRate()
 
         observeExchangeRate()
+
+        LineChartSetup(findViewById(R.id.line_chart))
     }
 
     override fun onDestroy() {
