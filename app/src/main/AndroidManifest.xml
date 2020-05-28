@@ -13,14 +13,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/BaseTheme">
+
         <activity
-            android:name=".ui.NewsActivity"
+            android:name=".ui.newsActivity.NewsActivity"
             android:label="@string/title_activity_news"
-            android:theme="@style/BaseTheme.NoActionBar"></activity>
-        <activity android:name=".ui.CalculatorActivity" />
-        <activity android:name=".ui.BankActivity" />
-        <activity android:name=".ui.NbuActivity" />
-        <activity android:name=".ui.ChoiceServiceActivity">
+            android:theme="@style/BaseTheme.NoActionBar"/>
+
+        <activity android:name=".ui.calculatorActivity.CalculatorActivity" />
+
+        <activity android:name=".ui.bankActivity.BankActivity" />
+
+        <activity android:name=".ui.nbuActivity.NbuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

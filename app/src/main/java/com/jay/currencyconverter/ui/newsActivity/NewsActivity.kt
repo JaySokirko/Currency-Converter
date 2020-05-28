@@ -1,4 +1,4 @@
-package com.jay.currencyconverter.ui
+package com.jay.currencyconverter.ui.newsActivity
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
