@@ -26,7 +26,7 @@ class BankActivityViewModel : BaseViewModel() {
             .subscribeOn(Schedulers.io())
             .subscribe(
                 { result: Banks ->
-                    exchangeObserver.postValue(ResponseWrapper(response = result.organizations))
+                    exchangeObserver.postValue(ResponseWrapper(data = result.organizations))
                 },
 
                 { error: Throwable ->

@@ -6,4 +6,5 @@ object Constant {
 
     const val ORGANIZATION_TITLE = "organizationName"
     const val CURRENCIES = "currencies"
+    const val EMPTY_STRING = ""
 }

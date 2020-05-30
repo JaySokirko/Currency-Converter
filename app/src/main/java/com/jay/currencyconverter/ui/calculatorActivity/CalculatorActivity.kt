@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.databinding.ActivityCalculatorBinding
 import com.jay.currencyconverter.di.DaggerCalculatorActivityComponent
-import com.jay.currencyconverter.model.CurrencySelectWrapper
+import com.jay.currencyconverter.model.CurrencyChoiceWrapper
 import com.jay.currencyconverter.model.exchangeRate.currency.Currencies
 import com.jay.currencyconverter.model.exchangeRate.currency.Currency
 import com.jay.currencyconverter.model.exchangeRate.currency.CurrencyType
@@ -67,15 +67,15 @@ class CalculatorActivity : AppCompatActivity() {
 
     private fun onCurrencyChoiceListItemClick() {
         val subscribe: Disposable =
-            currencyChoiceAdapter.clickEvent.subscribe { wrapper: CurrencySelectWrapper ->
+            currencyChoiceAdapter.clickEvent.subscribe { wrapper: CurrencyChoiceWrapper ->
                 when (wrapper.currencyType) {
                     CurrencyType.BASE -> {
-                        wrapper.selectedCurrency?.let {
+                        wrapper.chosenCurrency?.let {
                             calculatorVM.baseCurrencyObserver.onNext(it)
                         }
                     }
                     CurrencyType.CONVERSION -> {
-                        wrapper.selectedCurrency?.let {
+                        wrapper.chosenCurrency?.let {
                             calculatorVM.conversionCurrencyObserver.onNext(it)
                         }
                     }

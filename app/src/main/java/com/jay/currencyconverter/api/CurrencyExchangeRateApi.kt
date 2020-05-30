@@ -2,7 +2,6 @@ package com.jay.currencyconverter.api
 
 import com.jay.currencyconverter.model.exchangeRate.bank.Banks
 import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
-import com.jay.currencyconverter.model.exchangeRate.nbu.NbuCurrencyByDate
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -18,6 +17,6 @@ interface CurrencyExchangeRateApi {
 
     @GET("/NBUStatService/v1/statdirectory/exchange?json")
     fun getNbuExchangeByCurrencyAndDate(@Query("valcode") code: String,
-                                        @Query("date") date: String ): Observable<MutableList<NbuCurrencyByDate>>
+                                        @Query("date") date: String ): Observable<MutableList<Nbu>>
 
 }

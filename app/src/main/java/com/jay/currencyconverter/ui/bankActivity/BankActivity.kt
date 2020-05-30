@@ -65,7 +65,7 @@ class BankActivity : NavigationActivity(), ErrorDialog.ErrorDialogClickListener 
         bankActivityViewModel.exchangeObserver.observe(this, Observer { response ->
 
             if (response.error == null) {
-                bankExchangeRateAdapter.setItems(response.response!!)
+                bankExchangeRateAdapter.setItems(response.data!!)
             } else {
                 errorDialog.show(supportFragmentManager, this.localClassName)
             }
