@@ -1,4 +1,4 @@
-package com.jay.currencyconverter.ui.calculatorActivity
+package com.jay.currencyconverter.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.databinding.ActivityCalculatorBinding
 import com.jay.currencyconverter.di.DaggerCalculatorActivityComponent
-import com.jay.currencyconverter.model.CurrencySelectWrapper
 import com.jay.currencyconverter.model.exchangeRate.currency.Currencies
 import com.jay.currencyconverter.model.exchangeRate.currency.Currency
 import com.jay.currencyconverter.model.exchangeRate.currency.CurrencyType
 import com.jay.currencyconverter.model.exchangeRate.currency.UAH
 import com.jay.currencyconverter.ui.adapter.CurrencyChoiceAdapter
 import com.jay.currencyconverter.util.Constant
+import com.jay.currencyconverter.viewModel.CalculatorActivityVM
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_calculator.*
 import javax.inject.Inject
@@ -26,7 +26,7 @@ class CalculatorActivity : AppCompatActivity() {
     private var organizationTitle: String? = null
 
     @Inject
-    lateinit var calculatorVM: CalculatorActivityViewModel
+    lateinit var calculatorVM: CalculatorActivityVM
 
     @Inject
     lateinit var currencyChoiceAdapter: CurrencyChoiceAdapter
@@ -67,15 +67,15 @@ class CalculatorActivity : AppCompatActivity() {
 
     private fun onCurrencyChoiceListItemClick() {
         val subscribe: Disposable =
-            currencyChoiceAdapter.clickEvent.subscribe { wrapper: CurrencySelectWrapper ->
-                when (wrapper.currencyType) {
+            currencyChoiceAdapter.clickEvent.subscribe { helper: CurrencyChoiceAdapter.Helper ->
+                when (helper.currencyType) {
                     CurrencyType.BASE -> {
-                        wrapper.selectedCurrency?.let {
+                        helper.selectedCurrency?.let {
                             calculatorVM.baseCurrencyObserver.onNext(it)
                         }
                     }
                     CurrencyType.CONVERSION -> {
-                        wrapper.selectedCurrency?.let {
+                        helper.selectedCurrency?.let {
                             calculatorVM.conversionCurrencyObserver.onNext(it)
                         }
                     }

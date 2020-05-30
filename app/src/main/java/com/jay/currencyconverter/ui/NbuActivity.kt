@@ -1,4 +1,4 @@
-package com.jay.currencyconverter.ui.nbuActivity
+package com.jay.currencyconverter.ui
 
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.databinding.ActivityNbuBinding
 import com.jay.currencyconverter.di.DaggerNbuActivityComponent
-import com.jay.currencyconverter.ui.NavigationActivity
 import com.jay.currencyconverter.util.LineChartSetup
 import com.jay.currencyconverter.ui.adapter.NbuExchangeAdapter
 import com.jay.currencyconverter.ui.dialog.ErrorDialog
+import com.jay.currencyconverter.viewModel.NbuActivityMV
 import kotlinx.android.synthetic.main.activity_nbu.*
 import javax.inject.Inject
 
@@ -20,7 +20,7 @@ class NbuActivity : NavigationActivity(), ErrorDialog.ErrorDialogClickListener {
     lateinit var nbuExchangeAdapter: NbuExchangeAdapter
 
     @Inject
-    lateinit var nbuActivityVM: NbuActivityViewModel
+    lateinit var nbuActivityVM: NbuActivityMV
 
     private val errorDialog: ErrorDialog = ErrorDialog()
 
@@ -66,7 +66,7 @@ class NbuActivity : NavigationActivity(), ErrorDialog.ErrorDialogClickListener {
         nbuActivityVM.exchangeObserver.observe(this, Observer { response ->
 
             if (response.error == null) {
-                nbuExchangeAdapter.setItems(response.response!!)
+                nbuExchangeAdapter.setItems(response.data!!)
             } else {
                 errorDialog.show(supportFragmentManager, this.localClassName)
             }

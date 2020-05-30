@@ -1,18 +1,17 @@
-package com.jay.currencyconverter.ui.bankActivity
+package com.jay.currencyconverter.viewModel
 
 import android.view.View
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.MutableLiveData
-import com.jay.currencyconverter.model.ResponseWrapper
 import com.jay.currencyconverter.model.exchangeRate.bank.Banks
 import com.jay.currencyconverter.model.exchangeRate.bank.Organization
 import com.jay.currencyconverter.repository.BankExchangeRate
-import com.jay.currencyconverter.ui.BaseViewModel
+import com.jay.currencyconverter.util.ResponseWrapper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class BankActivityViewModel : BaseViewModel() {
+class BankActivityVM : BaseViewModel() {
 
     val progressVisibility: ObservableInt = ObservableInt()
     val exchangeObserver: MutableLiveData<ResponseWrapper<List<Organization>>> = MutableLiveData()
@@ -26,7 +25,7 @@ class BankActivityViewModel : BaseViewModel() {
             .subscribeOn(Schedulers.io())
             .subscribe(
                 { result: Banks ->
-                    exchangeObserver.postValue(ResponseWrapper(response = result.organizations))
+                    exchangeObserver.postValue(ResponseWrapper(data = result.organizations))
                 },
 
                 { error: Throwable ->

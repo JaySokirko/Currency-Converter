@@ -7,7 +7,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.customView.CustomMaterialButton
-import com.jay.currencyconverter.model.CurrencySelectWrapper
 import com.jay.currencyconverter.model.exchangeRate.currency.Currency
 import com.jay.currencyconverter.model.exchangeRate.currency.CurrencyType
 import com.jay.currencyconverter.util.ViewState
@@ -15,7 +14,7 @@ import io.reactivex.subjects.BehaviorSubject
 
 class CurrencyChoiceAdapter : RecyclerView.Adapter<BaseViewHolder<Currency>>() {
 
-    val clickEvent: BehaviorSubject<CurrencySelectWrapper> = BehaviorSubject.create()
+    val clickEvent: BehaviorSubject<Helper> = BehaviorSubject.create()
 
     private val currencyList: MutableList<Currency> = ArrayList()
     private val baseCurrencyBtnList: MutableList<CustomMaterialButton> = mutableListOf()
@@ -77,7 +76,7 @@ class CurrencyChoiceAdapter : RecyclerView.Adapter<BaseViewHolder<Currency>>() {
 
         private fun onBaseCurrencyBtnClick() {
             clickEvent.onNext(
-                CurrencySelectWrapper(
+                Helper(
                     selectedCurrency = currencyList[layoutPosition],
                     currencyType = CurrencyType.BASE
                 )
@@ -87,7 +86,7 @@ class CurrencyChoiceAdapter : RecyclerView.Adapter<BaseViewHolder<Currency>>() {
 
         private fun onConversionCurrencyBtnClick() {
             clickEvent.onNext(
-                CurrencySelectWrapper(
+                Helper(
                     selectedCurrency = currencyList[layoutPosition],
                     currencyType = CurrencyType.CONVERSION
                 )
@@ -96,6 +95,10 @@ class CurrencyChoiceAdapter : RecyclerView.Adapter<BaseViewHolder<Currency>>() {
         }
     }
 
+    inner class Helper(
+        val selectedCurrency: Currency? = null,
+        val currencyType: CurrencyType? = null
+    )
 
     private inner class VisualBehaviour {
 

@@ -7,14 +7,14 @@
 
         <variable
             name="calculator"
-            type="com.jay.currencyconverter.ui.calculatorActivity.CalculatorActivityViewModel" />
+            type="com.jay.currencyconverter.viewModel.CalculatorActivityVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
-        tools:context=".ui.calculatorActivity.CalculatorActivity">
+        tools:context=".ui.CalculatorActivity">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/base_currencies_list"

@@ -1,7 +1,8 @@
 package com.jay.currencyconverter.di
 
 import androidx.fragment.app.FragmentActivity
-import com.jay.currencyconverter.ui.nbuActivity.NbuActivity
+import com.jay.currencyconverter.databinding.ActivityNbuBinding
+import com.jay.currencyconverter.ui.NbuActivity
 import dagger.BindsInstance
 import dagger.Component
 

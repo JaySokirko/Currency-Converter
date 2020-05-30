@@ -36,7 +36,7 @@ class NetworkModule {
         return Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://bank.gov.ua")
+            .baseUrl(NBU_URL)
             .apply { if (okHttpClient != null) client(okHttpClient) }
             .build()
             .create(CurrencyExchangeRateApi::class.java)

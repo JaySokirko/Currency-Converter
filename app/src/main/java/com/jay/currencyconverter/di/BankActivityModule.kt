@@ -3,7 +3,7 @@ package com.jay.currencyconverter.di
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.jay.currencyconverter.ui.adapter.BankExchangeRateAdapter
-import com.jay.currencyconverter.ui.bankActivity.BankActivityViewModel
+import com.jay.currencyconverter.viewModel.BankActivityVM
 import dagger.Module
 import dagger.Provides
 
@@ -17,8 +17,8 @@ class BankActivityModule {
 
     companion object {
         @Provides
-        fun provideBankActivityVM(activity: FragmentActivity): BankActivityViewModel {
-            return ViewModelProviders.of(activity).get(BankActivityViewModel::class.java)
+        fun provideBankActivityVM(activity: FragmentActivity): BankActivityVM {
+            return ViewModelProviders.of(activity).get(BankActivityVM::class.java)
         }
     }
 }

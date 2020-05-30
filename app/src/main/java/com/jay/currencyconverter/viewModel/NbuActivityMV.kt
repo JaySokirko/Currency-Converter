@@ -1,4 +1,4 @@
-package com.jay.currencyconverter.ui.nbuActivity
+package com.jay.currencyconverter.viewModel
 
 import android.content.Context
 import android.util.Log
@@ -6,16 +6,15 @@ import android.view.View
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.MutableLiveData
 import com.jay.currencyconverter.BaseApplication
-import com.jay.currencyconverter.model.ResponseWrapper
 import com.jay.currencyconverter.model.exchangeRate.currency.Currencies
 import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
 import com.jay.currencyconverter.repository.NbuExchangeRate
-import com.jay.currencyconverter.ui.BaseViewModel
+import com.jay.currencyconverter.util.ResponseWrapper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class NbuActivityViewModel : BaseViewModel() {
+class NbuActivityMV : BaseViewModel() {
 
     val progressVisibility: ObservableInt = ObservableInt()
     val exchangeObserver: MutableLiveData<ResponseWrapper<List<Nbu>>> = MutableLiveData()
@@ -30,14 +29,9 @@ class NbuActivityViewModel : BaseViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe(
-                { result ->
-                    exchangeObserver.postValue(ResponseWrapper(filterResult(result)))
-                },
+                { result -> exchangeObserver.postValue(ResponseWrapper(filterResult(result))) },
 
-                { error ->
-                    exchangeObserver.postValue(ResponseWrapper(error = error))
-                    Log.d("TAG", "getExchangeRate: " + error.message)
-                },
+                { error -> exchangeObserver.postValue(ResponseWrapper(error = error)) },
 
                 { progressVisibility.set(View.GONE) })
 
@@ -50,11 +44,11 @@ class NbuActivityViewModel : BaseViewModel() {
             .subscribeOn(Schedulers.io())
             .subscribe(
                 { result ->
-                    Log.d("TAG", "getPreviousExchangeRate: ${result[0]}")
+                    Log.d("TAG", "getExchangeRate: ${result[0]}")
                 },
 
                 { error ->
-                    Log.d("TAG", "getPreviousExchangeRate: " + error.message)
+                    Log.d("TAG", "getExchangeRate: " + error.message)
                 }
             )
         disposable.add(subscribe)
