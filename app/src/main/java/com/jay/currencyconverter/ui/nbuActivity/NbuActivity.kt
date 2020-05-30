@@ -4,13 +4,17 @@ import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.mikephil.charting.charts.LineChart
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.databinding.ActivityNbuBinding
 import com.jay.currencyconverter.di.DaggerNbuActivityComponent
+import com.jay.currencyconverter.model.ResponseWrapper
+import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
+import com.jay.currencyconverter.ui.LineChartSetup
 import com.jay.currencyconverter.ui.NavigationActivity
-import com.jay.currencyconverter.util.LineChartSetup
 import com.jay.currencyconverter.ui.adapter.NbuExchangeAdapter
 import com.jay.currencyconverter.ui.dialog.ErrorDialog
+import com.jay.currencyconverter.util.Constant.EMPTY_STRING
 import kotlinx.android.synthetic.main.activity_nbu.*
 import javax.inject.Inject
 
@@ -23,6 +27,7 @@ class NbuActivity : NavigationActivity(), ErrorDialog.ErrorDialogClickListener {
     lateinit var nbuActivityVM: NbuActivityViewModel
 
     private val errorDialog: ErrorDialog = ErrorDialog()
+    private lateinit var lineChart: LineChart
 
     override fun onCreate(savedInstanceState: Bundle?) {
         DaggerNbuActivityComponent.builder().activity(this).build().inject(this)
@@ -30,6 +35,9 @@ class NbuActivity : NavigationActivity(), ErrorDialog.ErrorDialogClickListener {
         initContent(R.layout.activity_nbu, R.layout.default_toolbar)
 
         initBinding()
+
+        lineChart = findViewById(R.id.line_chart)
+        lineChart.setNoDataText(EMPTY_STRING)
 
         errorDialog.setOnErrorDialogClickListener(this)
 
@@ -39,8 +47,7 @@ class NbuActivity : NavigationActivity(), ErrorDialog.ErrorDialogClickListener {
         nbuActivityVM.getPreviousExchangeRate()
 
         observeExchangeRate()
-
-        LineChartSetup(findViewById(R.id.line_chart))
+        observePreviousExchangeRate()
     }
 
     override fun onDestroy() {
@@ -63,12 +70,23 @@ class NbuActivity : NavigationActivity(), ErrorDialog.ErrorDialogClickListener {
     }
 
     private fun observeExchangeRate() {
-        nbuActivityVM.exchangeObserver.observe(this, Observer { response ->
+        nbuActivityVM.exchangeRateObserver.observe(this, Observer {
+                response: ResponseWrapper<List<Nbu>> ->
 
             if (response.error == null) {
-                nbuExchangeAdapter.setItems(response.response!!)
+                nbuExchangeAdapter.setItems(response.data!!)
             } else {
                 errorDialog.show(supportFragmentManager, this.localClassName)
+            }
+        })
+    }
+
+    private fun observePreviousExchangeRate() {
+        nbuActivityVM.previousExchangeRateObserver.observe(this, Observer {
+                response: ResponseWrapper<MutableList<Double>> ->
+
+            if (response.error == null){
+                LineChartSetup(lineChart, response.data!!)
             }
         })
     }

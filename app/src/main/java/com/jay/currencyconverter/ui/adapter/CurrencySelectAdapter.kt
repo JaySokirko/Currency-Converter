@@ -7,15 +7,14 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.customView.CustomMaterialButton
-import com.jay.currencyconverter.model.CurrencySelectWrapper
+import com.jay.currencyconverter.model.CurrencyChoiceWrapper
 import com.jay.currencyconverter.model.exchangeRate.currency.Currency
 import com.jay.currencyconverter.model.exchangeRate.currency.CurrencyType
-import com.jay.currencyconverter.util.ViewState
 import io.reactivex.subjects.BehaviorSubject
 
 class CurrencyChoiceAdapter : RecyclerView.Adapter<BaseViewHolder<Currency>>() {
 
-    val clickEvent: BehaviorSubject<CurrencySelectWrapper> = BehaviorSubject.create()
+    val clickEvent: BehaviorSubject<CurrencyChoiceWrapper> = BehaviorSubject.create()
 
     private val currencyList: MutableList<Currency> = ArrayList()
     private val baseCurrencyBtnList: MutableList<CustomMaterialButton> = mutableListOf()
@@ -77,8 +76,8 @@ class CurrencyChoiceAdapter : RecyclerView.Adapter<BaseViewHolder<Currency>>() {
 
         private fun onBaseCurrencyBtnClick() {
             clickEvent.onNext(
-                CurrencySelectWrapper(
-                    selectedCurrency = currencyList[layoutPosition],
+                CurrencyChoiceWrapper(
+                    chosenCurrency = currencyList[layoutPosition],
                     currencyType = CurrencyType.BASE
                 )
             )
@@ -87,8 +86,8 @@ class CurrencyChoiceAdapter : RecyclerView.Adapter<BaseViewHolder<Currency>>() {
 
         private fun onConversionCurrencyBtnClick() {
             clickEvent.onNext(
-                CurrencySelectWrapper(
-                    selectedCurrency = currencyList[layoutPosition],
+                CurrencyChoiceWrapper(
+                    chosenCurrency = currencyList[layoutPosition],
                     currencyType = CurrencyType.CONVERSION
                 )
             )
@@ -109,16 +108,16 @@ class CurrencyChoiceAdapter : RecyclerView.Adapter<BaseViewHolder<Currency>>() {
             setViewsBackgroundTint(baseCurrencyBtnList, R.color.colorPrimary)
             conversionCurrencyBtnList.forEach { button -> button.visibility = View.VISIBLE }
 
-            if (baseCurrencyBtn.state == ViewState.ButtonPress.PRESSED){
+            if (baseCurrencyBtn.isButtonPressed){
                 setViewBackgroundTint(baseCurrencyBtn, R.color.colorPrimary)
-                baseCurrencyBtn.state = ViewState.ButtonPress.NO_PRESSED
+                baseCurrencyBtn.isButtonPressed = false
 
             } else {
                 baseCurrencyBtnList.forEach { button ->
-                    button.state = ViewState.ButtonPress.NO_PRESSED
+                    button.isButtonPressed = false
                 }
                 setViewBackgroundTint(baseCurrencyBtn, R.color.colorAccent)
-                baseCurrencyBtn.state = ViewState.ButtonPress.PRESSED
+                baseCurrencyBtn.isButtonPressed = true
                 conversionCurrencyBtn.visibility = View.INVISIBLE
             }
         }
@@ -130,16 +129,16 @@ class CurrencyChoiceAdapter : RecyclerView.Adapter<BaseViewHolder<Currency>>() {
             setViewsBackgroundTint(conversionCurrencyBtnList, R.color.colorPrimary)
             baseCurrencyBtnList.forEach { button -> button.visibility = View.VISIBLE }
 
-            if (conversionCurrencyBtn.state == ViewState.ButtonPress.PRESSED){
+            if (conversionCurrencyBtn.isButtonPressed){
                 setViewBackgroundTint(conversionCurrencyBtn, R.color.colorPrimary)
-                conversionCurrencyBtn.state = ViewState.ButtonPress.NO_PRESSED
+                conversionCurrencyBtn.isButtonPressed = false
 
             } else {
                 baseCurrencyBtnList.forEach { button ->
-                    button.state = ViewState.ButtonPress.NO_PRESSED
+                    button.isButtonPressed = false
                 }
                 setViewBackgroundTint(conversionCurrencyBtn, R.color.colorAccent)
-                conversionCurrencyBtn.state = ViewState.ButtonPress.PRESSED
+                conversionCurrencyBtn.isButtonPressed = true
                 baseCurrencyBtn.visibility = View.INVISIBLE
             }
         }

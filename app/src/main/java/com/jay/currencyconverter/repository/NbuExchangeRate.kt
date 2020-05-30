@@ -3,7 +3,6 @@ package com.jay.currencyconverter.repository
 import com.jay.currencyconverter.BaseApplication
 import com.jay.currencyconverter.api.CurrencyExchangeRateApi
 import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
-import com.jay.currencyconverter.model.exchangeRate.nbu.NbuCurrencyByDate
 import io.reactivex.Observable
 
 class NbuExchangeRate {
@@ -16,6 +15,19 @@ class NbuExchangeRate {
 
     fun getExchangeRate(): Observable<MutableList<Nbu>> = exchangeRateApi.getNbuExchangeRate()
 
-    fun getExchangeByDateAndCurrency(currencyAbr: String, date: String): Observable<MutableList<NbuCurrencyByDate>> =
-        exchangeByDateAndCurrency.getNbuExchangeByCurrencyAndDate(currencyAbr, date)
+    fun getExchangeByDateAndCurrency(currencyAbr: String, date: String):
+            Observable<MutableList<Nbu>> {
+        return exchangeByDateAndCurrency.getNbuExchangeByCurrencyAndDate(currencyAbr, date)
+    }
+
+    fun createRequestList(currencyAbr: String, dateList: List<String>):
+            List<Observable<MutableList<Nbu>>> {
+
+        val requestList: MutableList<Observable<MutableList<Nbu>>> = mutableListOf()
+
+        dateList.forEach { date ->
+            requestList.add(getExchangeByDateAndCurrency(currencyAbr, date))
+        }
+        return requestList
+    }
 }
