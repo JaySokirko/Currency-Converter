@@ -6,7 +6,7 @@
 
         <variable
             name="nbuVM"
-            type="com.jay.currencyconverter.viewModel.NbuActivityMV" />
+            type="com.jay.currencyconverter.ui.nbuActivity.NbuActivityViewModel" />
 
     </data>
 

@@ -1,4 +1,4 @@
-package com.jay.currencyconverter.viewModel
+package com.jay.currencyconverter.ui
 
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable

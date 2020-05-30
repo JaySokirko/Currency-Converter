@@ -14,6 +14,9 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.jay.currencyconverter.R
+import com.jay.currencyconverter.ui.bankActivity.BankActivity
+import com.jay.currencyconverter.ui.nbuActivity.NbuActivity
+import com.jay.currencyconverter.ui.newsActivity.NewsActivity
 
 abstract class NavigationActivity : AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener {

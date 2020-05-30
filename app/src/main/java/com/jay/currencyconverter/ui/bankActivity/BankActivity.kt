@@ -1,4 +1,4 @@
-package com.jay.currencyconverter.ui
+package com.jay.currencyconverter.ui.bankActivity
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,10 +8,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.databinding.ActivityBanksBinding
 import com.jay.currencyconverter.di.DaggerBankActivityComponent
+import com.jay.currencyconverter.ui.calculatorActivity.CalculatorActivity
+import com.jay.currencyconverter.ui.NavigationActivity
 import com.jay.currencyconverter.ui.adapter.BankExchangeRateAdapter
 import com.jay.currencyconverter.ui.dialog.ErrorDialog
 import com.jay.currencyconverter.util.Constant
-import com.jay.currencyconverter.viewModel.BankActivityVM
 import kotlinx.android.synthetic.main.activity_banks.*
 import javax.inject.Inject
 
@@ -21,7 +22,7 @@ class BankActivity : NavigationActivity(), ErrorDialog.ErrorDialogClickListener 
     lateinit var bankExchangeRateAdapter: BankExchangeRateAdapter
 
     @Inject
-    lateinit var bankActivityVM: BankActivityVM
+    lateinit var bankActivityViewModel: BankActivityViewModel
 
     private val errorDialog = ErrorDialog()
 
@@ -35,14 +36,14 @@ class BankActivity : NavigationActivity(), ErrorDialog.ErrorDialogClickListener 
         initBinding()
         setupBanksExchangeRateList()
 
-        bankActivityVM.getExchangeRate()
+        bankActivityViewModel.getExchangeRate()
 
         observeExchangeRate()
         onBankExchangeRateListItemClick()
     }
 
     override fun onDestroy() {
-        bankActivityVM.onDestroy()
+        bankActivityViewModel.onDestroy()
         super.onDestroy()
     }
 
@@ -50,7 +51,7 @@ class BankActivity : NavigationActivity(), ErrorDialog.ErrorDialogClickListener 
      * @see ErrorDialog.ErrorDialogClickListener.onReload
      */
     override fun onReload() {
-        bankActivityVM.getExchangeRate()
+        bankActivityViewModel.getExchangeRate()
     }
 
     /**
@@ -61,10 +62,10 @@ class BankActivity : NavigationActivity(), ErrorDialog.ErrorDialogClickListener 
     }
 
     private fun observeExchangeRate() {
-        bankActivityVM.exchangeObserver.observe(this, Observer { response ->
+        bankActivityViewModel.exchangeObserver.observe(this, Observer { response ->
 
             if (response.error == null) {
-                bankExchangeRateAdapter.setItems(response.data!!)
+                bankExchangeRateAdapter.setItems(response.response!!)
             } else {
                 errorDialog.show(supportFragmentManager, this.localClassName)
             }
@@ -73,7 +74,7 @@ class BankActivity : NavigationActivity(), ErrorDialog.ErrorDialogClickListener 
 
     private fun initBinding() {
         val binding: ActivityBanksBinding? = DataBindingUtil.bind(mainContentView)
-        binding?.bankVM = bankActivityVM
+        binding?.bankVM = bankActivityViewModel
     }
 
     private fun setupBanksExchangeRateList() {

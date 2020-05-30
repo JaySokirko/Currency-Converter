@@ -1,4 +1,4 @@
-package com.jay.currencyconverter.viewModel
+package com.jay.currencyconverter.ui.calculatorActivity
 
 import androidx.databinding.ObservableField
 import com.jay.currencyconverter.model.exchangeRate.currency.Currency
@@ -6,10 +6,11 @@ import com.jay.currencyconverter.util.CurrencyCalculator
 import com.jay.currencyconverter.util.ObservableFieldWrapper
 import com.jay.currencyconverter.util.letBlock
 import com.jay.currencyconverter.util.removeLastChar
+import com.jay.currencyconverter.ui.BaseViewModel
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.PublishSubject
 
-class CalculatorActivityVM : BaseViewModel() {
+class CalculatorActivityViewModel : BaseViewModel() {
 
     val baseCurrencyObserver: PublishSubject<Currency> = PublishSubject.create()
     val conversionCurrencyObserver: PublishSubject<Currency> = PublishSubject.create()
