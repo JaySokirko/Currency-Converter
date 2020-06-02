@@ -11,35 +11,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.customView.CurrencyView
 import com.jay.currencyconverter.model.exchangeRate.bank.Organization
-import com.jay.currencyconverter.ui.adapter.BankExchangeRateAdapter.ViewHolder
 
-class BankExchangeRateAdapter : RecyclerView.Adapter<ViewHolder>() {
+class BankExchangeRateAdapter : RecyclerView.Adapter<BaseViewHolder<Organization>>() {
 
     private val organizationList: MutableList<Organization> = ArrayList()
     val clickEvent: MutableLiveData<Organization> = MutableLiveData()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Organization> {
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_bank_exhange_rate, parent, false)
 
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BaseViewHolder<Organization>, position: Int) {
         holder.bind(organizationList[position])
     }
 
-    override fun getItemCount(): Int {
-        return organizationList.size
-    }
+    override fun getItemCount(): Int = organizationList.size
 
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
+    override fun getItemId(position: Int): Long = position.toLong()
 
-    override fun getItemViewType(position: Int): Int {
-        return position
-    }
+    override fun getItemViewType(position: Int): Int = position
 
     fun setItems(organizations: List<Organization?>) {
         organizationList.clear()
@@ -47,7 +40,7 @@ class BankExchangeRateAdapter : RecyclerView.Adapter<ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : BaseViewHolder<Organization>(itemView) {
 
         private val container: LinearLayoutCompat = itemView.findViewById(R.id.container)
         private val bankTitle: AppCompatTextView = itemView.findViewById(R.id.bank_title)
@@ -59,12 +52,12 @@ class BankExchangeRateAdapter : RecyclerView.Adapter<ViewHolder>() {
             }
         }
 
-        fun bind(organization: Organization) {
+        override fun bind(item: Organization) {
             clearViews()
 
-            bankTitle.text = organization.title
+            bankTitle.text = item.title
 
-            organization.currencies?.let { currencies ->
+            item.currencies?.let { currencies ->
 
                 currencies.getAllNotNullCurrencies().forEach { currency ->
 

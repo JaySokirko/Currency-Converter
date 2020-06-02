@@ -7,4 +7,8 @@ object Constant {
     const val ORGANIZATION_TITLE = "organizationName"
     const val CURRENCIES = "currencies"
     const val EMPTY_STRING = ""
+    const val COMMON = "Common"
+    const val CURRENCY_ABR = "currencyAbr"
+    const val CURRENCY_ABR_DEFAULT = "USD"
+    const val LAST_CHECKED_POSITION = "lastCheckedPosition"
 }

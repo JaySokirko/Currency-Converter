@@ -20,13 +20,13 @@ class NbuExchangeRate {
         return exchangeByDateAndCurrency.getNbuExchangeByCurrencyAndDate(currencyAbr, date)
     }
 
-    fun createRequestList(currencyAbr: String, dateList: List<String>):
+    fun createRequestList(currencyAbbreviation: String, dateList: List<String>):
             List<Observable<MutableList<Nbu>>> {
 
         val requestList: MutableList<Observable<MutableList<Nbu>>> = mutableListOf()
 
         dateList.forEach { date ->
-            requestList.add(getExchangeByDateAndCurrency(currencyAbr, date))
+            requestList.add(getExchangeByDateAndCurrency(currencyAbbreviation, date))
         }
         return requestList
     }

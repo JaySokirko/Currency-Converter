@@ -7,7 +7,7 @@ import android.net.NetworkCapabilities
 import android.net.NetworkInfo
 import android.os.Build
 import com.jay.currencyconverter.BaseApplication
-
+//todo apply it
 object InternetConnection {
 
     val context: Context = BaseApplication.baseComponent.application.baseContext

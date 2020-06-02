@@ -27,7 +27,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:itemCount="1"
-            tools:listitem="@layout/list_currency_choice" />
+            tools:listitem="@layout/list_horizontal_currency_buttons" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"

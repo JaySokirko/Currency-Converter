@@ -12,7 +12,7 @@ import com.jay.currencyconverter.model.exchangeRate.currency.Currencies
 import com.jay.currencyconverter.model.exchangeRate.currency.Currency
 import com.jay.currencyconverter.model.exchangeRate.currency.CurrencyType
 import com.jay.currencyconverter.model.exchangeRate.currency.UAH
-import com.jay.currencyconverter.ui.adapter.CurrencyChoiceAdapter
+import com.jay.currencyconverter.ui.adapter.CurrencyChoiceButtonsAdapter
 import com.jay.currencyconverter.util.Constant
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_calculator.*
@@ -29,7 +29,7 @@ class CalculatorActivity : AppCompatActivity() {
     lateinit var calculatorVM: CalculatorActivityViewModel
 
     @Inject
-    lateinit var currencyChoiceAdapter: CurrencyChoiceAdapter
+    lateinit var currencyChoiceAdapter: CurrencyChoiceButtonsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         DaggerCalculatorActivityComponent.builder().activity(this).build().inject(this)

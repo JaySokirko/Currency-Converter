@@ -22,3 +22,10 @@ fun Double.roundToFloat(places: Int = 2): Float {
     decimal = decimal.setScale(places, RoundingMode.HALF_UP)
     return decimal.toFloat()
 }
+
+val TAG = "TAG"
+
+fun main(){
+
+
+}
