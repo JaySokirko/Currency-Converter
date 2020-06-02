@@ -26,17 +26,11 @@ class NbuExchangeAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>() {
         holder.bind(nbuList[position])
     }
 
-    override fun getItemCount(): Int {
-        return nbuList.size
-    }
+    override fun getItemCount(): Int = nbuList.size
 
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
+    override fun getItemId(position: Int): Long = position.toLong()
 
-    override fun getItemViewType(position: Int): Int {
-       return 0
-    }
+    override fun getItemViewType(position: Int): Int = position
 
     fun setItems(currencies: List<Nbu?>) {
         nbuList.clear()

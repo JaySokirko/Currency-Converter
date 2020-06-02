@@ -4,6 +4,7 @@ import android.content.Context
 import com.jay.currencyconverter.BaseApplication
 import com.jay.currencyconverter.R
 import java.lang.IllegalStateException
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -17,8 +18,13 @@ object DateManager {
     private val context: Context = BaseApplication.baseComponent.application.baseContext
 
     /**
-     * todo write documentation
+     * Allows to get a short weekday name depends on an input date
+     * @throws IllegalStateException
+     * @param date the calendar date in which needs get a short weekday name
+     * @param dateFormat the format which will be parsing to get a weekday. For instance "dd/MM/yyyy"
+     * @return the short weekday name
      */
+    @Throws(exceptionClasses = [IllegalStateException::class])
     fun getDayName(date: String, dateFormat: SimpleDateFormat) : String {
         val calendar: Calendar = Calendar.getInstance()
         calendar.time = dateFormat.parse(date)
@@ -35,7 +41,11 @@ object DateManager {
     }
 
     /**
-     * todo write documentation
+     * Allows to get a special date depending on the deviation from the current date.
+     * @param amount the deviation from the current date.
+     * For instance if today is 12.12.2020 and amount is "-2" the method will return 10.12.2020.
+     * @param dateFormat the format in which the method will return the date
+     * @return the formatted specific date
      */
     fun getDate(amount: Int, dateFormat: SimpleDateFormat) : String{
         val calendar: Calendar = Calendar.getInstance()

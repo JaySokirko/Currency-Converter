@@ -2,7 +2,7 @@ package com.jay.currencyconverter.di
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
-import com.jay.currencyconverter.ui.adapter.CurrencyChoiceAdapter
+import com.jay.currencyconverter.ui.adapter.CurrencyChoiceButtonsAdapter
 import com.jay.currencyconverter.ui.calculatorActivity.CalculatorActivityViewModel
 import dagger.Module
 import dagger.Provides
@@ -11,8 +11,8 @@ import dagger.Provides
 class CalculatorActivityModule {
 
     @Provides
-    fun provideCurrencyChoiceAdapter(): CurrencyChoiceAdapter {
-        return CurrencyChoiceAdapter()
+    fun provideCurrencyChoiceAdapter(): CurrencyChoiceButtonsAdapter {
+        return CurrencyChoiceButtonsAdapter()
     }
 
     companion object {

@@ -12,7 +12,7 @@ import com.jay.currencyconverter.model.exchangeRate.currency.Currency
 import com.jay.currencyconverter.model.exchangeRate.currency.CurrencyType
 import io.reactivex.subjects.BehaviorSubject
 
-class CurrencyChoiceAdapter : RecyclerView.Adapter<BaseViewHolder<Currency>>() {
+class CurrencyChoiceButtonsAdapter : RecyclerView.Adapter<BaseViewHolder<Currency>>() {
 
     val clickEvent: BehaviorSubject<CurrencyChoiceWrapper> = BehaviorSubject.create()
 
@@ -23,7 +23,7 @@ class CurrencyChoiceAdapter : RecyclerView.Adapter<BaseViewHolder<Currency>>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Currency> {
         val view: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.list_currency_choice, parent, false)
+            .inflate(R.layout.list_horizontal_currency_buttons, parent, false)
 
         return CurrencyVH(view)
     }
@@ -32,17 +32,11 @@ class CurrencyChoiceAdapter : RecyclerView.Adapter<BaseViewHolder<Currency>>() {
         holder.bind(currencyList[position])
     }
 
-    override fun getItemCount(): Int {
-        return currencyList.size
-    }
+    override fun getItemCount(): Int = currencyList.size
 
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
+    override fun getItemId(position: Int): Long =  position.toLong()
 
-    override fun getItemViewType(position: Int): Int {
-        return position
-    }
+    override fun getItemViewType(position: Int): Int = position
 
     fun setItems(currencies: List<Currency?>) {
         currencyList.clear()

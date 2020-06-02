@@ -1,7 +1,7 @@
-package com.jay.currencyconverter.ui
+package com.jay.currencyconverter.util.ui
 
 import android.content.Context
-import android.graphics.Color
+import android.util.Log
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -9,23 +9,25 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.DefaultValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.github.mikephil.charting.utils.ViewPortHandler
 import com.jay.currencyconverter.BaseApplication
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.util.DateManager
+import com.jay.currencyconverter.util.TAG
 import com.jay.currencyconverter.util.roundToFloat
-import java.lang.IllegalArgumentException
 
-class LineChartSetup(
+
+class LineChartSettings(
     private val lineChart: LineChart,
-    private val exchangeRateList: MutableList<Double>
-) {
+    private val exchangeRateList: MutableList<Double>) {
 
     private val baseContext: Context = BaseApplication.baseComponent.application.baseContext
     private val xAxis: XAxis = lineChart.xAxis
     private val yAxis: YAxis = lineChart.axisLeft
-    private val lineDataSet = LineDataSet(dataValues(), null)
+    private val lineDataSet = LineDataSet(null, null)
 
     init {
         setupLineChart()
@@ -38,12 +40,18 @@ class LineChartSetup(
         lineChart.data = LineData(dataSet)
     }
 
+    fun setup(lineChart: LineChart, exchangeRateList: MutableList<Double>){
+
+    }
+
     private fun setupLineChart() {
         lineChart.apply {
             axisRight.isEnabled = false
             description = null
             legend.isEnabled = false
-            animateX(2000, Easing.Linear)
+            extraRightOffset = 20f
+            extraLeftOffset = 20f
+            animateX(1200, Easing.Linear)
         }
     }
 
@@ -51,7 +59,8 @@ class LineChartSetup(
         xAxis.apply {
             valueFormatter = XAxisValueFormatter()
             position = XAxis.XAxisPosition.TOP
-            labelCount = dataValues().size - 1
+            labelCount = setupDataValues().size - 1
+            axisLineWidth = 0.5f
             setDrawLabels(true)
             setDrawAxisLine(true)
             setDrawGridLines(true)
@@ -61,33 +70,36 @@ class LineChartSetup(
 
     private fun setupYAxis() {
         yAxis.apply {
-            setDrawLabels(false); // no axis labels
-            setDrawAxisLine(false); // no axis line
-            setDrawGridLines(false); // no grid lines
+            setDrawLabels(false) // no axis labels
+            setDrawAxisLine(false) // no axis line
+            setDrawGridLines(false) // no grid lines
+            spaceTop = 20f
         }
     }
 
     private fun setupLineData() {
         lineDataSet.apply {
-            valueTextSize = 10f
+            valueTextSize = 12f
             setDrawFilled(true)
-            fillDrawable = baseContext.resources.getDrawable(R.drawable.gradient)
-            lineWidth = 1f
-            color = Color.BLUE
-            setCircleColor(Color.BLUE)
+            fillDrawable = baseContext.resources.getDrawable(R.drawable.line_chart_background)
+            lineWidth = 0.5f
+            color = baseContext.resources.getColor(R.color.colorAccent)
+            setCircleColor(baseContext.resources.getColor(R.color.colorAccent))
+            valueFormatter = DefaultValueFormatter(3)
+            values = setupDataValues()
         }
     }
 
-    private fun dataValues(): List<Entry> {
+    private fun setupDataValues(): List<Entry> {
         if (exchangeRateList.size > 5) {
             throw IllegalArgumentException("max 5 values")
         }
         val list: MutableList<Entry> = mutableListOf()
-        list.add(Entry(0f, exchangeRateList[4].roundToFloat()))
-        list.add(Entry(1f, exchangeRateList[3].roundToFloat()))
-        list.add(Entry(2f, exchangeRateList[2].roundToFloat()))
-        list.add(Entry(3f, exchangeRateList[1].roundToFloat()))
-        list.add(Entry(4f, exchangeRateList[0].roundToFloat()))
+        list.add(Entry(0f, exchangeRateList[4].toFloat()))
+        list.add(Entry(1f, exchangeRateList[3].toFloat()))
+        list.add(Entry(2f, exchangeRateList[2].toFloat()))
+        list.add(Entry(3f, exchangeRateList[1].toFloat()))
+        list.add(Entry(4f, exchangeRateList[0].toFloat()))
         return list
     }
 
@@ -102,6 +114,18 @@ class LineChartSetup(
                 else -> throw IllegalArgumentException("Only the following values are available: " +
                         "0,1,2,3,4")
             }
+        }
+    }
+
+    class YAxisValueFormatter: ValueFormatter() {
+    }
+
+    class MyDecimalValueFormatter : ValueFormatter() {
+        override fun getFormattedValue(value: Float, entry: Entry, dataSetIndex: Int,
+                                       viewPortHandler: ViewPortHandler): String {
+
+            Log.d(TAG, "getFormattedValue: " + value)
+            return value.toDouble().roundToFloat(3).toString().plus("a")
         }
     }
 }
