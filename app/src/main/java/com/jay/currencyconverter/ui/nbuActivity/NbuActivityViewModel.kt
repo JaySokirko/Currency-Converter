@@ -3,6 +3,7 @@ package com.jay.currencyconverter.ui.nbuActivity
 import android.content.Context
 import android.util.Log
 import android.view.View
+import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.MutableLiveData
@@ -11,8 +12,9 @@ import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.ResponseWrapper
 import com.jay.currencyconverter.model.exchangeRate.currency.Currencies
 import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
-import com.jay.currencyconverter.repository.NbuExchangeRate
+import com.jay.currencyconverter.repository.exchangeRate.NbuExchangeRate
 import com.jay.currencyconverter.ui.BaseViewModel
+import com.jay.currencyconverter.util.Constant.MAIN_CHECKBOX_CHECKED
 import com.jay.currencyconverter.util.Constant.CURRENCY_ABR
 import com.jay.currencyconverter.util.DateManager
 import com.jay.currencyconverter.util.StorageManager
@@ -25,23 +27,26 @@ import io.reactivex.schedulers.Schedulers
 
 class NbuActivityViewModel : BaseViewModel() {
 
+    val isMainCheckboxChecked: ObservableBoolean = ObservableBoolean()
     val progressVisibility: ObservableInt = ObservableInt()
     val appBarProgressVisibility: ObservableInt = ObservableInt()
     val previousExchangeRateLoadErrorTitleVisibility: ObservableInt = ObservableInt()
     val previousExchangeRateLoadErrorButtonVisibility: ObservableInt = ObservableInt()
+    val averagePreviousExchangeRateLayoutVisibility: ObservableInt = ObservableInt()
     val averagePreviousExchangeRateValue: ObservableField<String> = ObservableField()
     val currencyAbbreviation: ObservableField<String> = ObservableField()
     val exchangeRateObserver: MutableLiveData<ResponseWrapper<List<Nbu>>> = MutableLiveData()
-    val previousExchangeRateObserver: MutableLiveData<ResponseWrapper<MutableList<Double>>> =
-        MutableLiveData()
+    val previousExchangeRateObserver: MutableLiveData<ResponseWrapper<MutableList<Double>>> = MutableLiveData()
 
     private val currencies: Currencies = Currencies()
-    private val nbuExchangeRate: NbuExchangeRate = NbuExchangeRate()
+    private val nbuExchangeRate: NbuExchangeRate =
+        NbuExchangeRate()
     private val context: Context = BaseApplication.baseComponent.application.baseContext
     private val listOfNbuLists: MutableList<ArrayList<Nbu>> = mutableListOf()
     private var isRequestRepeated: Boolean = false
 
     init {
+        isMainCheckboxChecked.set(StorageManager.getVariable(MAIN_CHECKBOX_CHECKED, default = true))
         currencyAbbreviation.set(context.resources.getString(R.string.USD))
         appBarProgressVisibility.set(View.GONE)
         previousExchangeRateLoadErrorTitleVisibility.set(View.GONE)
@@ -49,6 +54,7 @@ class NbuActivityViewModel : BaseViewModel() {
     }
 
     fun onReloadBtnClick() {
+        averagePreviousExchangeRateLayoutVisibility.set(View.VISIBLE)
         previousExchangeRateLoadErrorTitleVisibility.set(View.GONE)
         previousExchangeRateLoadErrorButtonVisibility.set(View.GONE)
         currencyAbbreviation.get()?.let { getPreviousExchangeRate(it) }
@@ -60,10 +66,10 @@ class NbuActivityViewModel : BaseViewModel() {
         val subscribe: Disposable = nbuExchangeRate.getExchangeRate()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
+            .map { currencyList: MutableList<Nbu> -> filterNotExistCurrency(currencyList) }
+            .map { currencyList: MutableList<Nbu> -> sortCurrenciesList(currencyList) }
             .subscribe(
-                { result: MutableList<Nbu> ->
-                    exchangeRateObserver.postValue(ResponseWrapper(filterNotExistCurrency(result)))
-                },
+                { result: List<Nbu> -> exchangeRateObserver.postValue(ResponseWrapper(result)) },
 
                 { error: Throwable -> onExchangeRateLoadError(error) },
 
@@ -93,8 +99,7 @@ class NbuActivityViewModel : BaseViewModel() {
                 { onPreviousExchangeRateLoadFinish() },
 
                 { onPreviousExchangeRateLoadError()
-                    //todo remove
-                    Log.d(TAG, "onPreviousExchangeLoadError: " + it.message) },
+                    Log.d(TAG, "getPreviousExchangeRate: " + it.message)},
 
                 { appBarProgressVisibility.set(View.GONE) }
             )
@@ -102,10 +107,28 @@ class NbuActivityViewModel : BaseViewModel() {
         disposable.add(subscribe)
     }
 
-    private fun filterNotExistCurrency(list: MutableList<Nbu>): List<Nbu> {
+    private fun filterNotExistCurrency(list: MutableList<Nbu>): MutableList<Nbu> {
         return list.filter { nbu ->
             currencies.checkCurrencyExistingByAbr(nbu.currencyAbbreviation, context)
+        } as MutableList<Nbu>
+    }
+
+    private fun sortCurrenciesList(list: MutableList<Nbu>): MutableList<Nbu> {
+        val usd: Nbu? = list.find {
+            it.currencyAbbreviation == context.resources.getString(R.string.USD)
         }
+        val eur: Nbu? = list.find {
+            it.currencyAbbreviation == context.resources.getString(R.string.EUR)
+        }
+        val rub: Nbu? = list.find {
+            it.currencyAbbreviation == context.resources.getString(R.string.RUB)
+        }
+        list.removeAll { it == usd || it == eur || it == rub }
+        usd?.let { list.add(0, it) }
+        eur?.let { list.add(1, it) }
+        rub?.let { list.add(2, it) }
+
+        return list
     }
 
     private fun extractExchangeRate(list: MutableList<ArrayList<Nbu>>): MutableList<Double> {
@@ -139,6 +162,7 @@ class NbuActivityViewModel : BaseViewModel() {
 
     private fun onPreviousExchangeRateLoadError() {
         appBarProgressVisibility.set(View.GONE)
+        averagePreviousExchangeRateLayoutVisibility.set(View.GONE)
         previousExchangeRateLoadErrorTitleVisibility.set(View.VISIBLE)
         previousExchangeRateLoadErrorButtonVisibility.set(View.VISIBLE)
     }

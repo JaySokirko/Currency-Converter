@@ -44,11 +44,8 @@ class CalculatorActivity : AppCompatActivity() {
         fillCurrenciesList()
         setupCurrencyChoiceList()
         onCurrencyChoiceListItemClick()
-    }
 
-    override fun onDestroy() {
-        calculatorVM.onDestroy()
-        super.onDestroy()
+        lifecycle.addObserver(calculatorVM)
     }
 
     private fun initBinding() {

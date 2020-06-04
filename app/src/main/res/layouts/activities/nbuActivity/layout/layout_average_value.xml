@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="nbuVM"
+            type="com.jay.currencyconverter.ui.nbuActivity.NbuActivityViewModel" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/average_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="@dimen/x"
+        android:orientation="horizontal"
+        android:visibility="@{nbuVM.averagePreviousExchangeRateLayoutVisibility}">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{nbuVM.currencyAbbreviation}"
+            android:textColor="@android:color/background_dark"
+            android:textSize="10sp"
+            tools:text="USD" />
+
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="0dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/middle"
+            android:textColor="@android:color/background_dark"
+            android:textSize="10sp" />
+
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="0dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{nbuVM.averagePreviousExchangeRateValue}"
+            android:textColor="@android:color/background_dark"
+            android:textSize="10sp"
+            tools:text="28.8899" />
+    </LinearLayout>
+</layout>

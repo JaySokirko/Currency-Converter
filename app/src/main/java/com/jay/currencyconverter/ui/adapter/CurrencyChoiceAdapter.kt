@@ -21,8 +21,6 @@ class CurrencyChoiceAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>() {
     private var checkBoxList: MutableList<MaterialCheckBox> = mutableListOf()
     private val currencyList: MutableList<Nbu> = mutableListOf()
     private val currencies: Currencies = Currencies()
-    private val lastCheckedPosition: Int =
-        StorageManager.getVariable(LAST_CHECKED_POSITION, default = 0)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Nbu> {
         val view: View = LayoutInflater.from(parent.context)
@@ -62,7 +60,7 @@ class CurrencyChoiceAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>() {
             currencyAbr.text = item.currencyAbbreviation
             currencyName.text = item.currencyName
 
-            if (layoutPosition == lastCheckedPosition) {
+            if (layoutPosition == StorageManager.getVariable(LAST_CHECKED_POSITION, default = 0)) {
                 checkBox.isChecked = true
             }
 

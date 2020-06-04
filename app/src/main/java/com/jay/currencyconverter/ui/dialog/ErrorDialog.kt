@@ -17,7 +17,7 @@ class ErrorDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        val builder = AlertDialog.Builder(context!!)
+        val builder = AlertDialog.Builder(requireContext())
 
         builder.apply {
             setTitle(resources.getString(R.string.error_dialog_title))
