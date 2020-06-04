@@ -40,11 +40,8 @@ class BankActivity : NavigationActivity(), ErrorDialog.ErrorDialogClickListener 
 
         observeExchangeRate()
         onBankExchangeRateListItemClick()
-    }
 
-    override fun onDestroy() {
-        bankActivityViewModel.onDestroy()
-        super.onDestroy()
+        lifecycle.addObserver(bankActivityViewModel)
     }
 
     /**

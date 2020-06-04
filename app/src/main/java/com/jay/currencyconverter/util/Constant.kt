@@ -11,4 +11,7 @@ object Constant {
     const val CURRENCY_ABR = "currencyAbr"
     const val CURRENCY_ABR_DEFAULT = "USD"
     const val LAST_CHECKED_POSITION = "lastCheckedPosition"
+    const val CHECKED_POSITIONS = "checkedPositions"
+    const val MAIN_CHECKBOX_CHECKED = "mainCheckBoxChecked"
+    const val DEFAULT_CURRENCIES_LIST = "defaultCurrenciesList"
 }

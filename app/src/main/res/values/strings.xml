@@ -10,6 +10,7 @@
     <string name="error_dialog_negative_btn">Выход</string>
     <string name="load_previous_exchange_error">Возникла ошибка при загрузке данных</string>
     <string name="reload">Повторить загрузку</string>
+    <string name="mark_all">Выделить все</string>
 
     <!--currencies name-->
     <string name="uah">Гривня</string>
