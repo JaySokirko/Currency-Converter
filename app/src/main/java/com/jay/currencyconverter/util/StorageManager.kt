@@ -19,9 +19,17 @@ object StorageManager {
         sharedPreferences.edit().putInt(key, value).apply()
     }
 
+    fun saveVariable(key: String, value: Boolean) {
+        sharedPreferences.edit().putBoolean(key, value).apply()
+    }
+
     fun getVariable(key: String, default: String): String {
         return sharedPreferences.getString(key, default).toString()
     }
 
     fun getVariable(key: String, default: Int): Int = sharedPreferences.getInt(key, default)
+
+    fun getVariable(key: String, default: Boolean): Boolean {
+        return sharedPreferences.getBoolean(key, default)
+    }
 }

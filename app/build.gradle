@@ -64,8 +64,8 @@ android {
             res.srcDirs =
                     [
                             file("src/main/res/layouts/").listFiles(),
-                            'src/main/res/layouts',
                             'src/main/res/layouts/activities/navigationActivity',
+                            'src/main/res/layouts/activities/nbuActivity',
                             'src/main/res'
                     ]
         }
@@ -86,6 +86,8 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
     implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
+    implementation 'com.jakewharton.rxbinding4:rxbinding:4.0.0'
+    implementation 'com.jakewharton.rxbinding:rxbinding-kotlin:0.4.0'
 
     //retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -109,6 +111,13 @@ dependencies {
     api "com.google.dagger:dagger-android-support:$dagger_ver"
     kapt "com.google.dagger:dagger-compiler:$dagger_ver"
     kapt "com.google.dagger:dagger-android-processor:$dagger_ver"
+
+    //room
+    def room_ver = '1.1.1'
+    implementation "android.arch.persistence.room:runtime:$room_ver"
+    kapt "android.arch.persistence.room:compiler:$room_ver"
+    implementation "android.arch.persistence.room:rxjava2:$room_ver"
+    testImplementation "android.arch.persistence.room:testing:$room_ver"
 
     //chart view
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'

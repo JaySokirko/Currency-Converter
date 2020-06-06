@@ -16,7 +16,7 @@ import com.jay.currencyconverter.util.Constant
 import kotlinx.android.synthetic.main.activity_banks.*
 import javax.inject.Inject
 
-class BankActivity : NavigationActivity(), ErrorDialog.ErrorDialogClickListener {
+class BankActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListener {
 
     @Inject
     lateinit var bankExchangeRateAdapter: BankExchangeRateAdapter
@@ -31,7 +31,7 @@ class BankActivity : NavigationActivity(), ErrorDialog.ErrorDialogClickListener 
         super.onCreate(savedInstanceState)
         initContent(R.layout.activity_banks, R.layout.default_toolbar)
 
-        errorDialog.setOnErrorDialogClickListener(this)
+        errorDialog.setOnDialogButtonsClickListener(this)
 
         initBinding()
         setupBanksExchangeRateList()
@@ -40,22 +40,19 @@ class BankActivity : NavigationActivity(), ErrorDialog.ErrorDialogClickListener 
 
         observeExchangeRate()
         onBankExchangeRateListItemClick()
-    }
 
-    override fun onDestroy() {
-        bankActivityViewModel.onDestroy()
-        super.onDestroy()
+        lifecycle.addObserver(bankActivityViewModel)
     }
 
     /**
-     * @see ErrorDialog.ErrorDialogClickListener.onReload
+     * @see ErrorDialog.OnDialogButtonsClickListener.onReload
      */
     override fun onReload() {
         bankActivityViewModel.getExchangeRate()
     }
 
     /**
-     * @see ErrorDialog.ErrorDialogClickListener.onExit
+     * @see ErrorDialog.OnDialogButtonsClickListener.onExit
      */
     override fun onExit() {
         onBackPressed()

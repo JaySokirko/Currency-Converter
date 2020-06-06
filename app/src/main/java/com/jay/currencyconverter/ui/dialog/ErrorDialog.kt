@@ -9,31 +9,34 @@ import com.jay.currencyconverter.R
 
 class ErrorDialog : DialogFragment() {
 
-    lateinit var errorDialogClickListener: ErrorDialogClickListener
+    private lateinit var onDialogButtonsClickListener: OnDialogButtonsClickListener
 
-    fun setOnErrorDialogClickListener(listener: ErrorDialogClickListener) {
-        errorDialogClickListener = listener
+    fun setOnDialogButtonsClickListener(listener: OnDialogButtonsClickListener) {
+        onDialogButtonsClickListener = listener
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        val builder = AlertDialog.Builder(context!!)
+        val builder = AlertDialog.Builder(requireContext())
 
         builder.apply {
             setTitle(resources.getString(R.string.error_dialog_title))
+
             setMessage(resources.getString(R.string.error_dialog_message))
+
             setIcon(ContextCompat.getDrawable(context, R.drawable.ic_error))
+
             setPositiveButton(resources.getString(R.string.error_dialog_positive_btn)) { _, _ ->
-                errorDialogClickListener.onReload()
+                onDialogButtonsClickListener.onReload()
             }
             setNegativeButton(resources.getString(R.string.error_dialog_negative_btn)) { _, _ ->
-                errorDialogClickListener.onExit()
+                onDialogButtonsClickListener.onExit()
             }
         }
         return builder.create()
     }
 
-    interface ErrorDialogClickListener {
+    interface OnDialogButtonsClickListener {
         fun onReload()
         fun onExit()
     }

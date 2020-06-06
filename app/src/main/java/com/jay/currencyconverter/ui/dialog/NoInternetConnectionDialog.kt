@@ -10,26 +10,29 @@ import com.jay.currencyconverter.R
 
 class NoInternetConnectionDialog : DialogFragment() {
 
-    lateinit var clickListener: NoInternetConnectionDialogClickListener
+    lateinit var clickListener: OnDialogButtonsClickListener
 
-    fun setNoInternetConnectionDialogClickListener(listener: NoInternetConnectionDialogClickListener) {
+    fun setOnDialogButtonsClickListener(listener: OnDialogButtonsClickListener) {
         clickListener = listener
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = AlertDialog.Builder(context!!)
+        val builder = AlertDialog.Builder(requireContext())
 
         builder.apply {
             setTitle("No internet connection")
+
             setIcon(ContextCompat.getDrawable(context, R.drawable.ic_no_internet))
+
             setPositiveButton("Settings") { _, _ -> clickListener.openSettings() }
+
             setNegativeButton("Exit") { _, _ -> clickListener.exit() }
         }
 
         return builder.create()
     }
 
-    interface NoInternetConnectionDialogClickListener {
+    interface OnDialogButtonsClickListener {
         fun openSettings()
         fun exit()
     }

@@ -1,7 +1,6 @@
 package com.jay.currencyconverter.util.ui
 
 import android.content.Context
-import android.util.Log
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -12,14 +11,13 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.DefaultValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import com.github.mikephil.charting.utils.ViewPortHandler
 import com.jay.currencyconverter.BaseApplication
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.util.DateManager
-import com.jay.currencyconverter.util.TAG
-import com.jay.currencyconverter.util.roundToFloat
 
-
+/**
+ * Documentation: https://weeklycoding.com/mpandroidchart-documentation/
+ */
 class LineChartSettings(
     private val lineChart: LineChart,
     private val exchangeRateList: MutableList<Double>) {
@@ -38,10 +36,6 @@ class LineChartSettings(
         val dataSet: MutableList<ILineDataSet> = mutableListOf()
         dataSet.add(lineDataSet)
         lineChart.data = LineData(dataSet)
-    }
-
-    fun setup(lineChart: LineChart, exchangeRateList: MutableList<Double>){
-
     }
 
     private fun setupLineChart() {
@@ -114,18 +108,6 @@ class LineChartSettings(
                 else -> throw IllegalArgumentException("Only the following values are available: " +
                         "0,1,2,3,4")
             }
-        }
-    }
-
-    class YAxisValueFormatter: ValueFormatter() {
-    }
-
-    class MyDecimalValueFormatter : ValueFormatter() {
-        override fun getFormattedValue(value: Float, entry: Entry, dataSetIndex: Int,
-                                       viewPortHandler: ViewPortHandler): String {
-
-            Log.d(TAG, "getFormattedValue: " + value)
-            return value.toDouble().roundToFloat(3).toString().plus("a")
         }
     }
 }

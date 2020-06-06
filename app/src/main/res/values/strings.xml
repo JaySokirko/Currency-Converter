@@ -5,11 +5,14 @@
     <string name="ask">Продажа</string>
 
     <string name="error_dialog_title">Оу…</string>
+    <string name="currency_should_chosen_message">Минимум две валюты должно быть отмечено</string>
+    <string name="currency_should_chosen_positive_btn_text">OK</string>
     <string name="error_dialog_message">Возникла ошибка при загрузке данных</string>
     <string name="error_dialog_positive_btn">Перезагрузить</string>
     <string name="error_dialog_negative_btn">Выход</string>
     <string name="load_previous_exchange_error">Возникла ошибка при загрузке данных</string>
     <string name="reload">Повторить загрузку</string>
+    <string name="mark_all">Выделить все</string>
 
     <!--currencies name-->
     <string name="uah">Гривня</string>

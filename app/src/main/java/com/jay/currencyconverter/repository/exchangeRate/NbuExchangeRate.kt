@@ -1,4 +1,4 @@
-package com.jay.currencyconverter.repository
+package com.jay.currencyconverter.repository.exchangeRate
 
 import com.jay.currencyconverter.BaseApplication
 import com.jay.currencyconverter.api.CurrencyExchangeRateApi
