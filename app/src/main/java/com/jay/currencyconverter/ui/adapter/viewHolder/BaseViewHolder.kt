@@ -1,4 +1,4 @@
-package com.jay.currencyconverter.ui.adapter
+package com.jay.currencyconverter.ui.adapter.viewHolder
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView

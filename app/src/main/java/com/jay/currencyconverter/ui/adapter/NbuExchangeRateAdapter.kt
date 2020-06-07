@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
 import com.jay.currencyconverter.model.exchangeRate.currency.Currencies
+import com.jay.currencyconverter.ui.adapter.viewHolder.BaseViewHolder
 
 class NbuExchangeRateAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>() {
 

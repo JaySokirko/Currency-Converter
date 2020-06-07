@@ -22,7 +22,7 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver{
     val currencyCoefficient: ObservableField<String> = ObservableField()
     val inputValue: ObservableFieldWrapper<String> = ObservableFieldWrapper()
     val disposable = CompositeDisposable()
-        //changes
+
     
     init {
         result.set("0")

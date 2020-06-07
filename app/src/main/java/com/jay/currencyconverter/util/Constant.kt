@@ -1,5 +1,7 @@
 package com.jay.currencyconverter.util
 
+import com.jay.currencyconverter.R
+
 object Constant {
     const val BANKS_EXCHANGE_URL = "https://resources.finance.ua"
     const val NBU_URL = "https://bank.gov.ua"
@@ -11,7 +13,9 @@ object Constant {
     const val CURRENCY_ABR = "currencyAbr"
     const val CURRENCY_ABR_DEFAULT = "USD"
     const val LAST_CHECKED_POSITION = "lastCheckedPosition"
-    const val CHECKED_POSITIONS = "checkedPositions"
     const val MAIN_CHECKBOX_CHECKED = "mainCheckBoxChecked"
-    const val DEFAULT_CURRENCIES_LIST = "defaultCurrenciesList"
+    const val NBU_ACTIVITY = "nbuActivity"
+    const val BANKS_ACTIVITY = "banksActivity"
+    const val NEWS_ACTIVITY = "newsActivity"
+    const val PREVIOUS_OPENED_WINDOW = "previousOpenedWindow"
 }
