@@ -3,8 +3,8 @@
 
     <data>
         <variable
-            name="nbuVM"
-            type="com.jay.currencyconverter.ui.nbuActivity.NbuActivityViewModel" />
+            name="appbarVM"
+            type="com.jay.currencyconverter.ui.nbuActivity.AppbarViewModel" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -62,7 +62,7 @@
                                 android:layout_width="@dimen/x8"
                                 android:layout_height="@dimen/x8"
                                 android:layout_marginEnd="@dimen/x"
-                                android:checked="@{nbuVM.isMainCheckboxChecked()}"
+                                android:checked="@{appbarVM.isMainCheckboxChecked()}"
                                 android:clickable="false"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"

@@ -18,9 +18,7 @@ class NoCurrencyChosenDialog : DialogFragment() {
             setIcon(ContextCompat.getDrawable(context, R.drawable.ic_error))
 
             setPositiveButton(resources.getString
-                (R.string.currency_should_chosen_positive_btn_text)) { _, _ ->
-                dismiss()
-            }
+                (R.string.currency_should_chosen_positive_btn_text)) { _, _ -> dismiss() }
         }
 
         return builder.create()

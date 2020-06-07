@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="nbuVM"
-            type="com.jay.currencyconverter.ui.nbuActivity.NbuActivityViewModel" />
+            name="appbarVM"
+            type="com.jay.currencyconverter.ui.nbuActivity.AppbarViewModel" />
     </data>
 
     <LinearLayout
@@ -16,14 +16,14 @@
         android:layout_gravity="bottom"
         android:layout_marginStart="@dimen/x"
         android:orientation="horizontal"
-        android:visibility="@{nbuVM.averagePreviousExchangeRateLayoutVisibility}">
+        android:visibility="@{appbarVM.averageExchangeRateLayoutVisibility}">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{nbuVM.currencyAbbreviation}"
-            android:textColor="@android:color/background_dark"
-            android:textSize="10sp"
+            android:text="@{appbarVM.currencyAbbreviation}"
+            android:textSize="11sp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
             tools:text="USD" />
 
         <Space
@@ -34,8 +34,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/middle"
-            android:textColor="@android:color/background_dark"
-            android:textSize="10sp" />
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:textSize="11sp" />
 
         <Space
             android:layout_width="5dp"
@@ -44,9 +44,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{nbuVM.averagePreviousExchangeRateValue}"
-            android:textColor="@android:color/background_dark"
-            android:textSize="10sp"
+            android:text="@{appbarVM.averageExchangeRateValue}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:textSize="11sp"
             tools:text="28.8899" />
     </LinearLayout>
 </layout>

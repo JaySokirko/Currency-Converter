@@ -43,8 +43,8 @@ class LineChartSettings(
             axisRight.isEnabled = false
             description = null
             legend.isEnabled = false
-            extraRightOffset = 20f
-            extraLeftOffset = 20f
+            extraRightOffset = 25f
+            extraLeftOffset = 25f
             animateX(1200, Easing.Linear)
         }
     }
@@ -79,7 +79,7 @@ class LineChartSettings(
             lineWidth = 0.5f
             color = baseContext.resources.getColor(R.color.colorAccent)
             setCircleColor(baseContext.resources.getColor(R.color.colorAccent))
-            valueFormatter = DefaultValueFormatter(3)
+            valueFormatter = DefaultValueFormatter(4)
             values = setupDataValues()
         }
     }

@@ -14,7 +14,7 @@ import com.jakewharton.rxbinding.view.RxView
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.exchangeRate.currency.Currencies
 import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
-import com.jay.currencyconverter.ui.nbuActivity.NbuCurrenciesDisplay
+import com.jay.currencyconverter.repository.NbuDatabaseManager
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
@@ -35,7 +35,7 @@ class DisplayedCurrenciesAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>(), 
     private val currencies: Currencies = Currencies()
     private val disposable = CompositeDisposable()
     private val subscription = CompositeSubscription()
-    private var nbuCurrenciesDisplay = NbuCurrenciesDisplay()
+    private var nbuDatabaseManager: NbuDatabaseManager = NbuDatabaseManager.instance
 
     init {
         val subscribe: Disposable = mainCheckboxClickEvent.subscribe { isChecked ->
@@ -44,7 +44,7 @@ class DisplayedCurrenciesAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>(), 
             checkedPositions.clear()
             repeat(itemCount) { checkedPositions.add(isChecked) }
 
-            nbuCurrenciesDisplay.updateAllDisplayedCurrencies(isChecked)
+            nbuDatabaseManager.updateAll(isChecked)
         }
         disposable.add(subscribe)
     }
@@ -106,7 +106,7 @@ class DisplayedCurrenciesAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>(), 
                 .subscribe {
                     checkBox.isChecked = !checkBox.isChecked
                     checkedPositions[layoutPosition] = checkBox.isChecked
-                    nbuCurrenciesDisplay.updateDisplayedCurrencies(item.currencyAbbreviation!!, checkBox.isChecked )
+                    nbuDatabaseManager.update(item.currencyAbbreviation!!, checkBox.isChecked )
                 }
             subscription.add(subscribe)
         }

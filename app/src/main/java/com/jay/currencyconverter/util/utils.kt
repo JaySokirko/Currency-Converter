@@ -24,8 +24,3 @@ fun Double.roundToFloat(places: Int = 2): Float {
 }
 
 val TAG = "TAG"
-
-fun main(){
-
-
-}

@@ -15,12 +15,14 @@ import com.jay.currencyconverter.util.Constant.LAST_CHECKED_POSITION
 import com.jay.currencyconverter.util.StorageManager
 
 
-class CurrencyChoiceAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>() {
+class ChartCurrencyAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>() {
 
-    val clickEvent: MutableLiveData<Nbu> = MutableLiveData()
+    val chartCurrencyChosen: MutableLiveData<Nbu> = MutableLiveData()
+
     private var checkBoxList: MutableList<MaterialCheckBox> = mutableListOf()
     private val currencyList: MutableList<Nbu> = mutableListOf()
     private val currencies: Currencies = Currencies()
+    private var currentChartCurrency: Nbu? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Nbu> {
         val view: View = LayoutInflater.from(parent.context)
@@ -62,6 +64,7 @@ class CurrencyChoiceAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>() {
 
             if (layoutPosition == StorageManager.getVariable(LAST_CHECKED_POSITION, default = 0)) {
                 checkBox.isChecked = true
+                currentChartCurrency = item
             }
 
             checkBoxList.add(checkBox)
@@ -72,7 +75,10 @@ class CurrencyChoiceAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>() {
                 StorageManager.saveVariable(LAST_CHECKED_POSITION, layoutPosition)
                 setAllCheckboxUnchecked()
                 checkBox.isChecked = true
-                clickEvent.postValue(currencyList[layoutPosition])
+                if (currentChartCurrency != currencyList[layoutPosition]) {
+                    chartCurrencyChosen.postValue(currencyList[layoutPosition])
+                }
+                currentChartCurrency = currencyList[layoutPosition]
             }
         }
     }

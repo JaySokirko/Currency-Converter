@@ -10,7 +10,7 @@ import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
 import com.jay.currencyconverter.model.exchangeRate.currency.Currencies
 
-class NbuExchangeAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>() {
+class NbuExchangeRateAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>() {
 
     private val nbuList: MutableList<Nbu> = ArrayList()
     private val currencies: Currencies = Currencies()

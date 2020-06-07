@@ -36,7 +36,7 @@ object DateManager {
             5 -> context.resources.getString(R.string.thu)
             6 -> context.resources.getString(R.string.fri)
             7 -> context.resources.getString(R.string.sat)
-            else -> throw IllegalStateException("invalid number of a week day")
+            else -> throw IllegalStateException("invalid number of the week day")
         }
     }
 
