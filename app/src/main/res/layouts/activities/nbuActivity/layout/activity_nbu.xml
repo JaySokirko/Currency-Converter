@@ -5,8 +5,11 @@
 
     <data>
         <variable
-            name="nbuVM"
-            type="com.jay.currencyconverter.ui.nbuActivity.NbuActivityViewModel" />
+            name="mainContentVM"
+            type="com.jay.currencyconverter.ui.nbuActivity.MainContentViewModel" />
+        <variable
+            name="appbarVM"
+            type="com.jay.currencyconverter.ui.nbuActivity.AppbarViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,7 +22,7 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{nbuVM.progressVisibility}"
+            android:visibility="@{mainContentVM.progressVisibility}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +71,7 @@
 
                             <include
                                 layout="@layout/layout_average_value"
-                                app:nbuVM="@{nbuVM}" />
+                                app:appbarVM="@{appbarVM}" />
 
                             <ProgressBar
                                 android:id="@+id/app_bar_progress_bar"
@@ -76,7 +79,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:visibility="@{nbuVM.appBarProgressVisibility}" />
+                                android:visibility="@{appbarVM.appBarProgressVisibility}" />
 
                             <com.github.mikephil.charting.charts.LineChart
                                 android:id="@+id/line_chart"
@@ -96,16 +99,16 @@
                                 android:layout_gravity="center"
                                 android:text="@string/load_previous_exchange_error"
                                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-                                android:visibility="@{nbuVM.previousExchangeRateLoadErrorTitleVisibility}" />
+                                android:visibility="@{appbarVM.chartErrorTitleVisibility}" />
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/reload_button"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center|bottom"
-                                android:onClick="@{() -> nbuVM.onReloadBtnClick()}"
+                                android:onClick="@{() -> appbarVM.onReloadBtnClick()}"
                                 android:text="@string/reload"
-                                android:visibility="@{nbuVM.previousExchangeRateLoadErrorButtonVisibility}" />
+                                android:visibility="@{appbarVM.chartErrorButtonVisibility}" />
                         </androidx.cardview.widget.CardView>
 
                         <androidx.cardview.widget.CardView
@@ -128,7 +131,7 @@
 
                         <include
                             layout="@layout/layout_currency_settings"
-                            app:nbuVM="@{nbuVM}" />
+                            app:appbarVM="@{appbarVM}" />
 
                     </androidx.constraintlayout.motion.widget.MotionLayout>
 
@@ -156,6 +159,17 @@
                 app:layout_anchorGravity="bottom|end"
                 app:srcCompat="@drawable/ic_list"
                 app:tint="@color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Actual date: 09.06.2020"
+                android:layout_marginStart="@dimen/x2"
+                android:layout_marginTop="@dimen/x2"
+                android:textSize="11sp"
+                android:text="@{mainContentVM.actualDate}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/nbu_exchange_rate_list"

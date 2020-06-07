@@ -2,13 +2,13 @@ package com.jay.currencyconverter.di
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
-import com.jay.currencyconverter.ui.adapter.CurrencyChoiceAdapter
+import com.jay.currencyconverter.ui.adapter.ChartCurrencyAdapter
 import com.jay.currencyconverter.ui.adapter.DisplayedCurrenciesAdapter
-import com.jay.currencyconverter.ui.adapter.NbuExchangeAdapter
+import com.jay.currencyconverter.ui.adapter.NbuExchangeRateAdapter
 import com.jay.currencyconverter.ui.dialog.ErrorDialog
 import com.jay.currencyconverter.ui.dialog.NoCurrencyChosenDialog
-import com.jay.currencyconverter.ui.nbuActivity.NbuActivityViewModel
-import com.jay.currencyconverter.ui.nbuActivity.NbuCurrenciesDisplay
+import com.jay.currencyconverter.ui.nbuActivity.MainContentViewModel
+import com.jay.currencyconverter.ui.nbuActivity.AppbarViewModel
 import com.jay.currencyconverter.util.ui.LayoutParamsAnimator
 import dagger.Module
 import dagger.Provides
@@ -17,16 +17,16 @@ import dagger.Provides
 class NbuActivityModule {
 
     @Provides
-    fun provideNbuExchangeAdapter(): NbuExchangeAdapter = NbuExchangeAdapter()
+    fun provideNbuExchangeAdapter(): NbuExchangeRateAdapter = NbuExchangeRateAdapter()
 
     @Provides
-    fun provideChartCurrenciesAdapter(): CurrencyChoiceAdapter = CurrencyChoiceAdapter()
+    fun provideChartCurrenciesAdapter(): ChartCurrencyAdapter = ChartCurrencyAdapter()
 
     @Provides
     fun provideDisplayedCurrenciesAdapter(): DisplayedCurrenciesAdapter = DisplayedCurrenciesAdapter()
 
-    @Provides
-    fun provideNbuCurrenciesDisplay(): NbuCurrenciesDisplay = NbuCurrenciesDisplay()
+//    @Provides
+//    fun provideNbuCurrenciesDisplay(): NbuDatabaseManager = NbuDatabaseManager()
 
     @Provides
     fun provideErrorDialog(): ErrorDialog = ErrorDialog()
@@ -39,8 +39,13 @@ class NbuActivityModule {
 
     companion object {
         @Provides
-        fun provideNbuActivityVM(activity: FragmentActivity): NbuActivityViewModel {
-            return ViewModelProviders.of(activity).get(NbuActivityViewModel::class.java)
+        fun provideNbuExchangeRateViewModel(activity: FragmentActivity): MainContentViewModel {
+            return ViewModelProviders.of(activity).get(MainContentViewModel::class.java)
+        }
+
+        @Provides
+        fun providePreviousNbuExchangeViewModel(activity: FragmentActivity): AppbarViewModel {
+            return ViewModelProviders.of(activity).get(AppbarViewModel::class.java)
         }
     }
 }

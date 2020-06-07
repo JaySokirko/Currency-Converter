@@ -16,6 +16,7 @@
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="app_bar_expanded_height">280dp</dimen>
 
-    <integer name="activity_nbu_scene_transition_duration">250</integer>
+    <integer name="list_appear_duration">200</integer>
+    <integer name="appbar_collapse_expand_duration">400</integer>
 
 </resources>

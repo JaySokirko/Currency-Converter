@@ -1,8 +1,7 @@
-package com.jay.currencyconverter.ui.nbuActivity
+package com.jay.currencyconverter.repository
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import com.jay.currencyconverter.BaseApplication
 import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
@@ -13,19 +12,19 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 
-class NbuCurrenciesDisplay : LifecycleObserver {
+class NbuDatabaseManager private constructor() : LifecycleObserver {
 
-    val displayedCurrenciesLiveData: MutableLiveData<MutableMap<Nbu, Boolean>> = MutableLiveData()
+    val currenciesToDisplay: PublishSubject<MutableMap<Nbu, Boolean>> = PublishSubject.create()
     private val displayedCurrenciesList: MutableMap<Nbu, Boolean> = mutableMapOf()
-    private val database: NbuDao = BaseApplication.dataBase.nbuDao()
     private val disposable = CompositeDisposable()
 
     init {
         onDatabaseEntityChanged()
     }
 
-    fun setItems(itemsList: List<Nbu>) {
+    fun putData(itemsList: List<Nbu>) {
 
         val subscribe: Disposable = database.getAllSingle()
             .subscribeOn(Schedulers.io())
@@ -41,7 +40,7 @@ class NbuCurrenciesDisplay : LifecycleObserver {
         disposable.add(subscribe)
     }
 
-    fun updateDisplayedCurrencies(abbr: String, isShouldDisplayed: Boolean) {
+    fun update(abbr: String, isShouldDisplayed: Boolean) {
         val subscribe: Disposable =
             Completable.fromAction { database.update(abbr, isShouldDisplayed) }
                 .subscribeOn(Schedulers.io())
@@ -50,7 +49,7 @@ class NbuCurrenciesDisplay : LifecycleObserver {
         disposable.add(subscribe)
     }
 
-    fun updateAllDisplayedCurrencies(isShouldDisplayed: Boolean){
+    fun updateAll(isShouldDisplayed: Boolean){
         val subscribe: Disposable =
             Completable.fromAction { database.updateAll(isShouldDisplayed) }
                 .subscribeOn(Schedulers.io())
@@ -70,9 +69,8 @@ class NbuCurrenciesDisplay : LifecycleObserver {
         }
 
         insertAll(entityList, onComplete = {
-            displayedCurrenciesLiveData.postValue(displayedCurrenciesList)
+            currenciesToDisplay.onNext(displayedCurrenciesList)
         })
-
     }
 
     private fun onDatabaseIsNotEmpty(itemsList: List<Nbu>, entityList: List<NbuEntity>) {
@@ -155,7 +153,7 @@ class NbuCurrenciesDisplay : LifecycleObserver {
                     }
                 }
 
-                displayedCurrenciesLiveData.postValue(displayedCurrenciesList)
+                currenciesToDisplay.onNext(displayedCurrenciesList)
             }
 
         disposable.add(subscribe)
@@ -164,5 +162,10 @@ class NbuCurrenciesDisplay : LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy() {
         disposable.clear()
+    }
+
+    companion object {
+        private val database: NbuDao = BaseApplication.dataBase.nbuDao()
+        val instance = NbuDatabaseManager()
     }
 }

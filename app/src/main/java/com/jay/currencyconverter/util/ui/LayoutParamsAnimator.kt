@@ -23,5 +23,9 @@ class LayoutParamsAnimator : Animation() {
         }
     }
 
+    override fun initialize(width: Int, height: Int, parentWidth: Int, parentHeight: Int) {
+        super.initialize(width, height, parentWidth, parentHeight)
+    }
+
     override fun willChangeBounds(): Boolean = true
 }

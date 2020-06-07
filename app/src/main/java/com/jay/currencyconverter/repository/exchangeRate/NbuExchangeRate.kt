@@ -15,9 +15,8 @@ class NbuExchangeRate {
 
     fun getExchangeRate(): Observable<MutableList<Nbu>> = exchangeRateApi.getNbuExchangeRate()
 
-    fun getExchangeByDateAndCurrency(currencyAbr: String, date: String):
-            Observable<MutableList<Nbu>> {
-        return exchangeByDateAndCurrency.getNbuExchangeByCurrencyAndDate(currencyAbr, date)
+    fun getExchangeByDateAndAbbr(abbreviation: String, date: String): Observable<MutableList<Nbu>> {
+        return exchangeByDateAndCurrency.getNbuExchangeByCurrencyAndDate(abbreviation, date)
     }
 
     fun createRequestList(currencyAbbreviation: String, dateList: List<String>):
@@ -26,7 +25,7 @@ class NbuExchangeRate {
         val requestList: MutableList<Observable<MutableList<Nbu>>> = mutableListOf()
 
         dateList.forEach { date ->
-            requestList.add(getExchangeByDateAndCurrency(currencyAbbreviation, date))
+            requestList.add(getExchangeByDateAndAbbr(currencyAbbreviation, date))
         }
         return requestList
     }

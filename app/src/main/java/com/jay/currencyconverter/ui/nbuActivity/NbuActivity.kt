@@ -11,12 +11,13 @@ import com.jay.currencyconverter.databinding.ActivityNbuBinding
 import com.jay.currencyconverter.di.DaggerNbuActivityComponent
 import com.jay.currencyconverter.model.ResponseWrapper
 import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
+import com.jay.currencyconverter.repository.NbuDatabaseManager
 import com.jay.currencyconverter.ui.NavigationActivity
-import com.jay.currencyconverter.ui.adapter.CurrencyChoiceAdapter
+import com.jay.currencyconverter.ui.adapter.ChartCurrencyAdapter
 import com.jay.currencyconverter.ui.adapter.DisplayedCurrenciesAdapter
-import com.jay.currencyconverter.ui.adapter.NbuExchangeAdapter
-import com.jay.currencyconverter.ui.dialog.NoCurrencyChosenDialog
+import com.jay.currencyconverter.ui.adapter.NbuExchangeRateAdapter
 import com.jay.currencyconverter.ui.dialog.ErrorDialog
+import com.jay.currencyconverter.ui.dialog.NoCurrencyChosenDialog
 import com.jay.currencyconverter.util.Constant.CURRENCY_ABR
 import com.jay.currencyconverter.util.Constant.CURRENCY_ABR_DEFAULT
 import com.jay.currencyconverter.util.Constant.EMPTY_STRING
@@ -33,19 +34,19 @@ import javax.inject.Inject
 class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListener {
 
     @Inject
-    lateinit var nbuExchangeAdapter: NbuExchangeAdapter
+    lateinit var nbuExchangeAdapter: NbuExchangeRateAdapter
 
     @Inject
-    lateinit var chartCurrenciesAdapter: CurrencyChoiceAdapter
+    lateinit var chartCurrenciesAdapter: ChartCurrencyAdapter
 
     @Inject
     lateinit var displayCurrenciesAdapter: DisplayedCurrenciesAdapter
 
     @Inject
-    lateinit var nbuActivityVM: NbuActivityViewModel
+    lateinit var mainContentVM: MainContentViewModel
 
     @Inject
-    lateinit var nbuCurrenciesDisplay: NbuCurrenciesDisplay
+    lateinit var appbarViewModel: AppbarViewModel
 
     @Inject
     lateinit var errorDialog: ErrorDialog
@@ -54,14 +55,15 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
     lateinit var layoutParamsAnimator: LayoutParamsAnimator
 
     @Inject
-    lateinit var currencyShouldChosenDialog: NoCurrencyChosenDialog
+    lateinit var noCurrencyChosenDialog: NoCurrencyChosenDialog
 
-    private lateinit var currenciesChart: LineChart
-    private var isChartSettingsClosed = true
-    private var isCurrenciesSettingsClosed = true
+    private var nbuDatabaseManager: NbuDatabaseManager = NbuDatabaseManager.instance
     private val CHART_SETTINGS_TRANSITION = 0
     private val CURRENCIES_SETTINGS_TRANSITION = 1
-    private var transitionDuration: Long = 0
+    private var isChartSettingsClosed = true
+    private var isCurrenciesSettingsClosed = true
+    private var listAppearDuration = 0L
+    private lateinit var currenciesChart: LineChart
 
     override fun onCreate(savedInstanceState: Bundle?) {
         DaggerNbuActivityComponent.builder().activity(this).build().inject(this)
@@ -75,14 +77,12 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
         setupDisplayedCurrenciesList()
 
         onExchangeRateLoadFinish()
-        onPreviousExchangeRateLoadFinish()
-
-        onDisplayedCurrenciesListChanged()
+        onChartExchangeRateLoadFinish()
 
         onChartSettingsClick()
         onChartCurrencyChosen()
 
-        onDisplayedCurrenciesSettingsClick()
+        onCurrenciesToDisplaySettingsClick()
         onMainCheckboxClick()
 
         currenciesChart = findViewById(R.id.line_chart)
@@ -90,22 +90,21 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
 
         errorDialog.setOnDialogButtonsClickListener(this)
 
-        nbuActivityVM.getExchangeRate()
-        nbuActivityVM.getPreviousExchangeRate(StorageManager.getVariable(CURRENCY_ABR, CURRENCY_ABR_DEFAULT))
+        mainContentVM.getExchangeRate()
+        appbarViewModel.getChartExchangeRate(StorageManager.getVariable(CURRENCY_ABR, CURRENCY_ABR_DEFAULT))
 
-        transitionDuration =
-            resources.getInteger(R.integer.activity_nbu_scene_transition_duration).toLong()
+        listAppearDuration = resources.getInteger(R.integer.list_appear_duration).toLong()
 
         lifecycle.addObserver(displayCurrenciesAdapter)
-        lifecycle.addObserver(nbuActivityVM)
-        lifecycle.addObserver(nbuCurrenciesDisplay)
+        lifecycle.addObserver(mainContentVM)
+        lifecycle.addObserver(nbuDatabaseManager)
     }
 
     /**
      * @see ErrorDialog.OnDialogButtonsClickListener.onReload
      */
     override fun onReload() {
-        nbuActivityVM.getExchangeRate()
+        mainContentVM.getExchangeRate()
     }
 
     /**
@@ -119,21 +118,21 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
         chart_settings_button.setOnClickListener {
             if (isChartSettingsClosed) {
                 openChartSettings()
-                expandAppbar()
+                expandAppbar(delay = listAppearDuration / 2)
             } else {
-                closeChartSettings()
+                closeChartSettings(delay = listAppearDuration)
                 collapseAppbar()
             }
         }
     }
 
-    private fun onDisplayedCurrenciesSettingsClick() {
+    private fun onCurrenciesToDisplaySettingsClick() {
         currency_settings_button.setOnClickListener {
             if (isCurrenciesSettingsClosed) {
                 openDisplayedCurrenciesSettings()
-                expandAppbar()
+                expandAppbar(delay = listAppearDuration / 2)
             } else {
-                closeDisplayedCurrenciesSettings()
+                closeDisplayedCurrenciesSettings(delay = listAppearDuration)
                 collapseAppbar()
             }
         }
@@ -148,21 +147,31 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
     }
 
     private fun onExchangeRateLoadFinish() {
-        nbuActivityVM.exchangeRateObserver.observe(this, Observer {
-                response: ResponseWrapper<List<Nbu>> ->
+        mainContentVM.exchangeRateObserver.observe(this, Observer {
+                result: ResponseWrapper<Map<Nbu, Boolean>> ->
 
-                if (response.error == null) {
-                    response.data?.let { nbuCurrenciesList: List<Nbu> ->
-                        nbuCurrenciesDisplay.setItems(nbuCurrenciesList)
+            if (result.error == null && result.data != null) {
+                displayCurrenciesAdapter.setItems(result.data)
+
+                val currenciesToDisplay: MutableList<Nbu> = mutableListOf()
+
+                result.data.forEach {
+                    val currencyShouldBeDisplayed: Boolean = it.value
+                    if (currencyShouldBeDisplayed) {
+                        currenciesToDisplay.add(it.key)
                     }
-                } else {
-                    errorDialog.show(supportFragmentManager, this.localClassName)
                 }
-            })
+                nbuExchangeAdapter.setItems(currenciesToDisplay)
+                chartCurrenciesAdapter.setItems(currenciesToDisplay)
+
+            } else {
+                errorDialog.show(supportFragmentManager, this.localClassName)
+            }
+        })
     }
 
-    private fun onPreviousExchangeRateLoadFinish() {
-        nbuActivityVM.previousExchangeRateObserver.observe(this, Observer {
+    private fun onChartExchangeRateLoadFinish() {
+        appbarViewModel.chartExchangeRate.observe(this, Observer {
                 response: ResponseWrapper<MutableList<Double>> ->
 
                 if (response.error == null) {
@@ -173,28 +182,10 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
             })
     }
 
-    private fun onDisplayedCurrenciesListChanged() {
-        nbuCurrenciesDisplay.displayedCurrenciesLiveData.observe(this,
-            Observer { result: MutableMap<Nbu, Boolean> ->
-                displayCurrenciesAdapter.setItems(result)
-
-                val currenciesToDisplay: MutableList<Nbu> = mutableListOf()
-
-                result.forEach{
-                    val currencyShouldBeDisplayed: Boolean = it.value
-                    if (currencyShouldBeDisplayed){
-                        currenciesToDisplay.add(it.key)
-                    }
-                }
-                nbuExchangeAdapter.setItems(currenciesToDisplay)
-                chartCurrenciesAdapter.setItems(currenciesToDisplay)
-            })
-    }
-
     private fun onChartCurrencyChosen() {
-        chartCurrenciesAdapter.clickEvent.observe(this, Observer { currency: Nbu ->
+        chartCurrenciesAdapter.chartCurrencyChosen.observe(this, Observer { currency: Nbu ->
             currency.currencyAbbreviation?.let { abr: String ->
-                nbuActivityVM.getPreviousExchangeRate(abr)
+                appbarViewModel.getChartExchangeRate(abr)
             }
             closeChartSettings()
             collapseAppbar()
@@ -203,7 +194,8 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
 
     private fun initBinding() {
         val binding: ActivityNbuBinding? = DataBindingUtil.bind(mainContentView)
-        binding?.nbuVM = nbuActivityVM
+        binding?.mainContentVM = mainContentVM
+        binding?.appbarVM = appbarViewModel
     }
 
     private fun setupNbuExchangeList() {
@@ -226,55 +218,56 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
         displayed_currencies_list.adapter = displayCurrenciesAdapter
     }
 
-    private fun expandAppbar() {
+    private fun expandAppbar(delay: Long = 0) {
         layoutParamsAnimator.apply {
-            duration = resources.getInteger(R.integer.activity_nbu_scene_transition_duration).toLong()
+            duration = resources.getInteger(R.integer.appbar_collapse_expand_duration).toLong()
             view = app_bar
             targetHeight = resources.getDimension(R.dimen.app_bar_expanded_height).toInt()
-            app_bar.startAnimation(this)
         }
+        Handler().postDelayed({ app_bar.startAnimation(layoutParamsAnimator) }, delay)
     }
 
-    private fun collapseAppbar() {
+    private fun collapseAppbar(delay: Long = 0) {
         layoutParamsAnimator.apply {
-            duration = resources.getInteger(R.integer.activity_nbu_scene_transition_duration).toLong()
+            duration = resources.getInteger(R.integer.appbar_collapse_expand_duration).toLong()
             view = app_bar
             targetHeight = resources.getDimension(R.dimen.app_bar_height).toInt()
             app_bar.startAnimation(this)
         }
+        Handler().postDelayed({ app_bar.startAnimation(layoutParamsAnimator) }, delay)
     }
 
     private fun openChartSettings() {
         if (!isCurrenciesSettingsClosed) {
             closeDisplayedCurrenciesSettings()
-            setTransitionToEnd(CHART_SETTINGS_TRANSITION, transitionDuration)
+            setTransitionToEnd(CHART_SETTINGS_TRANSITION, delay = listAppearDuration)
         } else {
-            setTransitionToEnd(CHART_SETTINGS_TRANSITION, duration = 0)
+            setTransitionToEnd(CHART_SETTINGS_TRANSITION, delay = 0)
         }
         isChartSettingsClosed = false
     }
 
-    private fun closeChartSettings() {
-        app_bar_root_motion_layout.transitionToStart()
+    private fun closeChartSettings(delay: Long = 0) {
+        Handler().postDelayed({ app_bar_root_motion_layout.transitionToStart() }, delay)
         isChartSettingsClosed = true
     }
 
     private fun openDisplayedCurrenciesSettings() {
         if (!isChartSettingsClosed) {
             closeChartSettings()
-            setTransitionToEnd(CURRENCIES_SETTINGS_TRANSITION, transitionDuration)
+            setTransitionToEnd(CURRENCIES_SETTINGS_TRANSITION, delay = listAppearDuration)
         } else {
-            setTransitionToEnd(CURRENCIES_SETTINGS_TRANSITION, duration = 0)
+            setTransitionToEnd(CURRENCIES_SETTINGS_TRANSITION, delay = 0)
         }
         isCurrenciesSettingsClosed = false
     }
 
-    private fun closeDisplayedCurrenciesSettings() {
-        app_bar_root_motion_layout.transitionToStart()
+    private fun closeDisplayedCurrenciesSettings(delay: Long = 0) {
+        Handler().postDelayed({ app_bar_root_motion_layout.transitionToStart() }, delay)
         isCurrenciesSettingsClosed = true
     }
 
-    private fun setTransitionToEnd(transitionType: Int, duration: Long) {
+    private fun setTransitionToEnd(transitionType: Int, delay: Long = 0) {
         when (transitionType) {
             CHART_SETTINGS_TRANSITION -> {
                 Handler().postDelayed({
@@ -283,7 +276,7 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
                         R.id.end_char_settings_transition
                     )
                     app_bar_root_motion_layout.transitionToEnd()
-                }, duration)
+                }, delay)
             }
             CURRENCIES_SETTINGS_TRANSITION -> {
                 Handler().postDelayed({
@@ -292,7 +285,7 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
                         R.id.end_currency_settings_transition
                     )
                     app_bar_root_motion_layout.transitionToEnd()
-                }, duration)
+                }, delay)
             }
             else -> throw IllegalArgumentException("unknown type")
         }
