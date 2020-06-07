@@ -7,12 +7,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.databinding.ActivityCalculatorBinding
 import com.jay.currencyconverter.di.DaggerCalculatorActivityComponent
-import com.jay.currencyconverter.model.CurrencyChoiceWrapper
+import com.jay.currencyconverter.model.CurrencyChoice
 import com.jay.currencyconverter.model.exchangeRate.currency.Currencies
 import com.jay.currencyconverter.model.exchangeRate.currency.Currency
 import com.jay.currencyconverter.model.exchangeRate.currency.CurrencyType
 import com.jay.currencyconverter.model.exchangeRate.currency.UAH
-import com.jay.currencyconverter.ui.adapter.CurrencyChoiceButtonsAdapter
+import com.jay.currencyconverter.ui.adapter.currencyButtonsAdapter.HorizontalCurrencyButtonsAdapter
 import com.jay.currencyconverter.util.Constant
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_calculator.*
@@ -29,7 +29,7 @@ class CalculatorActivity : AppCompatActivity() {
     lateinit var calculatorVM: CalculatorActivityViewModel
 
     @Inject
-    lateinit var currencyChoiceAdapter: CurrencyChoiceButtonsAdapter
+    lateinit var horizontalCurrencyAdapter: HorizontalCurrencyButtonsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         DaggerCalculatorActivityComponent.builder().activity(this).build().inject(this)
@@ -43,7 +43,7 @@ class CalculatorActivity : AppCompatActivity() {
 
         fillCurrenciesList()
         setupCurrencyChoiceList()
-        onCurrencyChoiceListItemClick()
+        onCurrencyToConvertChosen()
 
         lifecycle.addObserver(calculatorVM)
     }
@@ -56,15 +56,14 @@ class CalculatorActivity : AppCompatActivity() {
 
     private fun setupCurrencyChoiceList() {
         base_currencies_list.setHasFixedSize(true)
-        base_currencies_list.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        base_currencies_list.adapter = currencyChoiceAdapter
-        currencyChoiceAdapter.setItems(currenciesList)
+        base_currencies_list.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        base_currencies_list.adapter = horizontalCurrencyAdapter
+        horizontalCurrencyAdapter.setItems(currenciesList)
     }
 
-    private fun onCurrencyChoiceListItemClick() {
+    private fun onCurrencyToConvertChosen() {
         val subscribe: Disposable =
-            currencyChoiceAdapter.clickEvent.subscribe { wrapper: CurrencyChoiceWrapper ->
+            horizontalCurrencyAdapter.clickEvent.subscribe { wrapper: CurrencyChoice ->
                 when (wrapper.currencyType) {
                     CurrencyType.BASE -> {
                         wrapper.chosenCurrency?.let {

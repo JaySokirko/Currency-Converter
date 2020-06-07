@@ -3,8 +3,6 @@ package com.jay.currencyconverter.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -12,9 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.jakewharton.rxbinding.view.RxView
 import com.jay.currencyconverter.R
-import com.jay.currencyconverter.model.exchangeRate.currency.Currencies
 import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
 import com.jay.currencyconverter.repository.NbuDatabaseManager
+import com.jay.currencyconverter.ui.adapter.viewHolder.BaseViewHolder
+import com.jay.currencyconverter.ui.adapter.viewHolder.NbuViewHolder
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
@@ -29,10 +28,8 @@ class DisplayedCurrenciesAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>(), 
     val mainCheckboxClickEvent: PublishSubject<Boolean> = PublishSubject.create()
 
     private val currencyList: MutableList<Nbu> = mutableListOf()
-    private var checkBoxList: MutableList<MaterialCheckBox> = mutableListOf()
     private var checkedPositions: MutableList<Boolean> = mutableListOf()
-
-    private val currencies: Currencies = Currencies()
+    private var checkBoxList: MutableList<MaterialCheckBox> = mutableListOf()
     private val disposable = CompositeDisposable()
     private val subscription = CompositeSubscription()
     private var nbuDatabaseManager: NbuDatabaseManager = NbuDatabaseManager.instance
@@ -53,7 +50,7 @@ class DisplayedCurrenciesAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>(), 
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_currency_choice, parent, false)
 
-        return CurrencyVH(view)
+        return DisplayedCurrencyVH(view)
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder<Nbu>, position: Int) {
@@ -77,20 +74,10 @@ class DisplayedCurrenciesAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>(), 
         notifyDataSetChanged()
     }
 
-    private inner class CurrencyVH(itemView: View) : BaseViewHolder<Nbu>(itemView) {
-
-        private val currencyIcon: AppCompatImageView = itemView.findViewById(R.id.currency_image)
-        private val currencyAbr: AppCompatTextView = itemView.findViewById(R.id.currency_abr)
-        private val currencyName: AppCompatTextView = itemView.findViewById(R.id.currency_name)
-        private val checkBox: MaterialCheckBox = itemView.findViewById(R.id.currency_choice_check_box)
+    private inner class DisplayedCurrencyVH(itemView: View) : NbuViewHolder(itemView) {
 
         override fun bind(item: Nbu) {
-
-            item.currencyAbbreviation?.let {
-                currencyIcon.setImageDrawable(currencies.getCurrencyImageByAbr(it, itemView.context))
-            }
-            currencyAbr.text = item.currencyAbbreviation
-            currencyName.text = item.currencyName
+            super.bind(item)
 
             checkBox.isChecked = checkedPositions[layoutPosition]
 

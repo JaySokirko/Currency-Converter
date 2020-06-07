@@ -89,6 +89,8 @@ class AppbarViewModel: BaseNbuViewModel() {
             ConnectionErrorHandler.onSslHandshakeAborted(error) {
                 getChartExchangeRate(defaultAbbr)
                 isFirstRequest = false
+                chartErrorTitleVisibility.set(View.GONE)
+                chartErrorButtonVisibility.set(View.GONE)
             }
         } else {
             chartExchangeRate.postValue(ResponseWrapper(error = error))

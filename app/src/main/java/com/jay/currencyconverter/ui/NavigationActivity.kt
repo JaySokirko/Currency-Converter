@@ -17,6 +17,10 @@ import com.jay.currencyconverter.R
 import com.jay.currencyconverter.ui.bankActivity.BankActivity
 import com.jay.currencyconverter.ui.nbuActivity.NbuActivity
 import com.jay.currencyconverter.ui.newsActivity.NewsActivity
+import com.jay.currencyconverter.util.Constant.PREVIOUS_OPENED_WINDOW
+import com.jay.currencyconverter.util.StorageManager
+import kotlinx.android.synthetic.main.activity_navigation.*
+
 
 abstract class NavigationActivity : AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener {
@@ -31,8 +35,7 @@ abstract class NavigationActivity : AppCompatActivity(),
     }
 
     protected fun initContent(contentLayoutId: Int, toolbarLayoutId: Int) {
-        val inflater: LayoutInflater =
-            getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val inflater: LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
         val mainContainer: FrameLayout = findViewById(R.id.main_container)
         mainContentView = inflater.inflate(contentLayoutId, mainContainer, false)
@@ -67,7 +70,7 @@ abstract class NavigationActivity : AppCompatActivity(),
                 startActivity(Intent(this, NewsActivity::class.java))
             }
         }
-
+        StorageManager.saveVariable(PREVIOUS_OPENED_WINDOW, item.itemId)
         return true
     }
 
@@ -93,15 +96,16 @@ abstract class NavigationActivity : AppCompatActivity(),
     private fun initNavigation(toolbar: Toolbar) {
         val navDrawOpenResId: Int = R.string.navigation_drawer_open
         val navDrawCloseResId: Int = R.string.navigation_drawer_close
-        val toggle =
-            ActionBarDrawerToggle(this, nawDrawer, toolbar, navDrawOpenResId, navDrawCloseResId)
-        toggle.drawerArrowDrawable.color = resources.getColor(R.color.white)
-        toggle.syncState()
 
-        val navigationView: NavigationView = findViewById(R.id.drawer_menu_layout)
-        navigationView.setNavigationItemSelectedListener(this)
-        navigationView.itemIconTintList = null
+        ActionBarDrawerToggle(this, nawDrawer, toolbar, navDrawOpenResId, navDrawCloseResId).apply {
+            drawerArrowDrawable.color = resources.getColor(R.color.white)
+            syncState()
+        }
+
+        drawer_menu_layout.apply{
+          setNavigationItemSelectedListener(this@NavigationActivity)
+          itemIconTintList = null
+        }
     }
-
 }
 
