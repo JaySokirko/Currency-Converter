@@ -13,72 +13,208 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/x2"
         android:animateLayoutChanges="true"
         tools:context=".ui.calculatorActivity.CalculatorActivity">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/base_currencies_list"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="@dimen/x5"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:itemCount="1"
-            tools:listitem="@layout/list_horizontal_currency_buttons" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline10"
+            android:id="@+id/constraintLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/two"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/base_currencies_list">
+            app:layout_constraintStart_toStartOf="parent">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/result"
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/search_input_layout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:maxLength="11"
-                android:text="@{calculator.result}"
-                android:textSize="21sp"
+                android:layout_marginStart="@dimen/x2"
+                android:layout_marginEnd="@dimen/x2"
+                android:layout_marginBottom="@dimen/x2"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:hint="currency search"
+                app:boxStrokeColor="@color/colorPrimary"
+                app:layout_constraintBottom_toTopOf="@+id/currencies_list"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/search_currency_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/currencies_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/x4"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:text="123.456" />
+                app:layout_constraintStart_toStartOf="parent"
+                tools:itemCount="1"
+                tools:listitem="@layout/list_horizontal_currency_buttons" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:id="@+id/calculator_header_transition"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layoutDescription="@xml/scene_calculator_transition"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/exchange_rate_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/x2"
+                android:text="@string/exchange_rate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/call_phone_btn" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/exchange_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/x"
+                android:text="@={calculator.exchangeRateText}"
+                app:layout_constraintBottom_toBottomOf="@+id/exchange_rate_title"
+                app:layout_constraintStart_toEndOf="@+id/exchange_rate_title"
+                app:layout_constraintTop_toTopOf="@+id/exchange_rate_title"
+                tools:text="0.335" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/input_value_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/x2"
+                android:layout_marginTop="@dimen/x2"
+                android:text="@string/sum"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/exchange_rate_title" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/input_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="@={calculator.inputValue}"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/result"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="@dimen/x"
+                android:text="@={calculator.enteredValue}"
+                app:layout_constraintBottom_toBottomOf="@+id/input_value_title"
+                app:layout_constraintStart_toEndOf="@+id/input_value_title"
+                app:layout_constraintTop_toTopOf="@+id/input_value_title"
                 tools:text="123.41" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/currency_coefficient"
+                android:id="@+id/result_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@={calculator.currencyCoefficient}"
-                android:textSize="18sp"
+                android:layout_marginStart="@dimen/x2"
+                android:layout_marginTop="@dimen/x2"
+                android:text="@string/result"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/input_value_title" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/x"
+                android:text="@{calculator.result}"
+                app:layout_constraintBottom_toBottomOf="@+id/result_title"
+                app:layout_constraintStart_toEndOf="@+id/result_title"
+                app:layout_constraintTop_toTopOf="@+id/result_title"
+                tools:text="123.456" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/organization_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/x2"
+                android:layout_marginEnd="@dimen/x"
+                android:text="@{calculator.organizationTitleText}"
+                app:layout_constraintBottom_toBottomOf="@+id/call_phone_btn"
+                app:layout_constraintEnd_toStartOf="@+id/guideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/call_phone_btn"
+                tools:text="Organization title" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/call_phone_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/x2"
+                android:layout_marginEnd="@dimen/x2"
+                android:onClick="@{() -> calculator.onPhoneCallClick()}"
+                android:text="@{calculator.phoneCallBtnText}"
+                android:visibility="@{calculator.phoneCallBtnVisibility}"
+                app:icon="@drawable/ic_phone_call"
+                app:iconGravity="end"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="0.335" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                tools:text="+380633535751" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/base_currency_cancel_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/x2"
+                android:layout_marginBottom="@dimen/x"
+                android:alpha="0"
+                android:onClick="@{() -> calculator.onBaseCurrencyCancelClick()}"
+                android:text="@{calculator.baseCurrencyCancelBtnText}"
+                app:icon="@{calculator.baseCurrencyCancelBtnIcon}"
+                app:iconTint="@null"
+                app:isVisible="@{calculator.isBaseCurrencyCancelBtnVisible()}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/conversion_currency_btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/x"
+                android:layout_marginBottom="@dimen/x"
+                android:alpha="0"
+                android:onClick="@{() -> calculator.onConversionCurrencyCancelClick()}"
+                android:text="@{calculator.conversionCurrencyCancelBtnText}"
+                app:icon="@{calculator.conversionCurrencyCancelBtnIcon}"
+                app:iconTint="@null"
+                app:isVisible="@{calculator.isConversionCurrencyCancelBtnVisible()}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/base_currency_cancel_btn" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancel_all_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/x2"
+                android:layout_marginBottom="@dimen/x"
+                android:alpha="0"
+                android:onClick="@{() -> calculator.onCancelAllClick()}"
+                android:text="@string/cancel"
+                app:icon="@drawable/ic_cancel"
+                app:iconGravity="end"
+                app:isVisible="@{calculator.isCancelAllBtnVisibility()}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.motion.widget.MotionLayout>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline4"
@@ -99,28 +235,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.8572" />
+            app:layout_constraintGuide_percent="0.9" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.7144" />
+            app:layout_constraintGuide_percent="0.8" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.5716" />
+            app:layout_constraintGuide_percent="0.7" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.4288" />
+            app:layout_constraintGuide_percent="0.6" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/one"
@@ -131,6 +267,7 @@
             android:layout_marginTop="@dimen/x"
             android:layout_marginEnd="@dimen/x"
             android:layout_marginBottom="@dimen/x"
+            android:clickable="@{calculator.isCurrenciesChosen ? true : false}"
             android:onClick="@{() -> calculator.onOneClick()}"
             app:layout_constraintBottom_toTopOf="@+id/guideline8"
             app:layout_constraintEnd_toStartOf="@+id/guideline4"
@@ -143,6 +280,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="1"
+                android:textColor="@{calculator.isCurrenciesChosen ? @color/colorPrimaryDark : @color/gray_300}"
                 app:autoSizeTextType="uniform" />
         </androidx.cardview.widget.CardView>
 
@@ -155,6 +293,7 @@
             android:layout_marginTop="@dimen/x"
             android:layout_marginEnd="@dimen/x"
             android:layout_marginBottom="@dimen/x"
+            android:clickable="@{calculator.isCurrenciesChosen ? true : false}"
             android:onClick="@{() -> calculator.onTwoClick()}"
             app:layout_constraintBottom_toTopOf="@+id/guideline8"
             app:layout_constraintEnd_toStartOf="@+id/guideline5"
@@ -166,6 +305,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="2"
+                android:textColor="@{calculator.isCurrenciesChosen ? @color/colorPrimaryDark : @color/gray_300}"
                 app:autoSizeTextType="uniform" />
         </androidx.cardview.widget.CardView>
 
@@ -178,6 +318,7 @@
             android:layout_marginTop="@dimen/x"
             android:layout_marginEnd="@dimen/x"
             android:layout_marginBottom="@dimen/x"
+            android:clickable="@{calculator.isCurrenciesChosen ? true : false}"
             android:onClick="@{() -> calculator.onThreeClick()}"
             app:layout_constraintBottom_toTopOf="@+id/guideline8"
             app:layout_constraintEnd_toEndOf="parent"
@@ -189,6 +330,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="3"
+                android:textColor="@{calculator.isCurrenciesChosen ? @color/colorPrimaryDark : @color/gray_300}"
                 app:autoSizeTextType="uniform" />
         </androidx.cardview.widget.CardView>
 
@@ -201,6 +343,7 @@
             android:layout_marginTop="@dimen/x"
             android:layout_marginEnd="@dimen/x"
             android:layout_marginBottom="@dimen/x"
+            android:clickable="@{calculator.isCurrenciesChosen ? true : false}"
             android:onClick="@{() -> calculator.onFourClick()}"
             app:layout_constraintBottom_toTopOf="@+id/guideline7"
             app:layout_constraintEnd_toStartOf="@+id/guideline4"
@@ -213,6 +356,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="4"
+                android:textColor="@{calculator.isCurrenciesChosen ? @color/colorPrimaryDark : @color/gray_300}"
                 app:autoSizeTextType="uniform" />
         </androidx.cardview.widget.CardView>
 
@@ -225,6 +369,7 @@
             android:layout_marginTop="@dimen/x"
             android:layout_marginEnd="@dimen/x"
             android:layout_marginBottom="@dimen/x"
+            android:clickable="@{calculator.isCurrenciesChosen ? true : false}"
             android:onClick="@{() -> calculator.onFiveClick()}"
             app:layout_constraintBottom_toTopOf="@+id/guideline7"
             app:layout_constraintEnd_toStartOf="@+id/guideline5"
@@ -236,6 +381,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="5"
+                android:textColor="@{calculator.isCurrenciesChosen ? @color/colorPrimaryDark : @color/gray_300}"
                 app:autoSizeTextType="uniform" />
         </androidx.cardview.widget.CardView>
 
@@ -248,6 +394,7 @@
             android:layout_marginTop="@dimen/x"
             android:layout_marginEnd="@dimen/x"
             android:layout_marginBottom="@dimen/x"
+            android:clickable="@{calculator.isCurrenciesChosen ? true : false}"
             android:onClick="@{() -> calculator.onSixClick()}"
             app:layout_constraintBottom_toTopOf="@+id/guideline7"
             app:layout_constraintEnd_toEndOf="parent"
@@ -259,6 +406,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="6"
+                android:textColor="@{calculator.isCurrenciesChosen ? @color/colorPrimaryDark : @color/gray_300}"
                 app:autoSizeTextType="uniform" />
         </androidx.cardview.widget.CardView>
 
@@ -271,6 +419,7 @@
             android:layout_marginTop="@dimen/x"
             android:layout_marginEnd="@dimen/x"
             android:layout_marginBottom="@dimen/x"
+            android:clickable="@{calculator.isCurrenciesChosen ? true : false}"
             android:onClick="@{() -> calculator.onSevenClick()}"
             app:layout_constraintBottom_toTopOf="@+id/guideline6"
             app:layout_constraintEnd_toStartOf="@+id/guideline4"
@@ -282,6 +431,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="7"
+                android:textColor="@{calculator.isCurrenciesChosen ? @color/colorPrimaryDark : @color/gray_300}"
                 app:autoSizeTextType="uniform" />
         </androidx.cardview.widget.CardView>
 
@@ -294,6 +444,7 @@
             android:layout_marginTop="@dimen/x"
             android:layout_marginEnd="@dimen/x"
             android:layout_marginBottom="@dimen/x"
+            android:clickable="@{calculator.isCurrenciesChosen ? true : false}"
             android:onClick="@{() -> calculator.onEightClick()}"
             app:layout_constraintBottom_toTopOf="@+id/guideline6"
             app:layout_constraintEnd_toStartOf="@+id/guideline5"
@@ -306,6 +457,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="8"
+                android:textColor="@{calculator.isCurrenciesChosen ? @color/colorPrimaryDark : @color/gray_300}"
                 app:autoSizeTextType="uniform" />
         </androidx.cardview.widget.CardView>
 
@@ -318,6 +470,7 @@
             android:layout_marginTop="@dimen/x"
             android:layout_marginEnd="@dimen/x"
             android:layout_marginBottom="@dimen/x"
+            android:clickable="@{calculator.isCurrenciesChosen ? true : false}"
             android:onClick="@{() -> calculator.onNineClick()}"
             app:layout_constraintBottom_toTopOf="@+id/guideline6"
             app:layout_constraintEnd_toEndOf="parent"
@@ -329,6 +482,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="9"
+                android:textColor="@{calculator.isCurrenciesChosen ? @color/colorPrimaryDark : @color/gray_300}"
                 app:autoSizeTextType="uniform" />
         </androidx.cardview.widget.CardView>
 
@@ -341,6 +495,7 @@
             android:layout_marginTop="@dimen/x"
             android:layout_marginEnd="@dimen/x"
             android:layout_marginBottom="@dimen/x"
+            android:clickable="@{calculator.isCurrenciesChosen ? true : false}"
             android:onClick="@{() -> calculator.onDotClick()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline4"
@@ -352,6 +507,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="."
+                android:textColor="@{calculator.isCurrenciesChosen ? @color/colorPrimaryDark : @color/gray_300}"
                 app:autoSizeTextType="uniform" />
         </androidx.cardview.widget.CardView>
 
@@ -364,6 +520,7 @@
             android:layout_marginTop="@dimen/x"
             android:layout_marginEnd="@dimen/x"
             android:layout_marginBottom="@dimen/x"
+            android:clickable="@{calculator.isCurrenciesChosen ? true : false}"
             android:onClick="@{() -> calculator.onZeroClick()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline5"
@@ -375,6 +532,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="0"
+                android:textColor="@{calculator.isCurrenciesChosen ? @color/colorPrimaryDark : @color/gray_300}"
                 app:autoSizeTextType="uniform" />
         </androidx.cardview.widget.CardView>
 
@@ -387,18 +545,21 @@
             android:layout_marginTop="@dimen/x"
             android:layout_marginEnd="@dimen/x"
             android:layout_marginBottom="@dimen/x"
+            android:clickable="@{calculator.isCurrenciesChosen ? true : false}"
+            android:longClickable="true"
             android:onClick="@{() -> calculator.onEraseClick()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline5"
             app:layout_constraintTop_toTopOf="@+id/guideline6">
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="18dp"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/ic_clear" />
+                android:gravity="center"
+                android:text="C"
+                android:textColor="@{calculator.isCurrenciesChosen ? @color/colorPrimaryDark : @color/gray_300}"
+                app:autoSizeTextType="uniform" />
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

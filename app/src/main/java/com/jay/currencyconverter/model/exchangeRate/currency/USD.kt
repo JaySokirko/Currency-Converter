@@ -7,6 +7,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.jay.currencyconverter.R
+import com.jay.currencyconverter.model.exchangeRate.Currency
 
 class USD() : Currency() {
     @SerializedName("ask")

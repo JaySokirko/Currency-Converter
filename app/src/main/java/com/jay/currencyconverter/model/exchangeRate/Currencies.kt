@@ -1,4 +1,4 @@
-package com.jay.currencyconverter.model.exchangeRate.currency
+package com.jay.currencyconverter.model.exchangeRate
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -6,6 +6,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.jay.currencyconverter.model.exchangeRate.currency.*
 import java.util.*
 
 class Currencies() : Parcelable {
@@ -418,20 +419,15 @@ class Currencies() : Parcelable {
         parcel.writeParcelable(tJS, flags)
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int = 0
+
 
     companion object CREATOR : Parcelable.Creator<Currencies> {
-        override fun createFromParcel(parcel: Parcel): Currencies {
-            return Currencies(
-                parcel
-            )
-        }
 
-        override fun newArray(size: Int): Array<Currencies?> {
-            return arrayOfNulls(size)
-        }
+        override fun createFromParcel(parcel: Parcel): Currencies =
+            Currencies(parcel)
+
+        override fun newArray(size: Int): Array<Currencies?> = arrayOfNulls(size)
     }
 
 

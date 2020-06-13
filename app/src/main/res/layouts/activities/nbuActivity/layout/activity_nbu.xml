@@ -58,7 +58,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/transparent"
-                        app:layoutDescription="@xml/scene_nbu_transitions"
+                        app:layoutDescription="@xml/scene_chart_settings"
                         app:layout_collapseMode="parallax"
                         app:showPaths="false">
 

@@ -14,11 +14,11 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.jay.currencyconverter.R
-import com.jay.currencyconverter.ui.bankActivity.BankActivity
+import com.jay.currencyconverter.ui.organizationActivity.OrganizationActivity
 import com.jay.currencyconverter.ui.nbuActivity.NbuActivity
 import com.jay.currencyconverter.ui.newsActivity.NewsActivity
-import com.jay.currencyconverter.util.Constant.PREVIOUS_OPENED_WINDOW
-import com.jay.currencyconverter.util.StorageManager
+import com.jay.currencyconverter.util.common.Constant.PREVIOUS_OPENED_WINDOW
+import com.jay.currencyconverter.util.common.StorageManager
 import kotlinx.android.synthetic.main.activity_navigation.*
 
 
@@ -64,7 +64,7 @@ abstract class NavigationActivity : AppCompatActivity(),
                 startActivity(Intent(this, NbuActivity::class.java))
             }
             R.id.bank -> {
-                startActivity(Intent(this, BankActivity::class.java))
+                startActivity(Intent(this, OrganizationActivity::class.java))
             }
             R.id.news -> {
                 startActivity(Intent(this, NewsActivity::class.java))

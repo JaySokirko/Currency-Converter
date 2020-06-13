@@ -16,7 +16,13 @@
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="app_bar_expanded_height">280dp</dimen>
 
-    <integer name="list_appear_duration">200</integer>
-    <integer name="appbar_collapse_expand_duration">400</integer>
+    <!--durationX = 100-->
+    <integer name="durationX2">200</integer>
+    <integer name="durationX4">400</integer>
+    <integer name="calculator_max_input_values">9</integer>
+    <integer name="text_increase_duration">300</integer>
+    <integer name="text_reduce_duration">400</integer>
+
+    <item name="text_increase_step" format="float" type="dimen">2.5</item>
 
 </resources>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        android:id="@+id/items_transition"
+        app:constraintSetEnd="@id/end"
+        app:constraintSetStart="@+id/start"
+        app:duration="@integer/durationX2"/>
+
+    <ConstraintSet android:id="@+id/start">
+
+        <Constraint
+            android:id="@+id/exchange_rate_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/x2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/call_phone_btn">
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/exchange_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/x"
+            app:layout_constraintBottom_toBottomOf="@+id/exchange_rate_title"
+            app:layout_constraintStart_toEndOf="@+id/exchange_rate_title"
+            app:layout_constraintTop_toTopOf="@+id/exchange_rate_title">
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/organization_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/x2"
+            android:layout_marginEnd="@dimen/x"
+            app:layout_constraintBottom_toBottomOf="@+id/call_phone_btn"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/call_phone_btn">
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/input_value_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/x2"
+            android:layout_marginTop="@dimen/x2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exchange_rate_title">
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/input_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/x"
+            app:layout_constraintBottom_toBottomOf="@+id/input_value_title"
+            app:layout_constraintStart_toEndOf="@+id/input_value_title"
+            app:layout_constraintTop_toTopOf="@+id/input_value_title">
+
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/call_phone_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x2"
+            android:layout_marginEnd="@dimen/x2"
+            app:icon="@drawable/ic_phone_call"
+            app:iconGravity="end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Constraint
+            android:id="@+id/result_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/x2"
+            android:layout_marginTop="@dimen/x2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/input_value_title">
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/x"
+            app:layout_constraintBottom_toBottomOf="@+id/result_title"
+            app:layout_constraintStart_toEndOf="@+id/result_title"
+            app:layout_constraintTop_toTopOf="@+id/result_title" >
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+
+        <Constraint
+            android:id="@+id/result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/x"
+            app:layout_constraintBottom_toBottomOf="@+id/result_title"
+            app:layout_constraintStart_toEndOf="@+id/result_title"
+            app:layout_constraintTop_toTopOf="@+id/result_title">
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/input_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/x"
+            app:layout_constraintBottom_toBottomOf="@+id/input_value_title"
+            app:layout_constraintStart_toEndOf="@+id/input_value_title"
+            app:layout_constraintTop_toTopOf="@+id/input_value_title" >
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/organization_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/x2"
+            android:layout_marginEnd="@dimen/x"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/call_phone_btn"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/call_phone_btn" >
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/exchange_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/x"
+            app:layout_constraintBottom_toBottomOf="@+id/exchange_rate_title"
+            app:layout_constraintStart_toEndOf="@+id/exchange_rate_title"
+            app:layout_constraintTop_toTopOf="@+id/exchange_rate_title" >
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/exchange_rate_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/x2"
+            android:layout_marginTop="@dimen/x2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/call_phone_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/x2"
+            android:visibility="gone"
+            app:icon="@drawable/ic_phone_call"
+            app:iconGravity="end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <Constraint
+            android:id="@+id/input_value_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/x2"
+            android:layout_marginTop="@dimen/x2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exchange_rate_title">
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/result_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/x2"
+            android:layout_marginTop="@dimen/x2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/input_value_title" >
+        </Constraint>
+    </ConstraintSet>
+
+</MotionScene>
