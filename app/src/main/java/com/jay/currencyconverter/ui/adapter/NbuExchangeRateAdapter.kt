@@ -8,13 +8,14 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
-import com.jay.currencyconverter.model.exchangeRate.currency.Currencies
+import com.jay.currencyconverter.model.exchangeRate.Currencies
 import com.jay.currencyconverter.ui.adapter.viewHolder.BaseViewHolder
 
 class NbuExchangeRateAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>() {
 
     private val nbuList: MutableList<Nbu> = ArrayList()
-    private val currencies: Currencies = Currencies()
+    private val currencies: Currencies =
+        Currencies()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Nbu> {
         val view: View = LayoutInflater.from(parent.context)

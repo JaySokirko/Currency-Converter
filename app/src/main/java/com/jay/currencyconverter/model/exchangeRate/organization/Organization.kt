@@ -1,10 +1,10 @@
-package com.jay.currencyconverter.model.exchangeRate.bank
+package com.jay.currencyconverter.model.exchangeRate.organization
 
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.jay.currencyconverter.model.exchangeRate.currency.Currencies
+import com.jay.currencyconverter.model.exchangeRate.Currencies
 
 
 class Organization() : Parcelable {

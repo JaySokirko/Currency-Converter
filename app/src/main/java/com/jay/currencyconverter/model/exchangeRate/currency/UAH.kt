@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import android.os.Parcel
 import android.os.Parcelable
 import com.jay.currencyconverter.R
+import com.jay.currencyconverter.model.exchangeRate.Currency
 
 class UAH() : Currency() {
 

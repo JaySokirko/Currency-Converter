@@ -11,7 +11,7 @@ import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.ResponseWrapper
 import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
 import com.jay.currencyconverter.repository.NbuDatabaseManager
-import com.jay.currencyconverter.util.ConnectionErrorHandler
+import com.jay.currencyconverter.util.common.ConnectionErrorHandler
 import com.jay.currencyconverter.util.TAG
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

@@ -1,9 +1,9 @@
-package com.jay.currencyconverter.util
+package com.jay.currencyconverter.util.common
 
 import android.content.Context
 import android.content.SharedPreferences
 import com.jay.currencyconverter.BaseApplication
-import com.jay.currencyconverter.util.Constant.COMMON
+import com.jay.currencyconverter.util.common.Constant.COMMON
 
 object StorageManager {
 

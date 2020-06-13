@@ -18,12 +18,12 @@ import com.jay.currencyconverter.ui.adapter.DisplayedCurrenciesAdapter
 import com.jay.currencyconverter.ui.adapter.NbuExchangeRateAdapter
 import com.jay.currencyconverter.ui.dialog.ErrorDialog
 import com.jay.currencyconverter.ui.dialog.NoCurrencyChosenDialog
-import com.jay.currencyconverter.util.Constant.CURRENCY_ABR
-import com.jay.currencyconverter.util.Constant.CURRENCY_ABR_DEFAULT
-import com.jay.currencyconverter.util.Constant.EMPTY_STRING
-import com.jay.currencyconverter.util.Constant.MAIN_CHECKBOX_CHECKED
-import com.jay.currencyconverter.util.StorageManager
-import com.jay.currencyconverter.util.ui.LayoutParamsAnimator
+import com.jay.currencyconverter.util.common.Constant.CURRENCY_ABR
+import com.jay.currencyconverter.util.common.Constant.CURRENCY_ABR_DEFAULT
+import com.jay.currencyconverter.util.common.Constant.EMPTY_STRING
+import com.jay.currencyconverter.util.common.Constant.MAIN_CHECKBOX_CHECKED
+import com.jay.currencyconverter.util.common.StorageManager
+import com.jay.currencyconverter.animation.LayoutParamsAnimation
 import com.jay.currencyconverter.util.ui.LineChartSettings
 import com.jay.currencyconverter.util.ui.RecyclerViewTouchItemListener
 import kotlinx.android.synthetic.main.activity_nbu.*
@@ -52,7 +52,7 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
     lateinit var errorDialog: ErrorDialog
 
     @Inject
-    lateinit var layoutParamsAnimator: LayoutParamsAnimator
+    lateinit var layoutParamsAnimation: LayoutParamsAnimation
 
     @Inject
     lateinit var noCurrencyChosenDialog: NoCurrencyChosenDialog
@@ -93,7 +93,7 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
         mainContentVM.getExchangeRate()
         appbarViewModel.getChartExchangeRate(StorageManager.getVariable(CURRENCY_ABR, CURRENCY_ABR_DEFAULT))
 
-        listAppearDuration = resources.getInteger(R.integer.list_appear_duration).toLong()
+        listAppearDuration = resources.getInteger(R.integer.durationX2).toLong()
 
         lifecycle.addObserver(displayCurrenciesAdapter)
         lifecycle.addObserver(mainContentVM)
@@ -219,22 +219,22 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
     }
 
     private fun expandAppbar(delay: Long = 0) {
-        layoutParamsAnimator.apply {
-            duration = resources.getInteger(R.integer.appbar_collapse_expand_duration).toLong()
+        layoutParamsAnimation.apply {
+            duration = resources.getInteger(R.integer.durationX4).toLong()
             view = app_bar
             targetHeight = resources.getDimension(R.dimen.app_bar_expanded_height).toInt()
         }
-        Handler().postDelayed({ app_bar.startAnimation(layoutParamsAnimator) }, delay)
+        Handler().postDelayed({ app_bar.startAnimation(layoutParamsAnimation) }, delay)
     }
 
     private fun collapseAppbar(delay: Long = 0) {
-        layoutParamsAnimator.apply {
-            duration = resources.getInteger(R.integer.appbar_collapse_expand_duration).toLong()
+        layoutParamsAnimation.apply {
+            duration = resources.getInteger(R.integer.durationX4).toLong()
             view = app_bar
             targetHeight = resources.getDimension(R.dimen.app_bar_height).toInt()
             app_bar.startAnimation(this)
         }
-        Handler().postDelayed({ app_bar.startAnimation(layoutParamsAnimator) }, delay)
+        Handler().postDelayed({ app_bar.startAnimation(layoutParamsAnimation) }, delay)
     }
 
     private fun openChartSettings() {

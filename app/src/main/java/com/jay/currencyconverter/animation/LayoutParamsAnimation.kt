@@ -1,10 +1,10 @@
-package com.jay.currencyconverter.util.ui
+package com.jay.currencyconverter.animation
 
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.Transformation
 
-class LayoutParamsAnimator : Animation() {
+class LayoutParamsAnimation : Animation() {
 
     var view: View? = null
     var targetHeight: Int = 0

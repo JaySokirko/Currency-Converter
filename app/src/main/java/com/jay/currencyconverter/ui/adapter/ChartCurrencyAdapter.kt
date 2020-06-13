@@ -10,8 +10,8 @@ import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
 import com.jay.currencyconverter.ui.adapter.viewHolder.BaseViewHolder
 import com.jay.currencyconverter.ui.adapter.viewHolder.NbuViewHolder
-import com.jay.currencyconverter.util.Constant.LAST_CHECKED_POSITION
-import com.jay.currencyconverter.util.StorageManager
+import com.jay.currencyconverter.util.common.Constant.LAST_CHECKED_POSITION
+import com.jay.currencyconverter.util.common.StorageManager
 
 
 class ChartCurrencyAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>() {

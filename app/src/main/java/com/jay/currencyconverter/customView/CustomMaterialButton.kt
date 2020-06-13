@@ -9,6 +9,7 @@ import com.jay.currencyconverter.R
 class CustomMaterialButton : MaterialButton {
 
     var isPressedState = false
+    var isEnable = true
 
     constructor(context: Context) : super(context)
 
@@ -30,10 +31,12 @@ class CustomMaterialButton : MaterialButton {
     fun disable() {
         backgroundTintList = ContextCompat.getColorStateList(context, R.color.gray_300)
         isClickable = false
+        isEnable = false
     }
 
     fun enable() {
         backgroundTintList = ContextCompat.getColorStateList(context, R.color.colorPrimary)
         isClickable = true
+        isEnable =  true
     }
 }

@@ -1,34 +1,89 @@
 package com.jay.currencyconverter.ui.calculatorActivity
 
+import android.content.Context
+import android.content.Intent
+import android.graphics.drawable.Drawable
+import android.net.Uri
+import android.view.View
+import androidx.core.content.ContextCompat.startActivity
+import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.ViewModel
-import com.jay.currencyconverter.model.exchangeRate.currency.Currency
-import com.jay.currencyconverter.util.CurrencyCalculator
-import com.jay.currencyconverter.util.ObservableFieldWrapper
-import com.jay.currencyconverter.util.letBlock
+import androidx.databinding.ObservableInt
+import androidx.lifecycle.*
+import com.jay.currencyconverter.BaseApplication
+import com.jay.currencyconverter.R
+import com.jay.currencyconverter.model.CurrencyChoice
+import com.jay.currencyconverter.model.exchangeRate.Currency
+import com.jay.currencyconverter.model.exchangeRate.CurrencyType
+import com.jay.currencyconverter.model.exchangeRate.organization.Organization
+import com.jay.currencyconverter.util.common.*
+import com.jay.currencyconverter.util.common.Constant.CANCEL_ALL_CURRENCY_CHOICE
+import com.jay.currencyconverter.util.common.Constant.CANCEL_BASE_CURRENCY_CHOICE
+import com.jay.currencyconverter.util.common.Constant.CANCEL_CONVERSION_CURRENCY_CHOICE
+import com.jay.currencyconverter.util.common.Constant.CURRENCIES_CHOSEN
+import com.jay.currencyconverter.util.common.Constant.CURRENCIES_NOT_CHOSEN
+import com.jay.currencyconverter.util.common.Constant.ERASE_ALL_HINT_ALREADY_SHOWN
+import com.jay.currencyconverter.util.common.Constant.ERASE_HINT_SHOULD_BE_SHOWN
+import com.jay.currencyconverter.util.executeIfNotNull
 import com.jay.currencyconverter.util.removeLastChar
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.Observables
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import java.math.BigDecimal
+import java.text.DecimalFormat
 
-class CalculatorActivityViewModel : ViewModel(), LifecycleObserver{
 
-    val baseCurrencyObserver: PublishSubject<Currency> = PublishSubject.create()
-    val conversionCurrencyObserver: PublishSubject<Currency> = PublishSubject.create()
+class CalculatorActivityViewModel : ViewModel(), LifecycleObserver,
+    ValueChangeListener.OnValueChangeListener<Currency> {
+
+    val currencyChoiceObserver: PublishSubject<CurrencyChoice> = PublishSubject.create()
+    val organizationChoiceObserver: PublishSubject<Organization> = PublishSubject.create()
+    val onCurrenciesChosenObserver: MutableLiveData<Int> = MutableLiveData()
+    val eraseHintShouldBeShown: MutableLiveData<Boolean> = MutableLiveData()
     val result: ObservableField<String> = ObservableField()
-    val currencyCoefficient: ObservableField<String> = ObservableField()
-    val inputValue: ObservableFieldWrapper<String> = ObservableFieldWrapper()
-    val disposable = CompositeDisposable()
+    val exchangeRateText: ObservableField<String> = ObservableField()
+    val enteredValue: ObservableFieldWrapper<String> = ObservableFieldWrapper()
+    val phoneCallBtnVisibility: ObservableInt = ObservableInt()
+    val phoneCallBtnText: ObservableField<String> = ObservableField()
+    val organizationTitleText: ObservableField<String> = ObservableField()
+    val isCurrenciesChosen: ObservableBoolean = ObservableBoolean()
+    val isBaseCurrencyCancelBtnVisible: ObservableBoolean = ObservableBoolean()
+    val isConversionCurrencyCancelBtnVisible: ObservableBoolean = ObservableBoolean()
+    val isCancelAllBtnVisibility: ObservableBoolean = ObservableBoolean()
+    val baseCurrencyCancelBtnText: ObservableField<String> = ObservableField()
+    val conversionCurrencyCancelBtnText: ObservableField<String> = ObservableField()
+    val baseCurrencyCancelBtnIcon: ObservableField<Drawable> = ObservableField()
+    val conversionCurrencyCancelBtnIcon: ObservableField<Drawable> = ObservableField()
 
-    
+    private val context: Context = BaseApplication.baseComponent.application.baseContext
+    private val disposable = CompositeDisposable()
+    private val baseCurrency: ValueChangeListener<Currency> = ValueChangeListener()
+    private val conversionCurrency: ValueChangeListener<Currency> = ValueChangeListener()
+    private val choseBaseCurrencyHint: String =
+        context.resources.getString(R.string.choose_base_currency_hint)
+    private val choseConversionCurrencyHint: String =
+        context.resources.getString(R.string.choose_conversion_currency_hint)
+
     init {
+        baseCurrency.setListener(this)
+        conversionCurrency.setListener(this)
+
+        exchangeRateText.set(choseBaseCurrencyHint)
+        phoneCallBtnVisibility.set(View.GONE)
+        isCurrenciesChosen.set(false)
         result.set("0")
-        inputValue.setField("0")
+        enteredValue.setField("0")
+
         observeCurrenciesChoice()
         observeInput()
+        observeOrganization()
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun onDestroy() {
+        disposable.clear()
     }
 
     fun onOneClick() {
@@ -79,35 +134,134 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver{
         erase()
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroy() {
-        disposable.clear()
+    fun onLongEraseClick() {
+        eraseAll()
+    }
+
+    fun onPhoneCallClick() {
+        val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneCallBtnText.get()))
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(context, intent, null)
+    }
+
+    fun onCancelAllClick() {
+        cancelBtnClickObserver.onNext(CANCEL_ALL_CURRENCY_CHOICE)
+        isCancelAllBtnVisibility.set(false)
+        isBaseCurrencyCancelBtnVisible.set(false)
+        isConversionCurrencyCancelBtnVisible.set(false)
+        baseCurrency.value = null
+        conversionCurrency.value = null
+    }
+
+    fun onBaseCurrencyCancelClick() {
+        cancelBtnClickObserver.onNext(CANCEL_BASE_CURRENCY_CHOICE)
+        isBaseCurrencyCancelBtnVisible.set(false)
+        baseCurrency.value = null
+    }
+
+    fun onConversionCurrencyCancelClick() {
+        cancelBtnClickObserver.onNext(CANCEL_CONVERSION_CURRENCY_CHOICE)
+        isConversionCurrencyCancelBtnVisible.set(false)
+        conversionCurrency.value = null
+    }
+
+    /**
+     * @see ValueChangeListener.OnValueChangeListener.onChange
+     */
+    override fun onChange() {
+        isCurrenciesChosen.set(false)
+
+        if (baseCurrency.value != null || conversionCurrency.value != null) {
+            onCurrenciesChosenObserver.postValue(CURRENCIES_CHOSEN)
+        } else {
+            onCurrenciesChosenObserver.postValue(CURRENCIES_NOT_CHOSEN)
+        }
+
+        if (baseCurrency.value == null) {
+            isBaseCurrencyCancelBtnVisible.set(false)
+        } else {
+            isBaseCurrencyCancelBtnVisible.set(true)
+            baseCurrencyCancelBtnText.set(baseCurrency.value?.getAbr(context))
+            baseCurrencyCancelBtnIcon.set(baseCurrency.value?.getImage(context))
+        }
+
+        if (conversionCurrency.value == null) {
+            isConversionCurrencyCancelBtnVisible.set(false)
+        } else {
+            isConversionCurrencyCancelBtnVisible.set(true)
+            conversionCurrencyCancelBtnText.set(conversionCurrency.value?.getAbr(context))
+            conversionCurrencyCancelBtnIcon.set(conversionCurrency.value?.getImage(context))
+        }
+
+        isCancelAllBtnVisibility.set(false)
+
+        executeIfNotNull(baseCurrency.value, conversionCurrency.value)
+        { baseCurrency, conversionCurrency ->
+            isCurrenciesChosen.set(true)
+            isCancelAllBtnVisibility.set(true)
+            setupExchangeRate(baseCurrency.bid, conversionCurrency.bid)
+            setResult()
+        }
     }
 
     private fun observeInput() {
-        disposable.add(inputValue.publishSubject.subscribe { value ->
-
-            setupResult(inputValue = value)
+        disposable.add(enteredValue.publishSubject.subscribe { enteredValue: String ->
+            setResult(enteredValue)
         })
     }
 
     private fun observeCurrenciesChoice() {
-        Observables.combineLatest(baseCurrencyObserver, conversionCurrencyObserver)
-        { baseCurrency, conversionCurrency ->
+        val subscribe: Disposable = currencyChoiceObserver
+            .subscribe { currencyChoice: CurrencyChoice ->
 
-            setupCurrencyCoefficient(baseCurrency.bid, conversionCurrency.bid)
-            setupResult()
+                currencyChoice.chosenCurrency ?: return@subscribe
+                currencyChoice.isSelected ?: return@subscribe
+                currencyChoice.currencyType ?: return@subscribe
 
-        }.subscribe()
+                if (currencyChoice.currencyType == CurrencyType.BASE && currencyChoice.isSelected) {
+                    exchangeRateText.set(choseConversionCurrencyHint)
+                    baseCurrency.value = currencyChoice.chosenCurrency
+                } else
+
+                if (currencyChoice.currencyType == CurrencyType.BASE && !currencyChoice.isSelected) {
+                    exchangeRateText.set(choseBaseCurrencyHint)
+                    baseCurrency.value = null
+                    conversionCurrency.value = null
+                } else
+
+                if (currencyChoice.currencyType == CurrencyType.CONVERSION && !currencyChoice.isSelected) {
+                    exchangeRateText.set(choseConversionCurrencyHint)
+                    conversionCurrency.value = null
+                } else
+
+                if (currencyChoice.currencyType == CurrencyType.CONVERSION && currencyChoice.isSelected) {
+                    conversionCurrency.value = currencyChoice.chosenCurrency
+                }
+            }
+
+        disposable.add(subscribe)
+    }
+
+    private fun observeOrganization() {
+        val subscribe: Disposable = organizationChoiceObserver
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe { organization ->
+                phoneCallBtnVisibility.set(View.VISIBLE)
+                phoneCallBtnText.set(organization.phone)
+                organizationTitleText.set(organization.title)
+            }
+
+        disposable.add(subscribe)
     }
 
     private fun setInputValue(input: String) {
         val builder = StringBuilder()
-        val current: String = inputValue.get().toString()
+        val current: String = enteredValue.get().toString()
         val dot = "."
 
         if (current == "0" && input != dot) {
-            inputValue.setField(input)
+            enteredValue.setField(input)
             return
         }
 
@@ -119,57 +273,76 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver{
             return
         }
 
-        //TODO implement correct
-        if (current.length >= 12) {
-            return
+        if  (current.length > context.resources.getInteger(R.integer.calculator_max_input_values)) return
 
-        } else {
-            builder.append(current)
-            builder.append(input)
-            inputValue.setField(builder.toString())
-        }
+        builder.append(current)
+        builder.append(input)
+        enteredValue.setField(builder.toString())
     }
 
     private fun erase() {
-        val current: String = inputValue.get().toString()
+        val current: String = enteredValue.get().toString()
 
         if (current.length == 1) {
-            inputValue.set("0")
+            enteredValue.set("0")
 
         } else {
-            inputValue.setField(current.removeLastChar())
+            enteredValue.setField(current.removeLastChar())
+        }
+
+        if (!StorageManager.getVariable(ERASE_ALL_HINT_ALREADY_SHOWN, default = false)){
+            eraseHintShouldBeShown.postValue(ERASE_HINT_SHOULD_BE_SHOWN)
         }
     }
 
-    private fun setupCurrencyCoefficient(baseCurrencyBid: String?, conversionCurrencyBid: String?) {
-        letBlock(baseCurrencyBid, conversionCurrencyBid) { baseBid, conversionBid ->
-            currencyCoefficient.set(
-                CurrencyCalculator.calculateExchangeCoefficient(
-                    baseBid.toDouble(), conversionBid.toDouble()
-                ).toString()
-            )
-        }
+    private fun eraseAll() {
+        enteredValue.set("0")
     }
 
-    private fun setupResult() {
-        letBlock(currencyCoefficient.get(), inputValue.get()) { coefficient, value ->
-            result.set(
+    private fun setupExchangeRate(baseCurrencyBid: String?, conversionCurrencyBid: String?) {
+        executeIfNotNull(baseCurrencyBid, conversionCurrencyBid) { baseRate, conversionRate ->
+
+            exchangeRateText.set(
                 CurrencyCalculator.calculateExchangeRate(
-                    coefficient.toDouble(),
-                    value.toDouble()
+                    baseRate.toBigDecimal(), conversionRate.toBigDecimal()
                 ).toString()
             )
         }
     }
 
-    private fun setupResult(inputValue: String) {
-        currencyCoefficient.get()?.let { coefficient ->
-            result.set(
-                CurrencyCalculator.calculateExchangeRate(
-                    coefficient.toDouble(),
-                    inputValue.toDouble()
-                ).toString()
+    private fun setResult() {
+        executeIfNotNull(exchangeRateText.get(), enteredValue.get()) { exchangeRate, enteredValue ->
+
+            if (!isCurrenciesChosen.get()) return
+
+            val calculatedValue: BigDecimal = CurrencyCalculator.calculateResult(
+                exchangeRate.toBigDecimal(),
+                enteredValue.toBigDecimal()
             )
+
+            result.set(DecimalFormat(context.resources.getString(R.string.numbers_pattern))
+                .format(calculatedValue))
         }
+    }
+
+    private fun setResult(inputValue: String) {
+        if (!isCurrenciesChosen.get()) return
+
+        exchangeRateText.get()?.let { exchangeRate ->
+
+            val calculatedValue: BigDecimal = CurrencyCalculator.calculateResult(
+                exchangeRate.toBigDecimal(),
+                inputValue.toBigDecimal()
+            )
+
+            val format = DecimalFormat(context.resources.getString(R.string.numbers_pattern))
+                .format(calculatedValue)
+
+            result.set(format)
+        }
+    }
+
+    companion object {
+        val cancelBtnClickObserver: PublishSubject<Int> = PublishSubject.create()
     }
 }

@@ -10,6 +10,10 @@ import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.ResponseWrapper
 import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
 import com.jay.currencyconverter.util.*
+import com.jay.currencyconverter.util.common.ConnectionErrorHandler
+import com.jay.currencyconverter.util.common.Constant
+import com.jay.currencyconverter.util.common.DateManager
+import com.jay.currencyconverter.util.common.StorageManager
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -89,6 +93,8 @@ class AppbarViewModel: BaseNbuViewModel() {
             ConnectionErrorHandler.onSslHandshakeAborted(error) {
                 getChartExchangeRate(defaultAbbr)
                 isFirstRequest = false
+                appBarProgressVisibility.set(View.VISIBLE)
+                averageExchangeRateLayoutVisibility.set(View.VISIBLE)
                 chartErrorTitleVisibility.set(View.GONE)
                 chartErrorButtonVisibility.set(View.GONE)
             }

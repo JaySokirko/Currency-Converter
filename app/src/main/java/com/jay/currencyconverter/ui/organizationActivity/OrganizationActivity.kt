@@ -1,4 +1,4 @@
-package com.jay.currencyconverter.ui.bankActivity
+package com.jay.currencyconverter.ui.organizationActivity
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,49 +6,51 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jay.currencyconverter.R
-import com.jay.currencyconverter.databinding.ActivityBanksBinding
+import com.jay.currencyconverter.databinding.ActivityOrganizationBinding
 import com.jay.currencyconverter.di.DaggerBankActivityComponent
+import com.jay.currencyconverter.model.exchangeRate.organization.Organization
 import com.jay.currencyconverter.ui.calculatorActivity.CalculatorActivity
 import com.jay.currencyconverter.ui.NavigationActivity
-import com.jay.currencyconverter.ui.adapter.BankExchangeRateAdapter
+import com.jay.currencyconverter.ui.adapter.OrganizationExchangeRateAdapter
 import com.jay.currencyconverter.ui.dialog.ErrorDialog
-import com.jay.currencyconverter.util.Constant
-import kotlinx.android.synthetic.main.activity_banks.*
+import com.jay.currencyconverter.util.common.Constant.CURRENCIES
+import com.jay.currencyconverter.util.common.Constant.ORGANIZATION
+import kotlinx.android.synthetic.main.activity_organization.*
 import javax.inject.Inject
 
-class BankActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListener {
+class OrganizationActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListener {
 
     @Inject
-    lateinit var bankExchangeRateAdapter: BankExchangeRateAdapter
+    lateinit var organizationExchangeRateAdapter: OrganizationExchangeRateAdapter
 
     @Inject
-    lateinit var bankActivityViewModel: BankActivityViewModel
+    lateinit var organizationActivityViewModel: OrganizationActivityViewModel
 
     private val errorDialog = ErrorDialog()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         DaggerBankActivityComponent.builder().activity(this).build().inject(this)
         super.onCreate(savedInstanceState)
-        initContent(R.layout.activity_banks, R.layout.default_toolbar)
+        initContent(R.layout.activity_organization, R.layout.default_toolbar)
 
         errorDialog.setOnDialogButtonsClickListener(this)
 
         initBinding()
         setupBanksExchangeRateList()
 
-        bankActivityViewModel.getExchangeRate()
+        organizationActivityViewModel.getExchangeRate()
 
         observeExchangeRate()
         onBankExchangeRateListItemClick()
 
-        lifecycle.addObserver(bankActivityViewModel)
+        lifecycle.addObserver(organizationActivityViewModel)
     }
 
     /**
      * @see ErrorDialog.OnDialogButtonsClickListener.onReload
      */
     override fun onReload() {
-        bankActivityViewModel.getExchangeRate()
+        organizationActivityViewModel.getExchangeRate()
     }
 
     /**
@@ -59,10 +61,10 @@ class BankActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListe
     }
 
     private fun observeExchangeRate() {
-        bankActivityViewModel.exchangeObserver.observe(this, Observer { response ->
+        organizationActivityViewModel.exchangeObserver.observe(this, Observer { response ->
 
             if (response.error == null) {
-                bankExchangeRateAdapter.setItems(response.data!!)
+                organizationExchangeRateAdapter.setItems(response.data!!)
             } else {
                 errorDialog.show(supportFragmentManager, this.localClassName)
             }
@@ -70,24 +72,22 @@ class BankActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListe
     }
 
     private fun initBinding() {
-        val binding: ActivityBanksBinding? = DataBindingUtil.bind(mainContentView)
-        binding?.bankVM = bankActivityViewModel
+        val binding: ActivityOrganizationBinding? = DataBindingUtil.bind(mainContentView)
+        binding?.bankVM = organizationActivityViewModel
     }
 
     private fun setupBanksExchangeRateList() {
         banks_exchange_rate_list.setHasFixedSize(true)
         banks_exchange_rate_list.layoutManager = LinearLayoutManager(this)
-        banks_exchange_rate_list.adapter = bankExchangeRateAdapter
+        banks_exchange_rate_list.adapter = organizationExchangeRateAdapter
     }
 
     private fun onBankExchangeRateListItemClick() {
-        bankExchangeRateAdapter.clickEvent.observe(this, Observer { organization ->
+        organizationExchangeRateAdapter.clickEvent.observe(this, Observer { organization: Organization ->
 
-            startActivity(
-                Intent(this, CalculatorActivity::class.java)
-                    .putExtra(Constant.ORGANIZATION_TITLE, organization.title)
-                    .putExtra(Constant.CURRENCIES, organization.currencies)
-            )
+            startActivity(Intent(this, CalculatorActivity::class.java)
+                .putExtra(ORGANIZATION, organization)
+                .putExtra(CURRENCIES, organization.currencies))
         })
     }
 }

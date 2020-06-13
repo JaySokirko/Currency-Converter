@@ -1,4 +1,4 @@
-package com.jay.currencyconverter.util
+package com.jay.currencyconverter.util.common
 
 object ConnectionErrorHandler {
 

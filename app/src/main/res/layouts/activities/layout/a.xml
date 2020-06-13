@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layoutDescription="@xml/scene_calculator_transition"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/x"
+        android:text="@{calculator.result}"
+        android:textSize="@dimen/x5"
+        app:layout_constraintBottom_toBottomOf="@+id/result_title"
+        app:layout_constraintStart_toEndOf="@+id/result_title"
+        app:layout_constraintTop_toTopOf="@+id/result_title"
+        tools:text="123.456" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/input_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/x"
+        android:maxLength="9"
+        android:textSize="@dimen/x5"
+        android:text="@={calculator.enteredValue}"
+        app:layout_constraintBottom_toBottomOf="@+id/input_value_title"
+        app:layout_constraintStart_toEndOf="@+id/input_value_title"
+        app:layout_constraintTop_toTopOf="@+id/input_value_title"
+        tools:text="123.41" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/organization_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/x2"
+        android:layout_marginEnd="@dimen/x"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/call_phone_btn"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/call_phone_btn"
+        tools:text="Organization title" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/exchange_rate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/x"
+        android:textSize="@dimen/x5"
+        android:text="@={calculator.exchangeRateText}"
+        app:layout_constraintBottom_toBottomOf="@+id/exchange_rate_title"
+        app:layout_constraintStart_toEndOf="@+id/exchange_rate_title"
+        app:layout_constraintTop_toTopOf="@+id/exchange_rate_title"
+        tools:text="0.335" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/exchange_rate_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/x2"
+        android:layout_marginTop="@dimen/x2"
+        android:textSize="@dimen/x5"
+        android:text="@string/exchange_rate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/call_phone_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/x2"
+        android:visibility="gone"
+        app:icon="@drawable/ic_phone_call"
+        app:iconGravity="end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="+380633535751" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/input_value_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/sum"
+        android:textSize="@dimen/x5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/exchange_rate_title" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/result_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/result"
+        android:textSize="@dimen/x5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_value_title" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="4dp"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="4dp"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
