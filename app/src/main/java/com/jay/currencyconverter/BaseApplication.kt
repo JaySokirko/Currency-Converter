@@ -7,6 +7,7 @@ import com.jay.currencyconverter.repository.room.DataBase
 
 class BaseApplication : Application() {
 
+    
     override fun onCreate() {
         baseComponent = DaggerBaseComponent.builder().baseModule(BaseModule(application = this)).build()
         networkComponent = DaggerNetworkComponent.create()
