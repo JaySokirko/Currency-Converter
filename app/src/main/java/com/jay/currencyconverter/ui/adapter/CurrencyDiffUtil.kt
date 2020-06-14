@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.recyclerview.widget.DiffUtil
 import com.jay.currencyconverter.BaseApplication
 import com.jay.currencyconverter.model.exchangeRate.Currency
+import com.jay.currencyconverter.model.exchangeRate.OrganizationCurrency
 
 class CurrencyDiffUtil : DiffUtil.Callback() {
 

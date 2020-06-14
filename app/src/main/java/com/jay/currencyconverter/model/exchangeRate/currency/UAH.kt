@@ -5,9 +5,9 @@ import android.graphics.drawable.Drawable
 import android.os.Parcel
 import android.os.Parcelable
 import com.jay.currencyconverter.R
-import com.jay.currencyconverter.model.exchangeRate.Currency
+import com.jay.currencyconverter.model.exchangeRate.OrganizationCurrency
 
-class UAH() : Currency() {
+class UAH() : OrganizationCurrency() {
 
     override var ask: String? = "1"
     override var bid: String? = "1"
@@ -20,6 +20,12 @@ class UAH() : Currency() {
     override fun getImage(context: Context): Drawable? {
         return context.resources.getDrawable(R.drawable.ic_ukraine_flag)
     }
+
+    override val rate: Double
+        get() {
+            bid?.let { return it.toDouble() }
+            return 0.0
+        }
 
     override fun getName(context: Context): String? {
         return context.resources.getString(R.string.uah)

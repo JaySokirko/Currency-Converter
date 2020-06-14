@@ -7,8 +7,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.databinding.ActivityOrganizationBinding
-import com.jay.currencyconverter.di.DaggerBankActivityComponent
-import com.jay.currencyconverter.model.exchangeRate.organization.Organization
+import com.jay.currencyconverter.di.organizationActivity.DaggerOrganizationActivityComponent
+import com.jay.currencyconverter.model.exchangeRate.organization.CommonOrganization
 import com.jay.currencyconverter.ui.calculatorActivity.CalculatorActivity
 import com.jay.currencyconverter.ui.NavigationActivity
 import com.jay.currencyconverter.ui.adapter.OrganizationExchangeRateAdapter
@@ -29,7 +29,7 @@ class OrganizationActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsCl
     private val errorDialog = ErrorDialog()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        DaggerBankActivityComponent.builder().activity(this).build().inject(this)
+        DaggerOrganizationActivityComponent.builder().activity(this).build().inject(this)
         super.onCreate(savedInstanceState)
         initContent(R.layout.activity_organization, R.layout.default_toolbar)
 
@@ -83,7 +83,7 @@ class OrganizationActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsCl
     }
 
     private fun onBankExchangeRateListItemClick() {
-        organizationExchangeRateAdapter.clickEvent.observe(this, Observer { organization: Organization ->
+        organizationExchangeRateAdapter.clickEvent.observe(this, Observer { organization: CommonOrganization ->
 
             startActivity(Intent(this, CalculatorActivity::class.java)
                 .putExtra(ORGANIZATION, organization)

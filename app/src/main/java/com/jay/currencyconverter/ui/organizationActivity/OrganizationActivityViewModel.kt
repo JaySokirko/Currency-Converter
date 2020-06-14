@@ -5,8 +5,8 @@ import android.view.View
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.MutableLiveData
 import com.jay.currencyconverter.model.ResponseWrapper
-import com.jay.currencyconverter.model.exchangeRate.organization.Organizations
-import com.jay.currencyconverter.model.exchangeRate.organization.Organization
+import com.jay.currencyconverter.model.exchangeRate.organization.CommonOrganizations
+import com.jay.currencyconverter.model.exchangeRate.organization.CommonOrganization
 import com.jay.currencyconverter.repository.exchangeRate.BankExchangeRate
 import com.jay.currencyconverter.ui.BaseViewModel
 import com.jay.currencyconverter.util.TAG
@@ -17,7 +17,7 @@ import io.reactivex.schedulers.Schedulers
 class OrganizationActivityViewModel : BaseViewModel() {
 
     val progressVisibility: ObservableInt = ObservableInt()
-    val exchangeObserver: MutableLiveData<ResponseWrapper<List<Organization>>> = MutableLiveData()
+    val exchangeObserver: MutableLiveData<ResponseWrapper<List<CommonOrganization>>> = MutableLiveData()
     private val bankExchangeRate: BankExchangeRate = BankExchangeRate()
 
     fun getExchangeRate() {
@@ -27,7 +27,7 @@ class OrganizationActivityViewModel : BaseViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe(
-                { result: Organizations ->
+                { result: CommonOrganizations ->
                     exchangeObserver.postValue(ResponseWrapper(data = result.organizations))
                 },
 

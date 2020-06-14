@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="mainContentVM"
             type="com.jay.currencyconverter.ui.nbuActivity.MainContentViewModel" />
+
         <variable
             name="appbarVM"
             type="com.jay.currencyconverter.ui.nbuActivity.AppbarViewModel" />
@@ -160,16 +162,27 @@
                 app:srcCompat="@drawable/ic_list"
                 app:tint="@color/white" />
 
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/open_calculator_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="@dimen/x4"
+                app:tint="@color/white"
+                app:fabSize="mini"
+                app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+                android:src="@drawable/ic_calculator" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Actual date: 09.06.2020"
                 android:layout_marginStart="@dimen/x2"
                 android:layout_marginTop="@dimen/x2"
-                android:textSize="11sp"
                 android:text="@{mainContentVM.actualDate}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+                android:textSize="11sp"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                tools:text="Actual date: 09.06.2020" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/nbu_exchange_rate_list"
@@ -182,5 +195,6 @@
                 tools:listitem="@layout/list_nbu_exchange_rate" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -9,17 +9,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.ResponseWrapper
-import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
+import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
 import com.jay.currencyconverter.repository.NbuDatabaseManager
-import com.jay.currencyconverter.util.common.ConnectionErrorHandler
 import com.jay.currencyconverter.util.TAG
+import com.jay.currencyconverter.util.common.ConnectionErrorHandler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 class MainContentViewModel : BaseNbuViewModel() {
 
-    val exchangeRateObserver: MutableLiveData<ResponseWrapper<Map<Nbu, Boolean>>> = MutableLiveData()
+    val exchangeRateObserver: MutableLiveData<ResponseWrapper<Map<NbuCurrency, Boolean>>> = MutableLiveData()
     val actualDate: ObservableField<String> = ObservableField()
     val progressVisibility: ObservableInt = ObservableInt()
 
@@ -32,10 +32,10 @@ class MainContentViewModel : BaseNbuViewModel() {
         val subscribe: Disposable = nbuExchangeRate.getExchangeRate()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .map { currencyList: MutableList<Nbu> -> filterNotExistCurrency(currencyList) }
-            .map { currencyList: MutableList<Nbu> -> sortCurrenciesList(currencyList) }
+            .map { currencyList: MutableList<NbuCurrency> -> filterNotExistCurrency(currencyList) }
+            .map { currencyList: MutableList<NbuCurrency> -> sortCurrenciesList(currencyList) }
             .subscribe(
-                { result: List<Nbu> -> onExchangeRateLoadFinished(result) },
+                { result: List<NbuCurrency> -> onExchangeRateLoadFinished(result) },
                 { error: Throwable -> onExchangeRateLoadError(error) })
 
         disposable.add(subscribe)
@@ -44,10 +44,9 @@ class MainContentViewModel : BaseNbuViewModel() {
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     private fun onResume() {
         onCurrenciesToDisplayPrepared()
-        Log.d(TAG, "onResume: ")
     }
 
-    private fun onExchangeRateLoadFinished(result: List<Nbu>) {
+    private fun onExchangeRateLoadFinished(result: List<NbuCurrency>) {
         nbuDataBaseManager.putData(result)
 
         result.find { it.currencyAbbreviation == context.resources.getString(R.string.USD) }?.let {usdCurrency ->
@@ -62,7 +61,6 @@ class MainContentViewModel : BaseNbuViewModel() {
             .subscribe {listToDisplay ->
                 exchangeRateObserver.postValue(ResponseWrapper(listToDisplay))
                 progressVisibility.set(View.GONE)
-                Log.d(TAG, "onCurrenciesToDisplayPrepared: ")
             }
 
         disposable.add(subscribe)
@@ -74,7 +72,8 @@ class MainContentViewModel : BaseNbuViewModel() {
                 getExchangeRate()
                 isFirstRequest = false
             }
-        } else {
+        }
+        else {
             exchangeRateObserver.postValue(ResponseWrapper(error = error))
         }
         Log.d(TAG, "onExchangeRateLoadError: " + error.message)

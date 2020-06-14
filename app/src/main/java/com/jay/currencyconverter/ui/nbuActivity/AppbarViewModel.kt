@@ -8,7 +8,7 @@ import androidx.databinding.ObservableInt
 import androidx.lifecycle.MutableLiveData
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.ResponseWrapper
-import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
+import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
 import com.jay.currencyconverter.util.*
 import com.jay.currencyconverter.util.common.ConnectionErrorHandler
 import com.jay.currencyconverter.util.common.Constant
@@ -30,7 +30,7 @@ class AppbarViewModel: BaseNbuViewModel() {
     val isMainCheckboxChecked: ObservableBoolean = ObservableBoolean()
     val currencyAbbreviation: ObservableField<String> = ObservableField()
 
-    private val listOfNbuLists: MutableList<ArrayList<Nbu>> = mutableListOf()
+    private val listOfNbuLists: MutableList<ArrayList<NbuCurrency>> = mutableListOf()
     private var isFirstRequest: Boolean = true
     private val defaultAbbr: String = context.resources.getString(R.string.USD)
 
@@ -58,7 +58,7 @@ class AppbarViewModel: BaseNbuViewModel() {
             Observable.zip(nbuExchangeRate.createRequestList(currencyAbbreviation, DateManager.dateList))
             { response ->
                 response.forEach { list: Any ->
-                    listOfNbuLists.add(list as ArrayList<Nbu>)
+                    listOfNbuLists.add(list as ArrayList<NbuCurrency>)
                 }
             }
 
@@ -105,7 +105,7 @@ class AppbarViewModel: BaseNbuViewModel() {
         Log.d(TAG, "getPreviousExchangeRate: " + error.message)
     }
 
-    private fun extractChartExchangeRate(list: MutableList<ArrayList<Nbu>>): MutableList<Double> {
+    private fun extractChartExchangeRate(list: MutableList<ArrayList<NbuCurrency>>): MutableList<Double> {
         val exchangeRateList: MutableList<Double> = mutableListOf()
         list.forEach { innerList -> innerList.forEach { nbu -> exchangeRateList.add(nbu.rate) } }
         return exchangeRateList

@@ -3,7 +3,7 @@ package com.jay.currencyconverter.model.exchangeRate.organization
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class Organizations {
+class CommonOrganizations {
 
     @SerializedName("sourceId")
     @Expose
@@ -15,6 +15,6 @@ class Organizations {
 
     @SerializedName("organizations")
     @Expose
-    var organizations: List<Organization>? = null
+    var organizations: List<CommonOrganization>? = null
 
 }

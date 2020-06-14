@@ -6,6 +6,7 @@ object Constant {
 
     const val ORGANIZATION = "organization"
     const val CURRENCIES = "currencies"
+    const val NBU_CURRENCIES = "nbuCurrencies"
     const val EMPTY_STRING = ""
     const val COMMON = "Common"
     const val CURRENCY_ABR = "currencyAbr"

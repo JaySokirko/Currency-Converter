@@ -1,6 +1,3 @@
 package com.jay.currencyconverter.model.exchangeRate
 
-enum class CurrencyType {
-    BASE,
-    CONVERSION
-}
+enum class CurrencyType { BASE, CONVERSION }

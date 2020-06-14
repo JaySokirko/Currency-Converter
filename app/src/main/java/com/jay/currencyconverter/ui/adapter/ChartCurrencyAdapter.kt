@@ -7,29 +7,29 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.jay.currencyconverter.R
-import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
+import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
 import com.jay.currencyconverter.ui.adapter.viewHolder.BaseViewHolder
 import com.jay.currencyconverter.ui.adapter.viewHolder.NbuViewHolder
 import com.jay.currencyconverter.util.common.Constant.LAST_CHECKED_POSITION
 import com.jay.currencyconverter.util.common.StorageManager
 
 
-class ChartCurrencyAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>() {
+class ChartCurrencyAdapter : RecyclerView.Adapter<BaseViewHolder<NbuCurrency>>() {
 
-    val chartCurrencyChosen: MutableLiveData<Nbu> = MutableLiveData()
+    val chartCurrencyChosen: MutableLiveData<NbuCurrency> = MutableLiveData()
 
     private var checkBoxList: MutableList<MaterialCheckBox> = mutableListOf()
-    private val currencyList: MutableList<Nbu> = mutableListOf()
-    private var currentChartCurrency: Nbu? = null
+    private val currencyList: MutableList<NbuCurrency> = mutableListOf()
+    private var currentChartCurrency: NbuCurrency? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Nbu> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<NbuCurrency> {
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_currency_choice, parent, false)
 
         return ChartCurrencyVH(view)
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder<Nbu>, position: Int) {
+    override fun onBindViewHolder(holder: BaseViewHolder<NbuCurrency>, position: Int) {
         holder.bind(currencyList[position])
     }
 
@@ -39,7 +39,7 @@ class ChartCurrencyAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>() {
 
     override fun getItemViewType(position: Int): Int = position
 
-    fun setItems(currencies: List<Nbu?>) {
+    fun setItems(currencies: List<NbuCurrency?>) {
         currencyList.clear()
         currencyList.addAll(currencies.filterNotNull())
         notifyDataSetChanged()
@@ -47,7 +47,7 @@ class ChartCurrencyAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>() {
 
     private inner class ChartCurrencyVH(itemView: View) : NbuViewHolder(itemView) {
 
-        override fun bind(item: Nbu) {
+        override fun bind(item: NbuCurrency) {
             super.bind(item)
 
             if (layoutPosition == StorageManager.getVariable(LAST_CHECKED_POSITION, default = 0)) {

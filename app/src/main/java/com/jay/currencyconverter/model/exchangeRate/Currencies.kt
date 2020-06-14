@@ -6,6 +6,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.exchangeRate.currency.*
 import java.util.*
 
@@ -199,8 +200,8 @@ class Currencies() : Parcelable {
     @Expose
     var tJS: TJS? = null
 
-    fun getAllNotNullCurrencies(): List<Currency> {
-        val currenciesList: MutableList<Currency?> = ArrayList()
+    fun getAllNotNullCurrencies(): List<OrganizationCurrency> {
+        val currenciesList: MutableList<OrganizationCurrency?> = ArrayList()
         currenciesList.add(uSD)
         currenciesList.add(eUR)
         currenciesList.add(rUB)
@@ -251,8 +252,8 @@ class Currencies() : Parcelable {
         return currenciesList.filterNotNull()
     }
 
-    fun getAllCurrencies(): List<Currency> {
-        val list: MutableList<Currency> = mutableListOf()
+    fun getAllCurrencies(): List<OrganizationCurrency> {
+        val list: MutableList<OrganizationCurrency> = mutableListOf()
         list.add(USD())
         list.add(EUR())
         list.add(RUB())
@@ -317,6 +318,60 @@ class Currencies() : Parcelable {
             }
         }
         return null
+    }
+
+    fun getCurrencyNameByAbr(abbr: String?, context: Context): String? {
+        return when (abbr) {
+            context.resources.getString(R.string.AED) -> context.resources.getString(R.string.uae_dirhams)
+            context.resources.getString(R.string.AMD) -> context.resources.getString(R.string.armenian_dramas)
+            context.resources.getString(R.string.AUD) -> context.resources.getString(R.string.australian_dollars)
+            context.resources.getString(R.string.AZN) -> context.resources.getString(R.string.azerbaijani_manats)
+            context.resources.getString(R.string.BGN) -> context.resources.getString(R.string.bulgarian_lev)
+            context.resources.getString(R.string.BRL) -> context.resources.getString(R.string.brazilian_reals)
+            context.resources.getString(R.string.BYN) -> context.resources.getString(R.string.belorussian_rubles)
+            context.resources.getString(R.string.CAD) -> context.resources.getString(R.string.canadian_dollars)
+            context.resources.getString(R.string.CHF) -> context.resources.getString(R.string.swiss_francs)
+            context.resources.getString(R.string.CLP) -> context.resources.getString(R.string.chilean_pesos)
+            context.resources.getString(R.string.CNY) -> context.resources.getString(R.string.yuan)
+            context.resources.getString(R.string.CZK) -> context.resources.getString(R.string.czech_crowns)
+            context.resources.getString(R.string.DKK) -> context.resources.getString(R.string.danish_kroner)
+            context.resources.getString(R.string.DZD) -> context.resources.getString(R.string.algerian_dinars)
+            context.resources.getString(R.string.EGP) -> context.resources.getString(R.string.egyptian_pounds)
+            context.resources.getString(R.string.EUR) -> context.resources.getString(R.string.euro)
+            context.resources.getString(R.string.GBP) -> context.resources.getString(R.string.pounds)
+            context.resources.getString(R.string.GEL) -> context.resources.getString(R.string.georgian_lari)
+            context.resources.getString(R.string.HKD) -> context.resources.getString(R.string.hong_kong_dollars)
+            context.resources.getString(R.string.HRK) -> context.resources.getString(R.string.croatian_coons)
+            context.resources.getString(R.string.HUF) -> context.resources.getString(R.string.hungarian_forints)
+            context.resources.getString(R.string.ILS) -> context.resources.getString(R.string.israeli_shekels)
+            context.resources.getString(R.string.INR) -> context.resources.getString(R.string.indian_rupees)
+            context.resources.getString(R.string.IQD) -> context.resources.getString(R.string.iraqi_dinars)
+            context.resources.getString(R.string.JPY) -> context.resources.getString(R.string.japanese_yen)
+            context.resources.getString(R.string.KGS) -> context.resources.getString(R.string.kgs_of_kyrgyzstan)
+            context.resources.getString(R.string.KRW) -> context.resources.getString(R.string.south_korean_won)
+            context.resources.getString(R.string.KWD) -> context.resources.getString(R.string.kuwaiti_dinars)
+            context.resources.getString(R.string.KZT) -> context.resources.getString(R.string.kazakh_tenge)
+            context.resources.getString(R.string.LBP) -> context.resources.getString(R.string.lebanese_pounds)
+            context.resources.getString(R.string.MDL) -> context.resources.getString(R.string.moldovan_lei)
+            context.resources.getString(R.string.MXN) -> context.resources.getString(R.string.mexican_new_pesos)
+            context.resources.getString(R.string.NOK) -> context.resources.getString(R.string.norwegian_kroner)
+            context.resources.getString(R.string.NZD) -> context.resources.getString(R.string.new_zealand_dollars)
+            context.resources.getString(R.string.PKR) -> context.resources.getString(R.string.pakistani_rupees)
+            context.resources.getString(R.string.PLN) -> context.resources.getString(R.string.polish_zloty)
+            context.resources.getString(R.string.RON) -> context.resources.getString(R.string.new_romanian_leu)
+            context.resources.getString(R.string.RUB) -> context.resources.getString(R.string.rub)
+            context.resources.getString(R.string.SAR) -> context.resources.getString(R.string.rials_of_saudi_arabia)
+            context.resources.getString(R.string.SEK) -> context.resources.getString(R.string.swedish_kroner)
+            context.resources.getString(R.string.SGD) -> context.resources.getString(R.string.singapore_dollars)
+            context.resources.getString(R.string.THB) -> context.resources.getString(R.string.thai_baht)
+            context.resources.getString(R.string.TJS) -> context.resources.getString(R.string.tajik_somons)
+            context.resources.getString(R.string.TRY) -> context.resources.getString(R.string.turkish_lira)
+            context.resources.getString(R.string.TWD) -> context.resources.getString(R.string.taiwan_dollars)
+            context.resources.getString(R.string.UAH) -> context.resources.getString(R.string.uah)
+            context.resources.getString(R.string.USD) -> context.resources.getString(R.string.usd)
+            context.resources.getString(R.string.VND) -> context.resources.getString(R.string.vietnamese_dongs)
+            else -> null
+        }
     }
 
     constructor(parcel: Parcel) : this() {
@@ -424,8 +479,7 @@ class Currencies() : Parcelable {
 
     companion object CREATOR : Parcelable.Creator<Currencies> {
 
-        override fun createFromParcel(parcel: Parcel): Currencies =
-            Currencies(parcel)
+        override fun createFromParcel(parcel: Parcel): Currencies = Currencies(parcel)
 
         override fun newArray(size: Int): Array<Currencies?> = arrayOfNulls(size)
     }

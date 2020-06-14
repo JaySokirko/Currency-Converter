@@ -1,4 +1,4 @@
-package com.jay.currencyconverter.di
+package com.jay.currencyconverter.di.nbuActivity
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
@@ -24,9 +24,6 @@ class NbuActivityModule {
 
     @Provides
     fun provideDisplayedCurrenciesAdapter(): DisplayedCurrenciesAdapter = DisplayedCurrenciesAdapter()
-
-//    @Provides
-//    fun provideNbuCurrenciesDisplay(): NbuDatabaseManager = NbuDatabaseManager()
 
     @Provides
     fun provideErrorDialog(): ErrorDialog = ErrorDialog()

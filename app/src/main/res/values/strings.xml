@@ -235,6 +235,6 @@
     <string name="erase_all_hint">Долгое нажатие на кнопку "C", чтобы удалить все</string>
     <string name="cancel">отмена</string>
     <string name="currency_search_hint">Найти валюту</string>
-
+    <string name="nbu_title">Национальный банк Украины</string>
 
 </resources>

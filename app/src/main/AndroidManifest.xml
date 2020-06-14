@@ -22,16 +22,14 @@
         <activity android:name=".ui.calculatorActivity.CalculatorActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"/>
 
-        <activity android:name=".ui.organizationActivity.OrganizationActivity">
+        <activity android:name=".ui.organizationActivity.OrganizationActivity"/>
+
+        <activity android:name=".ui.nbuActivity.NbuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity android:name=".ui.nbuActivity.NbuActivity">
-
         </activity>
     </application>
 

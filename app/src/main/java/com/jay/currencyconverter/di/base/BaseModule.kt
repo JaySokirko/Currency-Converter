@@ -1,4 +1,4 @@
-package com.jay.currencyconverter.di
+package com.jay.currencyconverter.di.base
 
 import android.app.Application
 import dagger.Module
