@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.jakewharton.rxbinding.view.RxView
 import com.jay.currencyconverter.R
-import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
+import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
 import com.jay.currencyconverter.repository.NbuDatabaseManager
 import com.jay.currencyconverter.ui.adapter.viewHolder.BaseViewHolder
 import com.jay.currencyconverter.ui.adapter.viewHolder.NbuViewHolder
@@ -23,11 +23,11 @@ import rx.subscriptions.CompositeSubscription
 import java.util.concurrent.TimeUnit
 
 
-class DisplayedCurrenciesAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>(), LifecycleObserver {
+class DisplayedCurrenciesAdapter : RecyclerView.Adapter<BaseViewHolder<NbuCurrency>>(), LifecycleObserver {
 
     val mainCheckboxClickEvent: PublishSubject<Boolean> = PublishSubject.create()
 
-    private val currencyList: MutableList<Nbu> = mutableListOf()
+    private val currencyList: MutableList<NbuCurrency> = mutableListOf()
     private var checkedPositions: MutableList<Boolean> = mutableListOf()
     private var checkBoxList: MutableList<MaterialCheckBox> = mutableListOf()
     private val disposable = CompositeDisposable()
@@ -46,14 +46,14 @@ class DisplayedCurrenciesAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>(), 
         disposable.add(subscribe)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Nbu> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<NbuCurrency> {
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_currency_choice, parent, false)
 
         return DisplayedCurrencyVH(view)
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder<Nbu>, position: Int) {
+    override fun onBindViewHolder(holder: BaseViewHolder<NbuCurrency>, position: Int) {
         holder.bind(currencyList[position])
     }
 
@@ -63,7 +63,7 @@ class DisplayedCurrenciesAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>(), 
 
     override fun getItemViewType(position: Int): Int = position
 
-    fun setItems(currencies: Map<Nbu, Boolean>) {
+    fun setItems(currencies: Map<NbuCurrency, Boolean>) {
         currencyList.clear()
         checkedPositions.clear()
 
@@ -76,7 +76,7 @@ class DisplayedCurrenciesAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>(), 
 
     private inner class DisplayedCurrencyVH(itemView: View) : NbuViewHolder(itemView) {
 
-        override fun bind(item: Nbu) {
+        override fun bind(item: NbuCurrency) {
             super.bind(item)
 
             checkBox.isChecked = checkedPositions[layoutPosition]
@@ -86,7 +86,7 @@ class DisplayedCurrenciesAdapter : RecyclerView.Adapter<BaseViewHolder<Nbu>>(), 
             onItemClickListener(item)
         }
 
-        private fun onItemClickListener (item: Nbu){
+        private fun onItemClickListener (item: NbuCurrency){
             val subscribe: Subscription = RxView.clicks(itemView)
                 .debounce(200, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())

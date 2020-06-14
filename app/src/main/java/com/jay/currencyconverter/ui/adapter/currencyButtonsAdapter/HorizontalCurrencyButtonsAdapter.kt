@@ -16,7 +16,9 @@ import com.jay.currencyconverter.R
 import com.jay.currencyconverter.customView.CustomMaterialButton
 import com.jay.currencyconverter.model.CurrencyChoice
 import com.jay.currencyconverter.model.exchangeRate.Currency
+import com.jay.currencyconverter.model.exchangeRate.OrganizationCurrency
 import com.jay.currencyconverter.model.exchangeRate.CurrencyType
+import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
 import com.jay.currencyconverter.ui.adapter.CurrencyDiffUtil
 import com.jay.currencyconverter.ui.adapter.viewHolder.BaseViewHolder
 import com.jay.currencyconverter.util.common.Filter
@@ -29,7 +31,7 @@ class HorizontalCurrencyButtonsAdapter : RecyclerView.Adapter<BaseViewHolder<Cur
 
     val currencyButtonClick: MutableLiveData<CurrencyChoice> = MutableLiveData()
 
-    private val currencyList: MutableList<Currency> = ArrayList()
+    private val organizationCurrencyList: MutableList<Currency> = ArrayList()
     private val buttonsBehaviour = CurrencyButtonsBehaviour()
     private val filter: Filter<Currency> = Filter()
     private val diffUtil = CurrencyDiffUtil()
@@ -48,18 +50,18 @@ class HorizontalCurrencyButtonsAdapter : RecyclerView.Adapter<BaseViewHolder<Cur
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder<Currency>, position: Int) {
-        holder.bind(currencyList[position])
+        holder.bind(organizationCurrencyList[position])
     }
 
-    override fun getItemCount(): Int = currencyList.size
+    override fun getItemCount(): Int = organizationCurrencyList.size
 
     override fun getItemId(position: Int): Long = position.toLong()
 
     override fun getItemViewType(position: Int): Int = position
 
-    fun setItems(currencies: List<Currency?>) {
-        diffUtil.setData(oldList = currencyList, newList = currencies.filterNotNull())
-        currencyList.apply { clear(); addAll(currencies.filterNotNull()) }
+    fun setItems(organizationCurrencies: List<Currency?>) {
+        diffUtil.setData(oldList = organizationCurrencyList, newList = organizationCurrencies.filterNotNull())
+        organizationCurrencyList.apply { clear(); addAll(organizationCurrencies.filterNotNull()) }
         DiffUtil.calculateDiff(diffUtil).dispatchUpdatesTo(this)
     }
 
@@ -67,12 +69,12 @@ class HorizontalCurrencyButtonsAdapter : RecyclerView.Adapter<BaseViewHolder<Cur
         if (search.isBlank()) return 0
 
         val filteredResult: MutableList<Currency> =
-            filter.getFilteredResult(search, currencyList) { currency: Currency ->
+            filter.getFilteredResult(search, organizationCurrencyList) { currency: Currency ->
                 currency.getName(context)?.toLowerCase()?.contains(search.toLowerCase()) ?: false ||
                 currency.getAbr(context)?.toLowerCase()?.contains(search.toLowerCase()) ?: false
             }
 
-        currencyList.forEachIndexed  { index, currency ->
+        organizationCurrencyList.forEachIndexed  { index, currency ->
             val find: Currency? = filteredResult.find { it.getAbr(context) == currency.getAbr(context) }
             if (find != null) return index
         }
@@ -103,7 +105,7 @@ class HorizontalCurrencyButtonsAdapter : RecyclerView.Adapter<BaseViewHolder<Cur
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     buttonsBehaviour.onBaseButtonClick(baseCurrencyBtn)
-                    currencyButtonClick.postValue(CurrencyChoice(currencyList[layoutPosition],
+                    currencyButtonClick.postValue(CurrencyChoice(organizationCurrencyList[layoutPosition],
                                                                  CurrencyType.BASE,
                                                                  baseCurrencyBtn.isPressedState))
                 }
@@ -113,7 +115,7 @@ class HorizontalCurrencyButtonsAdapter : RecyclerView.Adapter<BaseViewHolder<Cur
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     buttonsBehaviour.onConversionButtonClick(conversionCurrencyBtn)
-                    currencyButtonClick.postValue(CurrencyChoice(currencyList[layoutPosition],
+                    currencyButtonClick.postValue(CurrencyChoice(organizationCurrencyList[layoutPosition],
                                                                  CurrencyType.CONVERSION,
                                                                  conversionCurrencyBtn.isPressedState))
                 }

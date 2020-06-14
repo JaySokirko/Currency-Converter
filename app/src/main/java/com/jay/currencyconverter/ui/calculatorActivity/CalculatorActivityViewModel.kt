@@ -49,12 +49,12 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver,
     val exchangeRateText: ObservableField<String> = ObservableField()
     val enteredValue: ObservableFieldWrapper<String> = ObservableFieldWrapper()
     val phoneCallBtnVisibility: ObservableInt = ObservableInt()
-    val phoneCallBtnText: ObservableField<String> = ObservableField()
-    val organizationTitleText: ObservableField<String> = ObservableField()
-    val isCurrenciesChosen: ObservableBoolean = ObservableBoolean()
     val isBaseCurrencyCancelBtnVisible: ObservableBoolean = ObservableBoolean()
     val isConversionCurrencyCancelBtnVisible: ObservableBoolean = ObservableBoolean()
     val isCancelAllBtnVisibility: ObservableBoolean = ObservableBoolean()
+    val phoneCallBtnText: ObservableField<String> = ObservableField()
+    val organizationTitleText: ObservableField<String> = ObservableField()
+    val isCurrenciesChosen: ObservableBoolean = ObservableBoolean()
     val baseCurrencyCancelBtnText: ObservableField<String> = ObservableField()
     val conversionCurrencyCancelBtnText: ObservableField<String> = ObservableField()
     val baseCurrencyCancelBtnIcon: ObservableField<Drawable> = ObservableField()
@@ -62,16 +62,16 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver,
 
     private val context: Context = BaseApplication.baseComponent.application.baseContext
     private val disposable = CompositeDisposable()
-    private val baseCurrency: ValueChangeListener<Currency> = ValueChangeListener()
-    private val conversionCurrency: ValueChangeListener<Currency> = ValueChangeListener()
+    private val baseCurrencyChangeListener: ValueChangeListener<Currency> = ValueChangeListener()
+    private val conversionCurrencyChangeListener: ValueChangeListener<Currency> = ValueChangeListener()
     private val choseBaseCurrencyHint: String =
         context.resources.getString(R.string.choose_base_currency_hint)
     private val choseConversionCurrencyHint: String =
         context.resources.getString(R.string.choose_conversion_currency_hint)
 
     init {
-        baseCurrency.setListener(this)
-        conversionCurrency.setListener(this)
+        baseCurrencyChangeListener.setListener(this)
+        conversionCurrencyChangeListener.setListener(this)
 
         exchangeRateText.set(choseBaseCurrencyHint)
         phoneCallBtnVisibility.set(View.GONE)
@@ -152,20 +152,20 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver,
         isCancelAllBtnVisibility.set(false)
         isBaseCurrencyCancelBtnVisible.set(false)
         isConversionCurrencyCancelBtnVisible.set(false)
-        baseCurrency.value = null
-        conversionCurrency.value = null
+        baseCurrencyChangeListener.value = null
+        conversionCurrencyChangeListener.value = null
     }
 
     fun onBaseCurrencyCancelClick() {
         cancelBtnClickObserver.onNext(CANCEL_BASE_CURRENCY_CHOICE)
         isBaseCurrencyCancelBtnVisible.set(false)
-        baseCurrency.value = null
+        baseCurrencyChangeListener.value = null
     }
 
     fun onConversionCurrencyCancelClick() {
         cancelBtnClickObserver.onNext(CANCEL_CONVERSION_CURRENCY_CHOICE)
         isConversionCurrencyCancelBtnVisible.set(false)
-        conversionCurrency.value = null
+        conversionCurrencyChangeListener.value = null
     }
 
     /**
@@ -174,35 +174,35 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver,
     override fun onChange() {
         isCurrenciesChosen.set(false)
 
-        if (baseCurrency.value != null || conversionCurrency.value != null) {
+        if (baseCurrencyChangeListener.value != null || conversionCurrencyChangeListener.value != null) {
             onCurrenciesChosenObserver.postValue(CURRENCIES_CHOSEN)
         } else {
             onCurrenciesChosenObserver.postValue(CURRENCIES_NOT_CHOSEN)
         }
 
-        if (baseCurrency.value == null) {
+        if (baseCurrencyChangeListener.value == null) {
             isBaseCurrencyCancelBtnVisible.set(false)
         } else {
             isBaseCurrencyCancelBtnVisible.set(true)
-            baseCurrencyCancelBtnText.set(baseCurrency.value?.getAbr(context))
-            baseCurrencyCancelBtnIcon.set(baseCurrency.value?.getImage(context))
+            baseCurrencyCancelBtnText.set(baseCurrencyChangeListener.value?.getAbr(context))
+            baseCurrencyCancelBtnIcon.set(baseCurrencyChangeListener.value?.getImage(context))
         }
 
-        if (conversionCurrency.value == null) {
+        if (conversionCurrencyChangeListener.value == null) {
             isConversionCurrencyCancelBtnVisible.set(false)
         } else {
             isConversionCurrencyCancelBtnVisible.set(true)
-            conversionCurrencyCancelBtnText.set(conversionCurrency.value?.getAbr(context))
-            conversionCurrencyCancelBtnIcon.set(conversionCurrency.value?.getImage(context))
+            conversionCurrencyCancelBtnText.set(conversionCurrencyChangeListener.value?.getAbr(context))
+            conversionCurrencyCancelBtnIcon.set(conversionCurrencyChangeListener.value?.getImage(context))
         }
 
         isCancelAllBtnVisibility.set(false)
 
-        executeIfNotNull(baseCurrency.value, conversionCurrency.value)
+        executeIfNotNull(baseCurrencyChangeListener.value, conversionCurrencyChangeListener.value)
         { baseCurrency, conversionCurrency ->
             isCurrenciesChosen.set(true)
             isCancelAllBtnVisibility.set(true)
-            setupExchangeRate(baseCurrency.bid, conversionCurrency.bid)
+            setupExchangeRate(baseCurrency.rate.toString(), conversionCurrency.rate.toString())
             calculateResult()
         }
     }
@@ -223,22 +223,22 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver,
 
                 if (currencyChoice.currencyType == CurrencyType.BASE && currencyChoice.isSelected) {
                     exchangeRateText.set(choseConversionCurrencyHint)
-                    baseCurrency.value = currencyChoice.chosenCurrency
+                    baseCurrencyChangeListener.value = currencyChoice.chosenCurrency
                 } else
 
                 if (currencyChoice.currencyType == CurrencyType.BASE && !currencyChoice.isSelected) {
                     exchangeRateText.set(choseBaseCurrencyHint)
-                    baseCurrency.value = null
-                    conversionCurrency.value = null
+                    baseCurrencyChangeListener.value = null
+                    conversionCurrencyChangeListener.value = null
                 } else
 
                 if (currencyChoice.currencyType == CurrencyType.CONVERSION && !currencyChoice.isSelected) {
                     exchangeRateText.set(choseConversionCurrencyHint)
-                    conversionCurrency.value = null
+                    conversionCurrencyChangeListener.value = null
                 } else
 
                 if (currencyChoice.currencyType == CurrencyType.CONVERSION && currencyChoice.isSelected) {
-                    conversionCurrency.value = currencyChoice.chosenCurrency
+                    conversionCurrencyChangeListener.value = currencyChoice.chosenCurrency
                 }
             }
 
@@ -305,13 +305,12 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver,
         calculateResult()
     }
 
-    private fun setupExchangeRate(baseCurrencyBid: String?, conversionCurrencyBid: String?) {
-        executeIfNotNull(baseCurrencyBid, conversionCurrencyBid) { baseRate, conversionRate ->
+    private fun setupExchangeRate(baseCurrencyRate: String?, conversionCurrencyRate: String?) {
+        executeIfNotNull(baseCurrencyRate, conversionCurrencyRate) { baseRate, conversionRate ->
 
-            exchangeRateText.set(
-                CurrencyCalculator.calculateExchangeRate(
-                    baseRate.toBigDecimal(), conversionRate.toBigDecimal()
-                ).toString()
+            exchangeRateText.set(CurrencyCalculator.calculateExchangeRate(
+                baseRate.toBigDecimal(),
+                conversionRate.toBigDecimal()).toString()
             )
         }
     }
@@ -335,10 +334,9 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver,
 
         exchangeRateText.get()?.let { exchangeRate ->
 
-            val calculatedValue: BigDecimal = CurrencyCalculator.calculateResult(
-                exchangeRate.toBigDecimal(),
-                inputValue.toBigDecimal()
-            )
+            val calculatedValue: BigDecimal =
+                CurrencyCalculator.calculateResult(exchangeRate.toBigDecimal(),
+                                                   inputValue.toBigDecimal())
 
             result.set(DecimalFormat(context.resources.getString(R.string.numbers_pattern))
                            .format(calculatedValue))

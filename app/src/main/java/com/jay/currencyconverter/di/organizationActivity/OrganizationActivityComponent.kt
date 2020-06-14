@@ -1,18 +1,18 @@
-package com.jay.currencyconverter.di
+package com.jay.currencyconverter.di.organizationActivity
 
 import androidx.fragment.app.FragmentActivity
 import com.jay.currencyconverter.ui.organizationActivity.OrganizationActivity
 import dagger.BindsInstance
 import dagger.Component
 
-@Component(modules = [BankActivityModule::class])
-interface BankActivityComponent {
+@Component(modules = [OrganizationActivityModule::class])
+interface OrganizationActivityComponent {
 
     @Component.Builder
     interface Builder {
         @BindsInstance
         fun activity(activity: FragmentActivity) : Builder
-        fun build(): BankActivityComponent
+        fun build(): OrganizationActivityComponent
     }
 
     fun inject(activity: OrganizationActivity)

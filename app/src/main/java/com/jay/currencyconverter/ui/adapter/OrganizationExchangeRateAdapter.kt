@@ -10,22 +10,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.customView.CurrencyView
-import com.jay.currencyconverter.model.exchangeRate.organization.Organization
+import com.jay.currencyconverter.model.exchangeRate.organization.CommonOrganization
 import com.jay.currencyconverter.ui.adapter.viewHolder.BaseViewHolder
 
-class OrganizationExchangeRateAdapter : RecyclerView.Adapter<BaseViewHolder<Organization>>() {
+class OrganizationExchangeRateAdapter : RecyclerView.Adapter<BaseViewHolder<CommonOrganization>>() {
 
-    private val organizationList: MutableList<Organization> = ArrayList()
-    val clickEvent: MutableLiveData<Organization> = MutableLiveData()
+    private val organizationList: MutableList<CommonOrganization> = ArrayList()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Organization> {
+    val clickEvent: MutableLiveData<CommonOrganization> = MutableLiveData()
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<CommonOrganization> {
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_bank_exhange_rate, parent, false)
 
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder<Organization>, position: Int) {
+    override fun onBindViewHolder(holder: BaseViewHolder<CommonOrganization>, position: Int) {
         holder.bind(organizationList[position])
     }
 
@@ -35,13 +36,13 @@ class OrganizationExchangeRateAdapter : RecyclerView.Adapter<BaseViewHolder<Orga
 
     override fun getItemViewType(position: Int): Int = position
 
-    fun setItems(organizations: List<Organization?>) {
+    fun setItems(organizations: List<CommonOrganization?>) {
         organizationList.clear()
         organizationList.addAll(organizations.filterNotNull())
         notifyDataSetChanged()
     }
 
-    inner class ViewHolder(itemView: View) : BaseViewHolder<Organization>(itemView) {
+    inner class ViewHolder(itemView: View) : BaseViewHolder<CommonOrganization>(itemView) {
 
         private val container: LinearLayoutCompat = itemView.findViewById(R.id.container)
         private val bankTitle: AppCompatTextView = itemView.findViewById(R.id.bank_title)
@@ -53,7 +54,7 @@ class OrganizationExchangeRateAdapter : RecyclerView.Adapter<BaseViewHolder<Orga
             }
         }
 
-        override fun bind(item: Organization) {
+        override fun bind(item: CommonOrganization) {
             clearViews()
 
             bankTitle.text = item.title

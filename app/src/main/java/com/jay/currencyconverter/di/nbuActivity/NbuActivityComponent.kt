@@ -1,4 +1,4 @@
-package com.jay.currencyconverter.di
+package com.jay.currencyconverter.di.nbuActivity
 
 import androidx.fragment.app.FragmentActivity
 import com.jay.currencyconverter.ui.nbuActivity.NbuActivity

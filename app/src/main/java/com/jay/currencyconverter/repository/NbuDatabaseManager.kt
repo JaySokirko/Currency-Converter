@@ -4,7 +4,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import com.jay.currencyconverter.BaseApplication
-import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
+import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
 import com.jay.currencyconverter.repository.room.NbuDao
 import com.jay.currencyconverter.repository.room.NbuEntity
 import io.reactivex.Completable
@@ -16,15 +16,15 @@ import io.reactivex.subjects.PublishSubject
 
 class NbuDatabaseManager private constructor() : LifecycleObserver {
 
-    val currenciesToDisplay: PublishSubject<MutableMap<Nbu, Boolean>> = PublishSubject.create()
-    private val displayedCurrenciesList: MutableMap<Nbu, Boolean> = mutableMapOf()
+    val currenciesToDisplay: PublishSubject<MutableMap<NbuCurrency, Boolean>> = PublishSubject.create()
+    private val displayedCurrenciesList: MutableMap<NbuCurrency, Boolean> = mutableMapOf()
     private val disposable = CompositeDisposable()
 
     init {
         onDatabaseEntityChanged()
     }
 
-    fun putData(itemsList: List<Nbu>) {
+    fun putData(itemsList: List<NbuCurrency>) {
 
         val subscribe: Disposable = database.getAllSingle()
             .subscribeOn(Schedulers.io())
@@ -58,7 +58,7 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
         disposable.add(subscribe)
     }
 
-    private fun onDatabaseIsEmpty(itemsList: List<Nbu>) {
+    private fun onDatabaseIsEmpty(itemsList: List<NbuCurrency>) {
         displayedCurrenciesList.clear()
 
         val entityList: MutableList<NbuEntity> = mutableListOf()
@@ -73,10 +73,10 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
         })
     }
 
-    private fun onDatabaseIsNotEmpty(itemsList: List<Nbu>, entityList: List<NbuEntity>) {
+    private fun onDatabaseIsNotEmpty(itemsList: List<NbuCurrency>, entityList: List<NbuEntity>) {
         displayedCurrenciesList.clear()
 
-        itemsList.forEach { currency: Nbu ->
+        itemsList.forEach { currency: NbuCurrency ->
             val currentEntity: NbuEntity? =
                 entityList.find { currency.currencyAbbreviation == it.currency.currencyAbbreviation }
 
@@ -95,7 +95,7 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
         val entityToInsert: MutableList<NbuEntity> = mutableListOf()
 
         entityList.forEach { entity: NbuEntity ->
-            val currency: Nbu? = displayedCurrenciesList.keys.find {
+            val currency: NbuCurrency? = displayedCurrenciesList.keys.find {
                 it.currencyAbbreviation == entity.currency.currencyAbbreviation
             }
             if (currency != null) {
@@ -145,7 +145,7 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
             .subscribe { result: List<NbuEntity> ->
 
                 result.forEach { entity ->
-                    val currency: Nbu? = displayedCurrenciesList.keys.find { currency ->
+                    val currency: NbuCurrency? = displayedCurrenciesList.keys.find { currency ->
                         entity.currency.currencyAbbreviation == currency.currencyAbbreviation
                     }
                     if (currency != null){

@@ -2,7 +2,11 @@ package com.jay.currencyconverter
 
 import android.app.Application
 import androidx.room.Room
-import com.jay.currencyconverter.di.*
+import com.jay.currencyconverter.di.base.BaseComponent
+import com.jay.currencyconverter.di.base.BaseModule
+import com.jay.currencyconverter.di.base.DaggerBaseComponent
+import com.jay.currencyconverter.di.network.DaggerNetworkComponent
+import com.jay.currencyconverter.di.network.NetworkComponent
 import com.jay.currencyconverter.repository.room.DataBase
 
 class BaseApplication : Application() {

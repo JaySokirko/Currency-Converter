@@ -4,17 +4,10 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Parcelable
 
-abstract class Currency : Parcelable, Cloneable {
-    abstract val bid: String?
-    abstract val ask: String?
-    abstract fun getName(context: Context): String?
-    abstract fun getImage(context: Context): Drawable?
-    abstract fun getAbr(context: Context): String?
+interface Currency : Parcelable {
 
-    var type: CurrencyType? = null
-
-    @Throws(CloneNotSupportedException::class)
-    public override fun clone(): Any {
-        return super.clone()
-    }
+    val rate: Double
+    fun getName(context: Context): String?
+    fun getImage(context: Context): Drawable?
+    fun getAbr(context: Context): String?
 }

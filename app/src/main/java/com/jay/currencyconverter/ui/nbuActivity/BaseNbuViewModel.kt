@@ -8,15 +8,14 @@ import androidx.lifecycle.ViewModel
 import com.jay.currencyconverter.BaseApplication
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.exchangeRate.Currencies
-import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
+import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
 import com.jay.currencyconverter.repository.exchangeRate.NbuExchangeRate
 import io.reactivex.disposables.CompositeDisposable
 
 open class BaseNbuViewModel : ViewModel(), LifecycleObserver {
 
     val nbuExchangeRate: NbuExchangeRate = NbuExchangeRate()
-    val currencies: Currencies =
-        Currencies()
+    val currencies: Currencies = Currencies()
     val context: Context = BaseApplication.baseComponent.application.baseContext
     val disposable = CompositeDisposable()
 
@@ -25,20 +24,20 @@ open class BaseNbuViewModel : ViewModel(), LifecycleObserver {
         disposable.clear()
     }
 
-    protected fun filterNotExistCurrency(list: MutableList<Nbu>): MutableList<Nbu> {
+    protected fun filterNotExistCurrency(list: MutableList<NbuCurrency>): MutableList<NbuCurrency> {
         return list.filter { nbu ->
             currencies.checkCurrencyExistingByAbr(nbu.currencyAbbreviation, context)
-        } as MutableList<Nbu>
+        } as MutableList<NbuCurrency>
     }
 
-    protected fun sortCurrenciesList(list: MutableList<Nbu>): MutableList<Nbu> {
-        val usd: Nbu? = list.find {
+    protected fun sortCurrenciesList(list: MutableList<NbuCurrency>): MutableList<NbuCurrency> {
+        val usd: NbuCurrency? = list.find {
             it.currencyAbbreviation == context.resources.getString(R.string.USD)
         }
-        val eur: Nbu? = list.find {
+        val eur: NbuCurrency? = list.find {
             it.currencyAbbreviation == context.resources.getString(R.string.EUR)
         }
-        val rub: Nbu? = list.find {
+        val rub: NbuCurrency? = list.find {
             it.currencyAbbreviation == context.resources.getString(R.string.RUB)
         }
         list.removeAll { it == usd || it == eur || it == rub }

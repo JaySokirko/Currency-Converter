@@ -1,4 +1,4 @@
-package com.jay.currencyconverter.di
+package com.jay.currencyconverter.di.organizationActivity
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
@@ -8,7 +8,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class BankActivityModule {
+class OrganizationActivityModule {
 
     @Provides
     fun provideBankExchangeRateAdapter(): OrganizationExchangeRateAdapter {

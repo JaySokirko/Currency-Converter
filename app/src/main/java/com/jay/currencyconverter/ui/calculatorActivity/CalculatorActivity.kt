@@ -14,25 +14,27 @@ import com.jay.currencyconverter.R
 import com.jay.currencyconverter.animation.TextSizeAnimation.getTextSizeInSP
 import com.jay.currencyconverter.animation.TextSizeAnimation.setTextSizeWithAnimation
 import com.jay.currencyconverter.databinding.ActivityCalculatorBinding
-import com.jay.currencyconverter.di.DaggerCalculatorActivityComponent
+import com.jay.currencyconverter.di.calculatorActivity.DaggerCalculatorActivityComponent
 import com.jay.currencyconverter.model.CurrencyChoice
 import com.jay.currencyconverter.model.exchangeRate.Currencies
 import com.jay.currencyconverter.model.exchangeRate.Currency
 import com.jay.currencyconverter.model.exchangeRate.currency.UAH
-import com.jay.currencyconverter.model.exchangeRate.organization.Organization
+import com.jay.currencyconverter.model.exchangeRate.organization.CommonOrganization
+import com.jay.currencyconverter.model.exchangeRate.organization.NbuOrganization
 import com.jay.currencyconverter.ui.adapter.currencyButtonsAdapter.HorizontalCurrencyButtonsAdapter
 import com.jay.currencyconverter.util.common.Constant.CURRENCIES
 import com.jay.currencyconverter.util.common.Constant.CURRENCIES_CHOSEN
 import com.jay.currencyconverter.util.common.Constant.CURRENCIES_NOT_CHOSEN
 import com.jay.currencyconverter.util.common.Constant.ERASE_ALL_HINT_ALREADY_SHOWN
 import com.jay.currencyconverter.util.common.Constant.ERASE_HINT_SHOULD_BE_SHOWN
+import com.jay.currencyconverter.util.common.Constant.NBU_CURRENCIES
 import com.jay.currencyconverter.util.common.Constant.ORGANIZATION
 import com.jay.currencyconverter.util.common.StorageManager
-import com.jay.currencyconverter.util.ui.Keyboard.hideKeyboard
 import com.jay.currencyconverter.util.ui.LinearLayoutManagerWrapper
 import com.jay.currencyconverter.util.ui.SmoothScroller
 import kotlinx.android.synthetic.main.activity_calculator.*
 import rx.android.schedulers.AndroidSchedulers
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -48,9 +50,9 @@ class CalculatorActivity : AppCompatActivity() {
     private val currenciesList: MutableList<Currency?> = mutableListOf()
     private val typedValue = TypedValue()
     private var isTextSizeIncreased = false
-    private  val linearLayoutManager = LinearLayoutManagerWrapper(this,
-                                                                  LinearLayoutManager.HORIZONTAL,
-                                                                  false)
+
+    private  val linearLayoutManager =
+        LinearLayoutManagerWrapper(this, LinearLayoutManager.HORIZONTAL, false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         DaggerCalculatorActivityComponent.builder().activity(this).build().inject(this)
@@ -58,11 +60,19 @@ class CalculatorActivity : AppCompatActivity() {
 
         initBinding()
 
-        (intent.getParcelableExtra(ORGANIZATION) as Organization?).let { organization ->
-            organization?.let { calculatorVM.organizationChoiceObserver.onNext(it) }
+        (intent.getParcelableExtra(ORGANIZATION) as CommonOrganization?)?.let { organization ->
+           calculatorVM.organizationChoiceObserver.onNext(organization)
         }
 
-        fillCurrenciesList(intent.getParcelableExtra(CURRENCIES) as Currencies)
+        (intent.getParcelableExtra(CURRENCIES) as Currencies?)?.let { currencies: Currencies ->
+            fillCurrenciesList(currencies)
+        }
+
+        intent.getParcelableArrayListExtra<Currency?>(NBU_CURRENCIES)?.let { currenciesList: ArrayList<Currency?> ->
+            calculatorVM.organizationChoiceObserver.onNext(NbuOrganization())
+            fillCurrenciesList(currenciesList)
+        }
+
         setupCurrencyButtonsList()
         onCurrencyButtonsAdapterItemClick()
         onEraseLongClick()
@@ -93,12 +103,16 @@ class CalculatorActivity : AppCompatActivity() {
         })
     }
 
-    private fun fillCurrenciesList(currencies: Currencies?) {
+    private fun fillCurrenciesList(currencies: Currencies) {
         currenciesList.clear()
-        currencies?.let {
-            currenciesList.add(UAH())
-            currenciesList.addAll(it.getAllNotNullCurrencies())
-        }
+        currenciesList.add(UAH())
+        currenciesList.addAll(currencies.getAllNotNullCurrencies())
+    }
+
+    private fun fillCurrenciesList(list: ArrayList<Currency?>) {
+        currenciesList.clear()
+        currenciesList.add(UAH())
+        currenciesList.addAll(list.filterNotNull())
     }
 
     private fun onCurrenciesSearch() {
@@ -110,7 +124,6 @@ class CalculatorActivity : AppCompatActivity() {
             .subscribe {text: String ->
                 smoothScrollToPosition(horizontalCurrencyAdapter.getItemPositionBySearch(text))
             }
-
     }
 
     private fun onShowEraseHint() {
