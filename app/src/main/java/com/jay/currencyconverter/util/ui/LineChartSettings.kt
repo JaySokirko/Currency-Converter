@@ -13,7 +13,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.jay.currencyconverter.BaseApplication
 import com.jay.currencyconverter.R
-import com.jay.currencyconverter.util.DateManager
+import com.jay.currencyconverter.util.common.DateManager
 
 /**
  * Documentation: https://weeklycoding.com/mpandroidchart-documentation/

@@ -7,7 +7,7 @@ import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ViewModel
 import com.jay.currencyconverter.BaseApplication
 import com.jay.currencyconverter.R
-import com.jay.currencyconverter.model.exchangeRate.currency.Currencies
+import com.jay.currencyconverter.model.exchangeRate.Currencies
 import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
 import com.jay.currencyconverter.repository.exchangeRate.NbuExchangeRate
 import io.reactivex.disposables.CompositeDisposable
@@ -15,7 +15,8 @@ import io.reactivex.disposables.CompositeDisposable
 open class BaseNbuViewModel : ViewModel(), LifecycleObserver {
 
     val nbuExchangeRate: NbuExchangeRate = NbuExchangeRate()
-    val currencies: Currencies = Currencies()
+    val currencies: Currencies =
+        Currencies()
     val context: Context = BaseApplication.baseComponent.application.baseContext
     val disposable = CompositeDisposable()
 

@@ -1,4 +1,4 @@
-package com.jay.currencyconverter.util
+package com.jay.currencyconverter.util.common
 
 import androidx.databinding.ObservableField
 import io.reactivex.subjects.PublishSubject

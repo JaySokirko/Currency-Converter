@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Currency Converter</string>
 
+    <string name="numbers_pattern">"#,###,###,###.####"</string>
+
     <string name="bid">Покупка</string>
     <string name="ask">Продажа</string>
 
@@ -224,5 +226,15 @@
     </string>
     <string name="middle">Средний:</string>
     <string name="actual_date">Курс на дату: </string>
+    <string name="exchange_rate">Курс обмена:</string>
+    <string name="choose_base_currency_hint">выберите базовую валюту</string>
+    <string name="choose_conversion_currency_hint">выберите котируемую валюту</string>
+    <string name="tel">Тел:</string>
+    <string name="sum">Сумма:</string>
+    <string name="result">Результат:</string>
+    <string name="erase_all_hint">Долгое нажатие на кнопку "C", чтобы удалить все</string>
+    <string name="cancel">отмена</string>
+    <string name="currency_search_hint">Найти валюту</string>
+
 
 </resources>

@@ -9,7 +9,7 @@ import com.jay.currencyconverter.ui.dialog.ErrorDialog
 import com.jay.currencyconverter.ui.dialog.NoCurrencyChosenDialog
 import com.jay.currencyconverter.ui.nbuActivity.MainContentViewModel
 import com.jay.currencyconverter.ui.nbuActivity.AppbarViewModel
-import com.jay.currencyconverter.util.ui.LayoutParamsAnimator
+import com.jay.currencyconverter.animation.LayoutParamsAnimation
 import dagger.Module
 import dagger.Provides
 
@@ -35,7 +35,8 @@ class NbuActivityModule {
     fun provideNoCurrencyChosenDialog() : NoCurrencyChosenDialog = NoCurrencyChosenDialog()
 
     @Provides
-    fun provideLayoutParamsAnimator(): LayoutParamsAnimator = LayoutParamsAnimator()
+    fun provideLayoutParamsAnimator(): LayoutParamsAnimation =
+        LayoutParamsAnimation()
 
     companion object {
         @Provides

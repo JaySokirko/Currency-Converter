@@ -1,10 +1,9 @@
-package com.jay.currencyconverter.util
+package com.jay.currencyconverter.util.common
 
 import android.content.Context
 import com.jay.currencyconverter.BaseApplication
 import com.jay.currencyconverter.R
 import java.lang.IllegalStateException
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -53,17 +52,77 @@ object DateManager {
         return dateFormat.format(calendar.time)
     }
 
+    //todo remove it from here
     init {
-        dateList.add(currentDate)
-        dateList.add(getDate(-1, dateFormat))
-        dateList.add(getDate(-2, dateFormat))
-        dateList.add(getDate(-3, dateFormat))
-        dateList.add(getDate(-4, dateFormat))
+        dateList.add(
+            currentDate
+        )
+        dateList.add(
+            getDate(
+                -1,
+                dateFormat
+            )
+        )
+        dateList.add(
+            getDate(
+                -2,
+                dateFormat
+            )
+        )
+        dateList.add(
+            getDate(
+                -3,
+                dateFormat
+            )
+        )
+        dateList.add(
+            getDate(
+                -4,
+                dateFormat
+            )
+        )
 
-        dayNameList.add(getDayName(currentDate, dateFormat))
-        dayNameList.add(getDayName(getDate(-1, dateFormat), dateFormat))
-        dayNameList.add(getDayName(getDate(-2, dateFormat), dateFormat))
-        dayNameList.add(getDayName(getDate(-3, dateFormat), dateFormat))
-        dayNameList.add(getDayName(getDate(-4, dateFormat), dateFormat))
+        dayNameList.add(
+            getDayName(
+                currentDate,
+                dateFormat
+            )
+        )
+        dayNameList.add(
+            getDayName(
+                getDate(
+                    -1,
+                    dateFormat
+                ),
+                dateFormat
+            )
+        )
+        dayNameList.add(
+            getDayName(
+                getDate(
+                    -2,
+                    dateFormat
+                ),
+                dateFormat
+            )
+        )
+        dayNameList.add(
+            getDayName(
+                getDate(
+                    -3,
+                    dateFormat
+                ),
+                dateFormat
+            )
+        )
+        dayNameList.add(
+            getDayName(
+                getDate(
+                    -4,
+                    dateFormat
+                ),
+                dateFormat
+            )
+        )
     }
 }

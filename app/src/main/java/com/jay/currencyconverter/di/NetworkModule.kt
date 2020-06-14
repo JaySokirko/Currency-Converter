@@ -5,8 +5,8 @@ import com.jay.currencyconverter.annotation.NbuExchange
 import com.jay.currencyconverter.annotation.NbuExchangeByDateAndCurrency
 import com.jay.currencyconverter.api.CurrencyExchangeRateApi
 import com.jay.currencyconverter.security.TLSOkHttpClient
-import com.jay.currencyconverter.util.Constant.BANKS_EXCHANGE_URL
-import com.jay.currencyconverter.util.Constant.NBU_URL
+import com.jay.currencyconverter.util.common.Constant.BANKS_EXCHANGE_URL
+import com.jay.currencyconverter.util.common.Constant.NBU_URL
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient

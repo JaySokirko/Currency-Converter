@@ -1,29 +1,43 @@
 package com.jay.currencyconverter.ui.calculatorActivity
 
 import android.os.Bundle
+import android.os.Handler
+import android.util.TypedValue
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import com.jakewharton.rxbinding.widget.RxTextView
 import com.jay.currencyconverter.R
+import com.jay.currencyconverter.animation.TextSizeAnimation.getTextSizeInSP
+import com.jay.currencyconverter.animation.TextSizeAnimation.setTextSizeWithAnimation
 import com.jay.currencyconverter.databinding.ActivityCalculatorBinding
 import com.jay.currencyconverter.di.DaggerCalculatorActivityComponent
 import com.jay.currencyconverter.model.CurrencyChoice
-import com.jay.currencyconverter.model.exchangeRate.currency.Currencies
-import com.jay.currencyconverter.model.exchangeRate.currency.Currency
-import com.jay.currencyconverter.model.exchangeRate.currency.CurrencyType
+import com.jay.currencyconverter.model.exchangeRate.Currencies
+import com.jay.currencyconverter.model.exchangeRate.Currency
 import com.jay.currencyconverter.model.exchangeRate.currency.UAH
+import com.jay.currencyconverter.model.exchangeRate.organization.Organization
 import com.jay.currencyconverter.ui.adapter.currencyButtonsAdapter.HorizontalCurrencyButtonsAdapter
-import com.jay.currencyconverter.util.Constant
-import io.reactivex.disposables.Disposable
+import com.jay.currencyconverter.util.common.Constant.CURRENCIES
+import com.jay.currencyconverter.util.common.Constant.CURRENCIES_CHOSEN
+import com.jay.currencyconverter.util.common.Constant.CURRENCIES_NOT_CHOSEN
+import com.jay.currencyconverter.util.common.Constant.ERASE_ALL_HINT_ALREADY_SHOWN
+import com.jay.currencyconverter.util.common.Constant.ERASE_HINT_SHOULD_BE_SHOWN
+import com.jay.currencyconverter.util.common.Constant.ORGANIZATION
+import com.jay.currencyconverter.util.common.StorageManager
+import com.jay.currencyconverter.util.ui.Keyboard.hideKeyboard
+import com.jay.currencyconverter.util.ui.LinearLayoutManagerWrapper
+import com.jay.currencyconverter.util.ui.SmoothScroller
 import kotlinx.android.synthetic.main.activity_calculator.*
+import rx.android.schedulers.AndroidSchedulers
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
 class CalculatorActivity : AppCompatActivity() {
-
-    private val currenciesList: MutableList<Currency?> = mutableListOf()
-    private var currencies: Currencies? = null
-    private var organizationTitle: String? = null
 
     @Inject
     lateinit var calculatorVM: CalculatorActivityViewModel
@@ -31,21 +45,33 @@ class CalculatorActivity : AppCompatActivity() {
     @Inject
     lateinit var horizontalCurrencyAdapter: HorizontalCurrencyButtonsAdapter
 
+    private val currenciesList: MutableList<Currency?> = mutableListOf()
+    private val typedValue = TypedValue()
+    private var isTextSizeIncreased = false
+    private  val linearLayoutManager = LinearLayoutManagerWrapper(this,
+                                                                  LinearLayoutManager.HORIZONTAL,
+                                                                  false)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         DaggerCalculatorActivityComponent.builder().activity(this).build().inject(this)
         super.onCreate(savedInstanceState)
 
         initBinding()
 
-        //TODO add organization title to calculator screen
-        organizationTitle = intent.getStringExtra(Constant.ORGANIZATION_TITLE)
-        currencies = intent.getParcelableExtra(Constant.CURRENCIES)
+        (intent.getParcelableExtra(ORGANIZATION) as Organization?).let { organization ->
+            organization?.let { calculatorVM.organizationChoiceObserver.onNext(it) }
+        }
 
-        fillCurrenciesList()
-        setupCurrencyChoiceList()
-        onCurrencyToConvertChosen()
+        fillCurrenciesList(intent.getParcelableExtra(CURRENCIES) as Currencies)
+        setupCurrencyButtonsList()
+        onCurrencyButtonsAdapterItemClick()
+        onEraseLongClick()
+        onShowEraseHint()
+        observeCurrenciesChoice()
+        onCurrenciesSearch()
 
         lifecycle.addObserver(calculatorVM)
+        lifecycle.addObserver(horizontalCurrencyAdapter)
     }
 
     private fun initBinding() {
@@ -54,41 +80,124 @@ class CalculatorActivity : AppCompatActivity() {
         binding.calculator = calculatorVM
     }
 
-    private fun setupCurrencyChoiceList() {
-        base_currencies_list.setHasFixedSize(true)
-        base_currencies_list.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        base_currencies_list.adapter = horizontalCurrencyAdapter
+    private fun setupCurrencyButtonsList() {
+        currencies_list.setHasFixedSize(true)
+        currencies_list.layoutManager = linearLayoutManager
+        currencies_list.adapter = horizontalCurrencyAdapter
         horizontalCurrencyAdapter.setItems(currenciesList)
     }
 
-    private fun onCurrencyToConvertChosen() {
-        val subscribe: Disposable =
-            horizontalCurrencyAdapter.clickEvent.subscribe { wrapper: CurrencyChoice ->
-                when (wrapper.currencyType) {
-                    CurrencyType.BASE -> {
-                        wrapper.chosenCurrency?.let {
-                            calculatorVM.baseCurrencyObserver.onNext(it)
-                        }
-                    }
-                    CurrencyType.CONVERSION -> {
-                        wrapper.chosenCurrency?.let {
-                            calculatorVM.conversionCurrencyObserver.onNext(it)
-                        }
-                    }
-                    null -> {
-                        throw NullPointerException("currencyType should not be null")
-                    }
-                }
-            }
-
-        calculatorVM.disposable.add(subscribe)
+    private fun onCurrencyButtonsAdapterItemClick() {
+        horizontalCurrencyAdapter.currencyButtonClick.observe(this, Observer { choice: CurrencyChoice ->
+            calculatorVM.currencyChoiceObserver.onNext(choice)
+        })
     }
 
-    private fun fillCurrenciesList() {
+    private fun fillCurrenciesList(currencies: Currencies?) {
         currenciesList.clear()
         currencies?.let {
             currenciesList.add(UAH())
             currenciesList.addAll(it.getAllNotNullCurrencies())
         }
     }
+
+    private fun onCurrenciesSearch() {
+        RxTextView.textChanges(search_currency_edit_text)
+            .skip(1)
+            .debounce(200, TimeUnit.MILLISECONDS)
+            .map { it.toString().replace(oldValue = " ", newValue =  "") }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {text: String ->
+                smoothScrollToPosition(horizontalCurrencyAdapter.getItemPositionBySearch(text))
+            }
+
+    }
+
+    private fun onShowEraseHint() {
+        calculatorVM.eraseHintShouldBeShown.observe(this, Observer { hintShouldBeShown: Boolean ->
+
+            if (hintShouldBeShown == ERASE_HINT_SHOULD_BE_SHOWN) {
+                val snackBar = Snackbar.make(findViewById(android.R.id.content),
+                                         resources.getString(R.string.erase_all_hint),
+                                         Snackbar.LENGTH_INDEFINITE)
+
+                snackBar.setAction(android.R.string.ok) {
+                        StorageManager.saveVariable(ERASE_ALL_HINT_ALREADY_SHOWN, true)
+                }.show()
+            }
+        })
+    }
+
+    private fun onEraseLongClick() {
+        erase.setOnLongClickListener {
+            calculatorVM.onLongEraseClick()
+            return@setOnLongClickListener false
+        }
+    }
+
+    private fun observeCurrenciesChoice() {
+        val duration = resources.getInteger(R.integer.durationX2).toLong()
+
+        calculatorVM.onCurrenciesChosenObserver.observe(this, Observer {
+             when (it) {
+                CURRENCIES_CHOSEN -> {
+                    calculator_header_transition.setTransition(R.id.items_transition)
+                    calculator_header_transition.transitionToEnd()
+
+                    Handler().postDelayed({
+                        if (!isTextSizeIncreased) {
+                            increaseTexViewSize(exchange_rate_title,
+                                                exchange_rate,
+                                                input_value_title,
+                                                input_value,
+                                                result_title,
+                                                result)
+                            isTextSizeIncreased = true
+                        }
+                    }, duration)
+                }
+
+                CURRENCIES_NOT_CHOSEN -> {
+                    if (isTextSizeIncreased) {
+                        reduceTextViewSize(exchange_rate_title,
+                                           exchange_rate,
+                                           input_value_title,
+                                           input_value,
+                                           result_title,
+                                           result)
+                        isTextSizeIncreased = false
+                    }
+
+                    Handler().postDelayed({
+                        calculator_header_transition.setTransition(R.id.items_transition)
+                        calculator_header_transition.transitionToStart()
+                    }, duration)
+                }
+            }
+        })
+    }
+
+    private fun increaseTexViewSize(vararg textView: TextView) {
+        resources.getValue(R.dimen.text_increase_step, typedValue, true)
+
+        textView.forEach { view: TextView ->
+            val targetSize: Float = view.getTextSizeInSP() + typedValue.float
+            view.setTextSizeWithAnimation(targetSize)
+        }
+    }
+
+    private fun reduceTextViewSize(vararg textView: TextView) {
+        resources.getValue(R.dimen.text_increase_step, typedValue, true)
+
+        textView.forEach {view: TextView ->
+            val targetSize: Float = view.getTextSizeInSP() - typedValue.float
+            view.setTextSizeWithAnimation(targetSize)
+        }
+    }
+
+    private fun smoothScrollToPosition(position: Int) {
+        SmoothScroller.getSmoothScroller().targetPosition = position
+        linearLayoutManager.startSmoothScroll(SmoothScroller.getSmoothScroller());
+    }
+
 }

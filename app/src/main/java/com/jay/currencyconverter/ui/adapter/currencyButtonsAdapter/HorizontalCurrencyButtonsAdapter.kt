@@ -1,24 +1,44 @@
 package com.jay.currencyconverter.ui.adapter.currencyButtonsAdapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.jakewharton.rxbinding.view.RxView
+import com.jay.currencyconverter.BaseApplication
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.customView.CustomMaterialButton
 import com.jay.currencyconverter.model.CurrencyChoice
-import com.jay.currencyconverter.model.exchangeRate.currency.Currency
-import com.jay.currencyconverter.model.exchangeRate.currency.CurrencyType
+import com.jay.currencyconverter.model.exchangeRate.Currency
+import com.jay.currencyconverter.model.exchangeRate.CurrencyType
+import com.jay.currencyconverter.ui.adapter.CurrencyDiffUtil
 import com.jay.currencyconverter.ui.adapter.viewHolder.BaseViewHolder
-import io.reactivex.subjects.BehaviorSubject
+import com.jay.currencyconverter.util.common.Filter
+import rx.android.schedulers.AndroidSchedulers
+import java.util.concurrent.TimeUnit
 
-class HorizontalCurrencyButtonsAdapter : RecyclerView.Adapter<BaseViewHolder<Currency>>() {
 
-    val clickEvent: BehaviorSubject<CurrencyChoice> = BehaviorSubject.create()
+class HorizontalCurrencyButtonsAdapter : RecyclerView.Adapter<BaseViewHolder<Currency>>(),
+    LifecycleObserver {
+
+    val currencyButtonClick: MutableLiveData<CurrencyChoice> = MutableLiveData()
 
     private val currencyList: MutableList<Currency> = ArrayList()
-    private val behaviourManager =
-        OnClickBehaviourManager()
+    private val buttonsBehaviour = CurrencyButtonsBehaviour()
+    private val filter: Filter<Currency> = Filter()
+    private val diffUtil = CurrencyDiffUtil()
+    private val context: Context = BaseApplication.baseComponent.application.baseContext
+    private var reduceTextDuration = 0L
+
+    init {
+        reduceTextDuration = context.resources.getInteger(R.integer.text_reduce_duration).toLong()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Currency> {
         val view: View = LayoutInflater.from(parent.context)
@@ -33,38 +53,70 @@ class HorizontalCurrencyButtonsAdapter : RecyclerView.Adapter<BaseViewHolder<Cur
 
     override fun getItemCount(): Int = currencyList.size
 
-    override fun getItemId(position: Int): Long =  position.toLong()
+    override fun getItemId(position: Int): Long = position.toLong()
 
     override fun getItemViewType(position: Int): Int = position
 
     fun setItems(currencies: List<Currency?>) {
-        currencyList.clear()
-        currencyList.addAll(currencies.filterNotNull())
-        notifyDataSetChanged()
+        diffUtil.setData(oldList = currencyList, newList = currencies.filterNotNull())
+        currencyList.apply { clear(); addAll(currencies.filterNotNull()) }
+        DiffUtil.calculateDiff(diffUtil).dispatchUpdatesTo(this)
+    }
+
+    fun getItemPositionBySearch(search: String): Int{
+        if (search.isBlank()) return 0
+
+        val filteredResult: MutableList<Currency> =
+            filter.getFilteredResult(search, currencyList) { currency: Currency ->
+                currency.getName(context)?.toLowerCase()?.contains(search.toLowerCase()) ?: false ||
+                currency.getAbr(context)?.toLowerCase()?.contains(search.toLowerCase()) ?: false
+            }
+
+        currencyList.forEachIndexed  { index, currency ->
+            val find: Currency? = filteredResult.find { it.getAbr(context) == currency.getAbr(context) }
+            if (find != null) return index
+        }
+
+        return 0
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    private fun onDestroy() {
+        buttonsBehaviour.onDestroy()
     }
 
     private inner class CurrencyVH(itemView: View) : BaseViewHolder<Currency>(itemView) {
 
-        private val baseCurrencyBtn: CustomMaterialButton
-                = itemView.findViewById(R.id.base_currency_btn)
+        private val baseCurrencyBtn: CustomMaterialButton =
+            itemView.findViewById(R.id.base_currency_btn)
 
-        private val conversionCurrencyBtn: CustomMaterialButton
-                = itemView.findViewById(R.id.conversion_currency_btn)
+        private val conversionCurrencyBtn: CustomMaterialButton =
+            itemView.findViewById(R.id.conversion_currency_btn)
 
         init {
-            behaviourManager.baseButtons.add(baseCurrencyBtn)
-            behaviourManager.conversionButtons.add(conversionCurrencyBtn)
-            behaviourManager.setup()
+            buttonsBehaviour.baseButtons.add(baseCurrencyBtn)
+            buttonsBehaviour.conversionButtons.add(conversionCurrencyBtn)
+            buttonsBehaviour.setup()
 
-            baseCurrencyBtn.setOnClickListener {
-                behaviourManager.onBaseButtonClick(it as CustomMaterialButton)
-                clickEvent.onNext(CurrencyChoice(currencyList[layoutPosition], CurrencyType.BASE))
-            }
+            RxView.clicks(baseCurrencyBtn)
+                .throttleFirst(reduceTextDuration, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    buttonsBehaviour.onBaseButtonClick(baseCurrencyBtn)
+                    currencyButtonClick.postValue(CurrencyChoice(currencyList[layoutPosition],
+                                                                 CurrencyType.BASE,
+                                                                 baseCurrencyBtn.isPressedState))
+                }
 
-            conversionCurrencyBtn.setOnClickListener {
-                behaviourManager.onConversionButtonClick(it)
-                clickEvent.onNext(CurrencyChoice(currencyList[layoutPosition], CurrencyType.CONVERSION))
-            }
+             RxView.clicks(conversionCurrencyBtn)
+                .throttleFirst(reduceTextDuration, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    buttonsBehaviour.onConversionButtonClick(conversionCurrencyBtn)
+                    currencyButtonClick.postValue(CurrencyChoice(currencyList[layoutPosition],
+                                                                 CurrencyType.CONVERSION,
+                                                                 conversionCurrencyBtn.isPressedState))
+                }
         }
 
         override fun bind(item: Currency) {

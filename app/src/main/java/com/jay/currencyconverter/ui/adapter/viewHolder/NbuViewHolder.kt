@@ -5,7 +5,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.jay.currencyconverter.R
-import com.jay.currencyconverter.model.exchangeRate.currency.Currencies
+import com.jay.currencyconverter.model.exchangeRate.Currencies
 import com.jay.currencyconverter.model.exchangeRate.nbu.Nbu
 
 open class NbuViewHolder(itemView: View) : BaseViewHolder<Nbu>(itemView) {
@@ -19,9 +19,9 @@ open class NbuViewHolder(itemView: View) : BaseViewHolder<Nbu>(itemView) {
         item.currencyAbbreviation?.let {
             currencyIcon.setImageDrawable(currencies.getCurrencyImageByAbr(it, itemView.context))
         }
+
         currencyAbr.text = item.currencyAbbreviation
         currencyName.text = item.currencyName
-
     }
 
     companion object {

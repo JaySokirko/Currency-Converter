@@ -10,10 +10,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.customView.CurrencyView
-import com.jay.currencyconverter.model.exchangeRate.bank.Organization
+import com.jay.currencyconverter.model.exchangeRate.organization.Organization
 import com.jay.currencyconverter.ui.adapter.viewHolder.BaseViewHolder
 
-class BankExchangeRateAdapter : RecyclerView.Adapter<BaseViewHolder<Organization>>() {
+class OrganizationExchangeRateAdapter : RecyclerView.Adapter<BaseViewHolder<Organization>>() {
 
     private val organizationList: MutableList<Organization> = ArrayList()
     val clickEvent: MutableLiveData<Organization> = MutableLiveData()

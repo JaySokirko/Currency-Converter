@@ -1,4 +1,4 @@
-package com.jay.currencyconverter.model.exchangeRate.currency
+package com.jay.currencyconverter.model.exchangeRate
 
 import android.content.Context
 import android.graphics.drawable.Drawable

@@ -1,9 +1,9 @@
-package com.jay.currencyconverter.model.exchangeRate.bank
+package com.jay.currencyconverter.model.exchangeRate.organization
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class Banks {
+class Organizations {
 
     @SerializedName("sourceId")
     @Expose

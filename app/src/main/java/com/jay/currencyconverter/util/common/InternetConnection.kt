@@ -1,4 +1,4 @@
-package com.jay.currencyconverter.util
+package com.jay.currencyconverter.util.common
 
 import android.content.Context
 import android.net.ConnectivityManager
