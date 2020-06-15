@@ -26,7 +26,9 @@ import com.jay.currencyconverter.util.common.Constant.CURRENCY_ABR
 import com.jay.currencyconverter.util.common.Constant.CURRENCY_ABR_DEFAULT
 import com.jay.currencyconverter.util.common.Constant.EMPTY_STRING
 import com.jay.currencyconverter.util.common.Constant.MAIN_CHECKBOX_CHECKED
+import com.jay.currencyconverter.util.common.Constant.NBU_ACTIVITY
 import com.jay.currencyconverter.util.common.Constant.NBU_CURRENCIES
+import com.jay.currencyconverter.util.common.Constant.PREVIOUS_OPENED_ACTIVITY
 import com.jay.currencyconverter.util.common.StorageManager
 import com.jay.currencyconverter.util.ui.LineChartSettings
 import com.jay.currencyconverter.util.ui.RecyclerViewTouchItemListener
@@ -74,6 +76,8 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
         initContent(R.layout.activity_nbu, R.layout.default_toolbar)
 
         initBinding()
+
+        StorageManager.saveVariable(PREVIOUS_OPENED_ACTIVITY, NBU_ACTIVITY)
 
         setupNbuExchangeList()
         setupChartCurrenciesList()

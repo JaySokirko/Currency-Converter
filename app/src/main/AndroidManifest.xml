@@ -14,23 +14,21 @@
         android:supportsRtl="true"
         android:theme="@style/BaseTheme">
 
-        <activity
-            android:name=".ui.newsActivity.NewsActivity"
-            android:label="@string/title_activity_news"
-            android:theme="@style/BaseTheme.NoActionBar"/>
-
-        <activity android:name=".ui.calculatorActivity.CalculatorActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"/>
-
-        <activity android:name=".ui.organizationActivity.OrganizationActivity"/>
-
-        <activity android:name=".ui.nbuActivity.NbuActivity">
+        <activity android:name=".ui.LaunchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.calculatorActivity.CalculatorActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity android:name=".ui.organizationActivity.OrganizationActivity" />
+
+        <activity android:name=".ui.nbuActivity.NbuActivity"/>
+
     </application>
 
 </manifest>

@@ -1,19 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/draw_header_parent"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:gravity="bottom"
-    android:orientation="vertical"
     android:padding="@dimen/x4"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    android:background="@drawable/gradient_list_anim">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/app_bar_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/x2"
+        android:layout_marginBottom="@dimen/x10"
         android:text="@string/app_name"
-        android:textColor="@color/colorPrimary"
-        android:textSize="25sp" />
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_x13"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/x"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_x7"
+        android:text="Powered by Jay Sokyrko"
+        app:layout_constraintStart_toStartOf="@+id/app_bar_title"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_title" />
+
+    <ImageView
+        android:layout_width="@dimen/x10"
+        android:layout_height="@dimen/x10"
+        android:src="@drawable/ic_android"
+        app:layout_constraintBottom_toTopOf="@+id/app_bar_title"
+        app:layout_constraintStart_toStartOf="@+id/app_bar_title"/>
+
+    <TextView
+        android:id="@+id/version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="v1.0.0"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_x6"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

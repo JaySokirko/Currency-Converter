@@ -2,24 +2,24 @@ package com.jay.currencyconverter.ui
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.jay.currencyconverter.BuildConfig
 import com.jay.currencyconverter.R
-import com.jay.currencyconverter.ui.organizationActivity.OrganizationActivity
 import com.jay.currencyconverter.ui.nbuActivity.NbuActivity
-import com.jay.currencyconverter.ui.newsActivity.NewsActivity
-import com.jay.currencyconverter.util.common.Constant.PREVIOUS_OPENED_WINDOW
-import com.jay.currencyconverter.util.common.StorageManager
-import kotlinx.android.synthetic.main.activity_navigation.*
+import com.jay.currencyconverter.ui.organizationActivity.OrganizationActivity
 
 
 abstract class NavigationActivity : AppCompatActivity(),
@@ -27,16 +27,32 @@ abstract class NavigationActivity : AppCompatActivity(),
 
     protected lateinit var mainContentView: View
     private lateinit var nawDrawer: DrawerLayout
+    private lateinit var inflater: LayoutInflater
+    private lateinit var navigationView: NavigationView
+    private var backgroundAnimation: AnimationDrawable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_navigation)
+
+        inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         nawDrawer = findViewById(R.id.drawer_layout)
+        navigationView = findViewById(R.id.navigation_view)
+
+        initDrawerHeader()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        backgroundAnimation?.start()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        backgroundAnimation?.stop()
     }
 
     protected fun initContent(contentLayoutId: Int, toolbarLayoutId: Int) {
-        val inflater: LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-
         val mainContainer: FrameLayout = findViewById(R.id.main_container)
         mainContentView = inflater.inflate(contentLayoutId, mainContainer, false)
         mainContainer.addView(mainContentView)
@@ -51,26 +67,22 @@ abstract class NavigationActivity : AppCompatActivity(),
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-//            R.id.foreign -> {
-//                setLanguage(resources.getString(R.string.culture_foreign))
-//            }
-//            R.id.eng -> {
-//                setLanguage(resources.getString(R.string.culture_en))
-//            }
-//            R.id.help -> {
-//                startActivity(Intent(this, ManualActivity::class.java).putExtra(FRAGMENT_KEY, FRAGMENT_TYPE_HELP))
-//            }
             R.id.nbu -> {
                 startActivity(Intent(this, NbuActivity::class.java))
             }
-            R.id.bank -> {
+            R.id.organization -> {
                 startActivity(Intent(this, OrganizationActivity::class.java))
             }
-            R.id.news -> {
-                startActivity(Intent(this, NewsActivity::class.java))
+            R.id.en_lang -> {
+                //set en lang
+            }
+            R.id.ua_lang -> {
+
+            }
+            R.id.settings -> {
+
             }
         }
-        StorageManager.saveVariable(PREVIOUS_OPENED_WINDOW, item.itemId)
         return true
     }
 
@@ -82,30 +94,33 @@ abstract class NavigationActivity : AppCompatActivity(),
         }
     }
 
-//    protected open fun translateUi() {
-//        LocalStorage.saveVariable(LocalStorageManager.LANGUAGE, language)
-//        translateUi()
-//    }
-//
-//    protected open fun setLanguage(language: String) {
-//        finish()
-//        startActivity(intent)
-//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra(NavigationActivity.LANGUAGE_CHANGED, true)
-//    }
-
     private fun initNavigation(toolbar: Toolbar) {
-        val navDrawOpenResId: Int = R.string.navigation_drawer_open
-        val navDrawCloseResId: Int = R.string.navigation_drawer_close
-
-        ActionBarDrawerToggle(this, nawDrawer, toolbar, navDrawOpenResId, navDrawCloseResId).apply {
+        ActionBarDrawerToggle(this,
+                              nawDrawer,
+                              toolbar,
+                              R.string.navigation_drawer_open,
+                              R.string.navigation_drawer_close)
+            .apply {
             drawerArrowDrawable.color = resources.getColor(R.color.white)
             syncState()
         }
 
-        drawer_menu_layout.apply{
-          setNavigationItemSelectedListener(this@NavigationActivity)
-          itemIconTintList = null
+        navigationView.apply {
+            setNavigationItemSelectedListener(this@NavigationActivity)
+            itemIconTintList = null
         }
+    }
+
+    private fun initDrawerHeader( ) {
+        val headerView: View = navigationView.getHeaderView(0)
+        val parentView: ConstraintLayout = headerView.findViewById(R.id.draw_header_parent)
+
+        backgroundAnimation = parentView.background as AnimationDrawable
+        backgroundAnimation?.setEnterFadeDuration(5000)
+        backgroundAnimation?.setExitFadeDuration(2000)
+        backgroundAnimation?.start()
+
+        headerView.findViewById<TextView>(R.id.version).text = BuildConfig.VERSION_NAME
     }
 }
 

@@ -13,8 +13,12 @@ import com.jay.currencyconverter.ui.calculatorActivity.CalculatorActivity
 import com.jay.currencyconverter.ui.NavigationActivity
 import com.jay.currencyconverter.ui.adapter.OrganizationExchangeRateAdapter
 import com.jay.currencyconverter.ui.dialog.ErrorDialog
+import com.jay.currencyconverter.util.common.Constant
 import com.jay.currencyconverter.util.common.Constant.CURRENCIES
 import com.jay.currencyconverter.util.common.Constant.ORGANIZATION
+import com.jay.currencyconverter.util.common.Constant.ORGANIZATION_ACTIVITY
+import com.jay.currencyconverter.util.common.Constant.PREVIOUS_OPENED_ACTIVITY
+import com.jay.currencyconverter.util.common.StorageManager
 import kotlinx.android.synthetic.main.activity_organization.*
 import javax.inject.Inject
 
@@ -33,6 +37,8 @@ class OrganizationActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsCl
         super.onCreate(savedInstanceState)
         initContent(R.layout.activity_organization, R.layout.default_toolbar)
 
+        StorageManager.saveVariable(PREVIOUS_OPENED_ACTIVITY, ORGANIZATION_ACTIVITY)
+
         errorDialog.setOnDialogButtonsClickListener(this)
 
         initBinding()
@@ -46,16 +52,12 @@ class OrganizationActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsCl
         lifecycle.addObserver(organizationActivityViewModel)
     }
 
-    /**
-     * @see ErrorDialog.OnDialogButtonsClickListener.onReload
-     */
+    /**@see ErrorDialog.OnDialogButtonsClickListener.onReload*/
     override fun onReload() {
         organizationActivityViewModel.getExchangeRate()
     }
 
-    /**
-     * @see ErrorDialog.OnDialogButtonsClickListener.onExit
-     */
+    /**@see ErrorDialog.OnDialogButtonsClickListener.onExit*/
     override fun onExit() {
         onBackPressed()
     }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- x = 4dp   -->
+    <!-- x = 4dp -->
     <dimen name="x">4dp</dimen>
     <dimen name="x2">8dp</dimen>
     <dimen name="x3">12dp</dimen>
@@ -10,11 +10,24 @@
     <dimen name="x7">28dp</dimen>
     <dimen name="x8">32dp</dimen>
     <dimen name="x10">40dp</dimen>
+    <dimen name="x16">64dp</dimen>
     <dimen name="x18">72dp</dimen>
     <dimen name="x22">88dp</dimen>
     <dimen name="nav_header_height">180dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="app_bar_expanded_height">280dp</dimen>
+
+    <!-- text_x = 2dp -->
+    <dimen name="text_x6">12dp</dimen>
+    <dimen name="text_x7">14dp</dimen>
+    <dimen name="text_x8">16dp</dimen>
+    <dimen name="text_x9">18dp</dimen>
+    <dimen name="text_x10">20dp</dimen>
+    <dimen name="text_x11">22dp</dimen>
+    <dimen name="text_x12">24dp</dimen>
+    <dimen name="text_x13">26dp</dimen>
+    <dimen name="text_x14">28dp</dimen>
+    <dimen name="text_x15">30dp</dimen>
 
     <!--durationX = 100-->
     <integer name="durationX2">200</integer>
@@ -24,5 +37,7 @@
     <integer name="text_reduce_duration">400</integer>
 
     <item name="text_increase_step" format="float" type="dimen">2.5</item>
+
+
 
 </resources>

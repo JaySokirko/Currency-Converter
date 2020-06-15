@@ -118,8 +118,7 @@
 
     <!--drawer menu-->
     <string name="nbu">Курс НБУ</string>
-    <string name="bank">Курс в банках</string>
-    <string name="news">Новости</string>
+    <string name="bank">Банковский курс</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

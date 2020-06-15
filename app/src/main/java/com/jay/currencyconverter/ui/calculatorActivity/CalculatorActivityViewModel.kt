@@ -168,9 +168,7 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver,
         conversionCurrencyChangeListener.value = null
     }
 
-    /**
-     * @see ValueChangeListener.OnValueChangeListener.onChange
-     */
+    /**@see ValueChangeListener.OnValueChangeListener.onChange*/
     override fun onChange() {
         isCurrenciesChosen.set(false)
 
