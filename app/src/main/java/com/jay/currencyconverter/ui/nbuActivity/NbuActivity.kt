@@ -3,7 +3,7 @@ package com.jay.currencyconverter.ui.nbuActivity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.os.PersistableBundle
+import android.util.Log
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,19 +20,18 @@ import com.jay.currencyconverter.ui.adapter.ChartCurrencyAdapter
 import com.jay.currencyconverter.ui.adapter.DisplayedCurrenciesAdapter
 import com.jay.currencyconverter.ui.adapter.NbuExchangeRateAdapter
 import com.jay.currencyconverter.ui.calculatorActivity.CalculatorActivity
+import com.jay.currencyconverter.ui.dialog.DialogBuilder
 import com.jay.currencyconverter.ui.dialog.ErrorDialog
-import com.jay.currencyconverter.ui.dialog.NoCurrencyChosenDialog
 import com.jay.currencyconverter.util.common.Constant.CURRENCY_ABR
 import com.jay.currencyconverter.util.common.Constant.CURRENCY_ABR_DEFAULT
 import com.jay.currencyconverter.util.common.Constant.EMPTY_STRING
 import com.jay.currencyconverter.util.common.Constant.MAIN_CHECKBOX_CHECKED
-import com.jay.currencyconverter.util.common.Constant.NBU_ACTIVITY
 import com.jay.currencyconverter.util.common.Constant.NBU_CURRENCIES
-import com.jay.currencyconverter.util.common.Constant.PREVIOUS_OPENED_ACTIVITY
 import com.jay.currencyconverter.util.common.StorageManager
 import com.jay.currencyconverter.util.ui.LineChartSettings
 import com.jay.currencyconverter.util.ui.RecyclerViewTouchItemListener
 import kotlinx.android.synthetic.main.activity_nbu.*
+import kotlinx.android.synthetic.main.default_toolbar.*
 import kotlinx.android.synthetic.main.layout_currency_settings.*
 import javax.inject.Inject
 
@@ -55,14 +54,10 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
     lateinit var appbarViewModel: AppbarViewModel
 
     @Inject
-    lateinit var errorDialog: ErrorDialog
-
-    @Inject
     lateinit var layoutParamsAnimation: LayoutParamsAnimation
 
-    @Inject
-    lateinit var noCurrencyChosenDialog: NoCurrencyChosenDialog
-
+    private val errorDialog: ErrorDialog = ErrorDialog()
+    private val dialogBuilder: DialogBuilder = DialogBuilder()
     private val nbuCurrency = NbuCurrency()
     private var nbuDatabaseManager: NbuDatabaseManager = NbuDatabaseManager.instance
     private var isChartSettingsClosed = true
@@ -76,8 +71,6 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
         initContent(R.layout.activity_nbu, R.layout.default_toolbar)
 
         initBinding()
-
-        StorageManager.saveVariable(PREVIOUS_OPENED_ACTIVITY, NBU_ACTIVITY)
 
         setupNbuExchangeList()
         setupChartCurrenciesList()
@@ -103,6 +96,8 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
         lifecycle.addObserver(displayCurrenciesAdapter)
         lifecycle.addObserver(mainContentVM)
         lifecycle.addObserver(nbuDatabaseManager)
+
+        app_bar_title.text = resources.getString(R.string.nbu_exchange)
     }
 
     /**@see ErrorDialog.OnDialogButtonsClickListener.onReload*/
@@ -117,6 +112,18 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
 
     private fun onOpenCalculatorClick() {
         open_calculator_btn.setOnClickListener {
+            if (checkCurrenciesChoice()) {
+                dialogBuilder.create(context = this,
+                                     message = getString(R.string.two_currencies_should_chosen_message),
+                                     positiveBtnText = getString(R.string.setup_currency_list),
+                                     onPositive = {
+                                         openDisplayedCurrenciesSettings()
+                                         expandAppbar(delay = listAppearDuration / 2)
+                                     })
+                dialogBuilder.show(supportFragmentManager, this.localClassName)
+                return@setOnClickListener
+            }
+
             startActivity(Intent(this, CalculatorActivity::class.java)
                               .putParcelableArrayListExtra(NBU_CURRENCIES, nbuCurrency.currenciesList))
         }
@@ -124,11 +131,22 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
 
     private fun onChartSettingsClick() {
         chart_settings_button.setOnClickListener {
+            if (checkCurrenciesChoice(minimumCurrencies = 1)) {
+                dialogBuilder.create(context = this,
+                                     message = getString(R.string.one_currency_should_chosen_message),
+                                     positiveBtnText = getString(R.string.setup_currency_list),
+                                     onPositive = {
+                                         openDisplayedCurrenciesSettings()
+                                         expandAppbar(delay = listAppearDuration / 2)
+                                     })
+                dialogBuilder.show(supportFragmentManager, this.localClassName)
+                return@setOnClickListener
+            }
+
             if (isChartSettingsClosed) {
                 openChartSettings()
                 expandAppbar(delay = listAppearDuration / 2)
-            }
-            else {
+            } else {
                 closeChartSettings(delay = listAppearDuration)
                 collapseAppbar()
             }
@@ -171,12 +189,13 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
                         currenciesToDisplay.add(it.key)
                     }
                 }
+                Log.d("TAG", "onExchangeRateLoadFinish: " + currenciesToDisplay.size)
                 nbuExchangeAdapter.setItems(currenciesToDisplay)
                 chartCurrenciesAdapter.setItems(currenciesToDisplay)
-                nbuCurrency.currenciesList.clear()
-                nbuCurrency.currenciesList.addAll(currenciesToDisplay)
+                nbuCurrency.currenciesList.apply { clear(); addAll(currenciesToDisplay) }
             }
             else {
+                Log.d("TAG", "onExchangeRateLoadFinish:error " + result.error?.message)
                 errorDialog.show(supportFragmentManager, this.localClassName)
             }
         })
@@ -228,6 +247,10 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
         displayed_currencies_list.layoutManager = LinearLayoutManager(this)
         displayed_currencies_list.addOnItemTouchListener(RecyclerViewTouchItemListener.listener)
         displayed_currencies_list.adapter = displayCurrenciesAdapter
+    }
+
+    private fun checkCurrenciesChoice(minimumCurrencies: Int = 2): Boolean {
+        return nbuCurrency.currenciesList.size < minimumCurrencies
     }
 
     private fun expandAppbar(delay: Long = 0) {
@@ -302,6 +325,7 @@ class NbuActivity : NavigationActivity(), ErrorDialog.OnDialogButtonsClickListen
             else -> throw IllegalArgumentException("unknown type")
         }
     }
+
 
     companion object {
         private const val CHART_SETTINGS_TRANSITION = 0

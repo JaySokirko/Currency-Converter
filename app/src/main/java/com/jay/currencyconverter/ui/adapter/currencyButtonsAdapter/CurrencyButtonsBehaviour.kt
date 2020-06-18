@@ -7,18 +7,20 @@ import com.jay.currencyconverter.util.common.Constant.CANCEL_ALL_CURRENCY_CHOICE
 import com.jay.currencyconverter.util.common.Constant.CANCEL_BASE_CURRENCY_CHOICE
 import com.jay.currencyconverter.util.common.Constant.CANCEL_CONVERSION_CURRENCY_CHOICE
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
 class CurrencyButtonsBehaviour {
 
     var baseButtons: MutableList<CustomMaterialButton> = mutableListOf()
     var conversionButtons: MutableList<CustomMaterialButton> = mutableListOf()
+    var isConversionButtonsShouldBeEnabled = false
 
     private val disposable = CompositeDisposable()
     private var baseBtn: CustomMaterialButton? = null
     private var conversionBtn: CustomMaterialButton? = null
 
     init {
-        val subscribe = CalculatorActivityViewModel.cancelBtnClickObserver.subscribe {
+        val subscribe: Disposable = CalculatorActivityViewModel.cancelBtnClickObserver.subscribe {
             when (it) {
                 CANCEL_ALL_CURRENCY_CHOICE -> {
                     setNoPressedState(conversionButtons)
@@ -48,7 +50,7 @@ class CurrencyButtonsBehaviour {
     }
 
     fun setup() {
-        disableButtons(conversionButtons)
+        if (!isConversionButtonsShouldBeEnabled) disableButtons(conversionButtons)
     }
 
     fun onBaseButtonClick(button: View) {
@@ -93,12 +95,14 @@ class CurrencyButtonsBehaviour {
                 enableButtonsBeside(conversionButtons, conversionBtn)
                 getBaseOppositeBtn()?.disable()
                 getConversionOppositeBtn()?.disable()
+                isConversionButtonsShouldBeEnabled = true
             }
             else {
                 setNoPressedState(conversionButtons)
                 disableButtons(conversionButtons)
                 baseBtn = null
                 conversionBtn = null
+                isConversionButtonsShouldBeEnabled = false
             }
         }
     }

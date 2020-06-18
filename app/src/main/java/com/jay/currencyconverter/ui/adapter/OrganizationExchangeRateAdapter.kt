@@ -7,39 +7,63 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.customView.CurrencyView
 import com.jay.currencyconverter.model.exchangeRate.organization.CommonOrganization
+import com.jay.currencyconverter.ui.adapter.diffUtil.OrganizationDiffUtil
 import com.jay.currencyconverter.ui.adapter.viewHolder.BaseViewHolder
+import com.jay.currencyconverter.util.common.Filter
+import kotlinx.coroutines.*
 
 class OrganizationExchangeRateAdapter : RecyclerView.Adapter<BaseViewHolder<CommonOrganization>>() {
 
-    private val organizationList: MutableList<CommonOrganization> = ArrayList()
-
     val clickEvent: MutableLiveData<CommonOrganization> = MutableLiveData()
+
+    private val initialOrganizationList: MutableList<CommonOrganization> = mutableListOf()
+    private val filteredOrganizationList: MutableList<CommonOrganization> = mutableListOf()
+    private val adapterJob: CompletableJob = Job()
+    private val uiScope: CoroutineScope = CoroutineScope(Dispatchers.Main + adapterJob)
+    private val diffUtil = OrganizationDiffUtil()
+    private val filter: Filter<CommonOrganization> = Filter()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<CommonOrganization> {
         val view: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.list_bank_exhange_rate, parent, false)
+            .inflate(R.layout.list_organizations, parent, false)
 
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder<CommonOrganization>, position: Int) {
-        holder.bind(organizationList[position])
+        holder.bind(filteredOrganizationList[position])
     }
 
-    override fun getItemCount(): Int = organizationList.size
+    override fun getItemCount(): Int = filteredOrganizationList.size
 
     override fun getItemId(position: Int): Long = position.toLong()
 
     override fun getItemViewType(position: Int): Int = position
 
     fun setItems(organizations: List<CommonOrganization?>) {
-        organizationList.clear()
-        organizationList.addAll(organizations.filterNotNull())
+        initialOrganizationList.apply { clear(); addAll(organizations.filterNotNull()) }
+        filteredOrganizationList.apply { clear(); addAll(organizations.filterNotNull()) }
         notifyDataSetChanged()
+    }
+
+    fun filter(search: String) {
+        val filteredResult: MutableList<CommonOrganization> =
+            filter.getFilteredResult(search, initialOrganizationList)
+            { organization: CommonOrganization ->
+                organization.title?.toLowerCase()?.contains(search.toLowerCase()) ?: false
+            }
+        setFilteredResult(filteredResult)
+    }
+
+    private fun setFilteredResult(organizations: List<CommonOrganization?>) {
+        diffUtil.setData(oldList = filteredOrganizationList, newList = organizations.filterNotNull())
+        filteredOrganizationList.apply { clear(); addAll(organizations.filterNotNull()) }
+        DiffUtil.calculateDiff(diffUtil).dispatchUpdatesTo(this)
     }
 
     inner class ViewHolder(itemView: View) : BaseViewHolder<CommonOrganization>(itemView) {
@@ -50,7 +74,7 @@ class OrganizationExchangeRateAdapter : RecyclerView.Adapter<BaseViewHolder<Comm
 
         init {
             itemView.setOnClickListener {
-                clickEvent.postValue(organizationList[layoutPosition])
+                clickEvent.postValue(filteredOrganizationList[layoutPosition])
             }
         }
 
@@ -79,5 +103,14 @@ class OrganizationExchangeRateAdapter : RecyclerView.Adapter<BaseViewHolder<Comm
             bankTitle.text = null
             container.removeAllViews()
         }
+
+        private suspend fun create() {
+
+        }
+    }
+
+    fun onDestroy(){
+        adapterJob.cancel()
+        uiScope.cancel()
     }
 }

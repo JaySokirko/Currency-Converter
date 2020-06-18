@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/draw_header_parent"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
+    android:background="@drawable/gradient_list_anim"
     android:padding="@dimen/x4"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    android:background="@drawable/gradient_list_anim">
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/app_bar_title"
@@ -28,9 +27,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/x"
+        android:text="Powered by Jay Sokyrko"
         android:textColor="@color/white"
         android:textSize="@dimen/text_x7"
-        android:text="Powered by Jay Sokyrko"
         app:layout_constraintStart_toStartOf="@+id/app_bar_title"
         app:layout_constraintTop_toBottomOf="@+id/app_bar_title" />
 
@@ -39,16 +38,16 @@
         android:layout_height="@dimen/x10"
         android:src="@drawable/ic_android"
         app:layout_constraintBottom_toTopOf="@+id/app_bar_title"
-        app:layout_constraintStart_toStartOf="@+id/app_bar_title"/>
+        app:layout_constraintStart_toStartOf="@+id/app_bar_title" />
 
     <TextView
         android:id="@+id/version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="v1.0.0"
         android:textColor="@color/white"
         android:textSize="@dimen/text_x6"
         app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:text="v1.0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

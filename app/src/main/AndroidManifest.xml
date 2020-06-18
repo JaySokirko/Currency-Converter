@@ -25,7 +25,8 @@
             android:name=".ui.calculatorActivity.CalculatorActivity"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
-        <activity android:name=".ui.organizationActivity.OrganizationActivity" />
+        <activity android:name=".ui.organizationActivity.OrganizationActivity"
+            android:windowSoftInputMode="stateHidden|adjustNothing"/>
 
         <activity android:name=".ui.nbuActivity.NbuActivity"/>
 

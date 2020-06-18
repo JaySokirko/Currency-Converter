@@ -15,6 +15,9 @@ object Constant {
     const val MAIN_CHECKBOX_CHECKED = "mainCheckBoxChecked"
     const val ERASE_ALL_HINT_ALREADY_SHOWN = "eraseHintAlreadyShown"
     const val PREVIOUS_OPENED_ACTIVITY = "previousOpenedActivity"
+    const val SELECTED_LANGUAGE = "selectedLanguage"
+    const val ENGLISH_LANGUAGE = "en"
+    const val UKRAINIAN_LANGUAGE = "default"
 
     const val CURRENCIES_NOT_CHOSEN = 0
     const val CURRENCIES_CHOSEN = 1

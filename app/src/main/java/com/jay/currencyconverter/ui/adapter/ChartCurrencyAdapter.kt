@@ -9,7 +9,7 @@ import com.google.android.material.checkbox.MaterialCheckBox
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
 import com.jay.currencyconverter.ui.adapter.viewHolder.BaseViewHolder
-import com.jay.currencyconverter.ui.adapter.viewHolder.NbuViewHolder
+import com.jay.currencyconverter.ui.adapter.viewHolder.CurrencyBaseViewHolder
 import com.jay.currencyconverter.util.common.Constant.LAST_CHECKED_POSITION
 import com.jay.currencyconverter.util.common.StorageManager
 
@@ -45,7 +45,7 @@ class ChartCurrencyAdapter : RecyclerView.Adapter<BaseViewHolder<NbuCurrency>>()
         notifyDataSetChanged()
     }
 
-    private inner class ChartCurrencyVH(itemView: View) : NbuViewHolder(itemView) {
+    private inner class ChartCurrencyVH(itemView: View) : CurrencyBaseViewHolder(itemView) {
 
         override fun bind(item: NbuCurrency) {
             super.bind(item)

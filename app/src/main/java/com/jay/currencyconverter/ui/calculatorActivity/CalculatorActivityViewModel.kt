@@ -323,7 +323,7 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver,
                                                    enteredValue.toBigDecimal())
 
             result.set(DecimalFormat(context.resources.getString(R.string.numbers_pattern))
-                           .format(calculatedValue))
+                           .format(calculatedValue).replace("," ," "))
         }
     }
 
@@ -337,7 +337,7 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver,
                                                    inputValue.toBigDecimal())
 
             result.set(DecimalFormat(context.resources.getString(R.string.numbers_pattern))
-                           .format(calculatedValue))
+                           .format(calculatedValue).replace(",", " "))
         }
     }
 

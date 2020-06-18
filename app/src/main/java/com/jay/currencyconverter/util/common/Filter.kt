@@ -1,11 +1,6 @@
 package com.jay.currencyconverter.util.common
 
-import android.content.Context
-import com.jay.currencyconverter.BaseApplication
-
 class Filter<T> {
-
-    val context: Context = BaseApplication.baseComponent.application.baseContext
 
     fun getFilteredResult(
         search: String,

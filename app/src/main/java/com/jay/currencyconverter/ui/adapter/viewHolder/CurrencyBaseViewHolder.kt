@@ -7,7 +7,7 @@ import com.google.android.material.checkbox.MaterialCheckBox
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
 
-open class NbuViewHolder(itemView: View) : BaseViewHolder<NbuCurrency>(itemView) {
+open class CurrencyBaseViewHolder(itemView: View) : BaseViewHolder<NbuCurrency>(itemView) {
 
     protected val currencyIcon: AppCompatImageView = itemView.findViewById(R.id.currency_image)
     protected val currencyAbr: AppCompatTextView = itemView.findViewById(R.id.currency_abr)

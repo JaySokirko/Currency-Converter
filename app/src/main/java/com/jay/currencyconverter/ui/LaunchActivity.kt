@@ -1,6 +1,8 @@
 package com.jay.currencyconverter.ui
 
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.jay.currencyconverter.ui.nbuActivity.NbuActivity
@@ -16,8 +18,16 @@ class LaunchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         when (StorageManager.getVariable(PREVIOUS_OPENED_ACTIVITY, default = NBU_ACTIVITY)) {
-            NBU_ACTIVITY -> startActivity(Intent(this, NbuActivity::class.java))
-            ORGANIZATION_ACTIVITY -> startActivity(Intent(this, OrganizationActivity::class.java))
+            NBU_ACTIVITY -> {
+                startActivity(Intent(this, NbuActivity::class.java)
+                                  .addFlags(FLAG_ACTIVITY_CLEAR_TASK or
+                                                    FLAG_ACTIVITY_NEW_TASK))
+            }
+            ORGANIZATION_ACTIVITY -> {
+                startActivity(Intent(this, OrganizationActivity::class.java)
+                                  .addFlags(FLAG_ACTIVITY_CLEAR_TASK or
+                                                    FLAG_ACTIVITY_NEW_TASK))
+            }
         }
     }
 }
