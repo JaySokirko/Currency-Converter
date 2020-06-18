@@ -3,18 +3,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/main_group"
+        android:checkableBehavior="single">
         <item
+            android:checkable="true"
             android:id="@+id/nbu"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/nbu" />
+            android:icon="@drawable/ic_nbu_menu"
+            android:title="@string/nbu_exchange" />
         <item
-            android:id="@+id/bank"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/bank" />
-        <item
-            android:id="@+id/news"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/news" />
+            android:checkable="true"
+            android:id="@+id/organization"
+            android:icon="@drawable/ic_money"
+            android:title="@string/organization_exchange" />
     </group>
+
+    <item android:title="Язык">
+        <menu
+            android:id="@+id/language"
+            android:checkableBehavior="all">
+            <item
+                android:id="@+id/ua_lang"
+                android:icon="@drawable/ic_ukraine_flag"
+                android:title="Ukrainian" />
+            <item
+                android:id="@+id/en_lang"
+                android:icon="@drawable/ic_usa_flag"
+                android:title="English" />
+        </menu>
+    </item>
+
+    <item
+        android:checkable="false"
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_settings_menu"
+        android:title="@string/action_settings" />
+
+
 </menu>

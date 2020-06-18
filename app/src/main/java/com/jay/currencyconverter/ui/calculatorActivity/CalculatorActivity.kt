@@ -149,7 +149,7 @@ class CalculatorActivity : AppCompatActivity() {
     }
 
     private fun observeCurrenciesChoice() {
-        val duration = resources.getInteger(R.integer.durationX2).toLong()
+        val duration: Long = resources.getInteger(R.integer.durationX2).toLong()
 
         calculatorVM.onCurrenciesChosenObserver.observe(this, Observer {
              when (it) {
@@ -210,7 +210,7 @@ class CalculatorActivity : AppCompatActivity() {
 
     private fun smoothScrollToPosition(position: Int) {
         SmoothScroller.getSmoothScroller().targetPosition = position
-        linearLayoutManager.startSmoothScroll(SmoothScroller.getSmoothScroller());
+        linearLayoutManager.startSmoothScroll(SmoothScroller.getSmoothScroller())
     }
 
 }

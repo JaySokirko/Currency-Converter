@@ -28,6 +28,7 @@ class MainContentViewModel : BaseNbuViewModel() {
 
     fun getExchangeRate() {
         progressVisibility.set(View.VISIBLE)
+        Log.d(TAG, "getExchangeRate: ")
 
         val subscribe: Disposable = nbuExchangeRate.getExchangeRate()
             .observeOn(AndroidSchedulers.mainThread())
@@ -43,10 +44,12 @@ class MainContentViewModel : BaseNbuViewModel() {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     private fun onResume() {
+        Log.d(TAG, "onResume: ")
         onCurrenciesToDisplayPrepared()
     }
 
     private fun onExchangeRateLoadFinished(result: List<NbuCurrency>) {
+        Log.d(TAG, "view model onExchangeRateLoadFinished: " + result.size)
         nbuDataBaseManager.putData(result)
 
         result.find { it.currencyAbbreviation == context.resources.getString(R.string.USD) }?.let {usdCurrency ->
@@ -59,6 +62,7 @@ class MainContentViewModel : BaseNbuViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {listToDisplay ->
+                Log.d(TAG, "onCurrenciesToDisplayPrepared: " +  listToDisplay.size)
                 exchangeRateObserver.postValue(ResponseWrapper(listToDisplay))
                 progressVisibility.set(View.GONE)
             }
@@ -69,6 +73,7 @@ class MainContentViewModel : BaseNbuViewModel() {
     private fun onExchangeRateLoadError(error: Throwable) {
         if (isFirstRequest) {
             ConnectionErrorHandler.onSslHandshakeAborted(error) {
+                Log.d(TAG, "onExchangeRateLoadError: " + error.message)
                 getExchangeRate()
                 isFirstRequest = false
             }

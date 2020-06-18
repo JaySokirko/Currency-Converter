@@ -74,6 +74,7 @@ class LineChartSettings(
     private fun setupLineData() {
         lineDataSet.apply {
             valueTextSize = 12f
+            valueTextColor = baseContext.resources.getColor(R.color.colorPrimaryDark)
             setDrawFilled(true)
             fillDrawable = baseContext.resources.getDrawable(R.drawable.line_chart_background)
             lineWidth = 0.5f

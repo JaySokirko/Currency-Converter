@@ -168,9 +168,7 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver,
         conversionCurrencyChangeListener.value = null
     }
 
-    /**
-     * @see ValueChangeListener.OnValueChangeListener.onChange
-     */
+    /**@see ValueChangeListener.OnValueChangeListener.onChange*/
     override fun onChange() {
         isCurrenciesChosen.set(false)
 
@@ -325,7 +323,7 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver,
                                                    enteredValue.toBigDecimal())
 
             result.set(DecimalFormat(context.resources.getString(R.string.numbers_pattern))
-                           .format(calculatedValue))
+                           .format(calculatedValue).replace("," ," "))
         }
     }
 
@@ -339,7 +337,7 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver,
                                                    inputValue.toBigDecimal())
 
             result.set(DecimalFormat(context.resources.getString(R.string.numbers_pattern))
-                           .format(calculatedValue))
+                           .format(calculatedValue).replace(",", " "))
         }
     }
 
