@@ -49,6 +49,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:focusable="true"
+                    android:textSize="@dimen/text_x8"
                     android:focusableInTouchMode="true"
                     android:imeOptions="actionDone"
                     android:singleLine="true" />
@@ -84,16 +85,19 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/x2"
                 android:text="@string/exchange_rate"
+                android:textSize="@dimen/text_x8"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/call_phone_btn" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/exchange_rate"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/x"
                 android:text="@={calculator.exchangeRateText}"
+                android:textSize="@dimen/text_x8"
                 app:layout_constraintBottom_toBottomOf="@+id/exchange_rate_title"
+                app:layout_constraintEnd_toEndOf="@+id/guideline_2"
                 app:layout_constraintStart_toEndOf="@+id/exchange_rate_title"
                 app:layout_constraintTop_toTopOf="@+id/exchange_rate_title"
                 tools:text="0.335" />
@@ -105,16 +109,20 @@
                 android:layout_marginStart="@dimen/x2"
                 android:layout_marginTop="@dimen/x2"
                 android:text="@string/sum"
+                android:textSize="@dimen/text_x8"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/exchange_rate_title" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/input_value"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/x"
+                android:layout_marginEnd="8dp"
                 android:text="@={calculator.enteredValue}"
+                android:textSize="@dimen/text_x8"
                 app:layout_constraintBottom_toBottomOf="@+id/input_value_title"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/input_value_title"
                 app:layout_constraintTop_toTopOf="@+id/input_value_title"
                 tools:text="123.41" />
@@ -126,43 +134,62 @@
                 android:layout_marginStart="@dimen/x2"
                 android:layout_marginTop="@dimen/x2"
                 android:text="@string/result"
+                android:textSize="@dimen/text_x8"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/input_value_title" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/result"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/x"
+                android:layout_marginEnd="8dp"
                 android:text="@{calculator.result}"
+                android:textSize="@dimen/text_x8"
                 app:layout_constraintBottom_toBottomOf="@+id/result_title"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/result_title"
                 app:layout_constraintTop_toTopOf="@+id/result_title"
                 tools:text="123.456" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline"
+                android:id="@+id/guideline_centre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.5" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.6" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.9" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/organization_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/x2"
-                android:layout_marginEnd="@dimen/x"
+                android:layout_marginEnd="4dp"
                 android:text="@{calculator.organizationTitleText}"
+                android:textSize="@dimen/text_x8"
                 app:layout_constraintBottom_toBottomOf="@+id/call_phone_btn"
-                app:layout_constraintEnd_toStartOf="@+id/guideline"
+                app:layout_constraintEnd_toStartOf="@+id/call_phone_btn"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/call_phone_btn"
                 tools:text="Organization title" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/call_phone_btn"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/x2"
                 android:layout_marginEnd="@dimen/x2"
@@ -172,6 +199,7 @@
                 app:icon="@drawable/ic_phone_call"
                 app:iconGravity="end"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/guideline_centre"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="+380633535751" />
 
@@ -207,7 +235,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/cancel_all_btn"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/x2"
                 android:layout_marginBottom="@dimen/x"
@@ -218,7 +246,8 @@
                 app:iconGravity="end"
                 app:isVisibleAnimated="@{calculator.isCancelAllBtnVisibility()}"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/guideline_1" />
         </androidx.constraintlayout.motion.widget.MotionLayout>
 
         <androidx.constraintlayout.widget.Guideline

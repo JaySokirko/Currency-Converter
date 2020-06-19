@@ -54,6 +54,7 @@
                             android:layout_height="wrap_content"
                             android:clickable="true"
                             android:focusable="true"
+                            android:textSize="@dimen/text_x8"
                             android:focusableInTouchMode="true"
                             android:imeOptions="actionDone"
                             android:singleLine="true" />

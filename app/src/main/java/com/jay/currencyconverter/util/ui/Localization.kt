@@ -18,10 +18,16 @@ object Localization {
     fun setLocale(context: Context, language: String)  {
         StorageManager.saveVariable(SELECTED_LANGUAGE, language)
 
-         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            updateResources(context, language)
-        } else {
-            updateResourcesLegacy(context, language)
+        when {
+             Build.MODEL.startsWith("SM-A30") -> {
+                updateResourcesLegacy(context, language)
+            }
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> {
+                updateResources(context, language)
+            }
+            else -> {
+                updateResourcesLegacy(context, language)
+            }
         }
     }
 
@@ -30,21 +36,19 @@ object Localization {
     }
 
     @TargetApi(Build.VERSION_CODES.N)
-    private fun updateResources(context: Context, language: String): Context {
+    private fun updateResources(context: Context, language: String) {
         val locale = Locale(language)
         Locale.setDefault(locale)
         val configuration: Configuration = context.resources.configuration
         configuration.setLocale(locale)
-        return context.createConfigurationContext(configuration)
+        context.createConfigurationContext(configuration)
     }
 
-    private fun updateResourcesLegacy(context: Context, language: String): Context {
+    private fun updateResourcesLegacy(context: Context, language: String) {
         val locale = Locale(language)
         Locale.setDefault(locale)
-        val resources: Resources = context.resources
-        val configuration: Configuration = resources.configuration
+        val configuration: Configuration = context.resources.configuration
         configuration.locale = locale
-        resources.updateConfiguration(configuration, resources.displayMetrics)
-        return context
+        context.resources.updateConfiguration(configuration, context.resources.displayMetrics)
     }
 }

@@ -13,7 +13,8 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.jay.currencyconverter.BaseApplication
 import com.jay.currencyconverter.R
-import com.jay.currencyconverter.util.common.DateManager
+import com.jay.currencyconverter.util.common.DateInitializer
+
 
 /**
  * Documentation: https://weeklycoding.com/mpandroidchart-documentation/
@@ -22,10 +23,11 @@ class LineChartSettings(
     private val lineChart: LineChart,
     private val exchangeRateList: MutableList<Double>) {
 
-    private val baseContext: Context = BaseApplication.baseComponent.application.baseContext
+    private val context: Context = BaseApplication.baseComponent.application.applicationContext
     private val xAxis: XAxis = lineChart.xAxis
     private val yAxis: YAxis = lineChart.axisLeft
     private val lineDataSet = LineDataSet(null, null)
+    private val scale = context.resources.displayMetrics.scaledDensity;
 
     init {
         setupLineChart()
@@ -72,14 +74,16 @@ class LineChartSettings(
     }
 
     private fun setupLineData() {
+        val textSize = context.resources.getDimension(R.dimen.text_x7) / scale
+
         lineDataSet.apply {
-            valueTextSize = 12f
-            valueTextColor = baseContext.resources.getColor(R.color.colorPrimaryDark)
+            valueTextSize = textSize
+            valueTextColor = context.resources.getColor(R.color.colorPrimaryDark)
             setDrawFilled(true)
-            fillDrawable = baseContext.resources.getDrawable(R.drawable.line_chart_background)
+            fillDrawable = context.resources.getDrawable(R.drawable.line_chart_background)
             lineWidth = 0.5f
-            color = baseContext.resources.getColor(R.color.colorAccent)
-            setCircleColor(baseContext.resources.getColor(R.color.colorAccent))
+            color = context.resources.getColor(R.color.colorAccent)
+            setCircleColor(context.resources.getColor(R.color.colorAccent))
             valueFormatter = DefaultValueFormatter(4)
             values = setupDataValues()
         }
@@ -101,11 +105,11 @@ class LineChartSettings(
     class XAxisValueFormatter : ValueFormatter() {
         override fun getFormattedValue(value: Float): String {
             return when (value) {
-                0f -> DateManager.dayNameList[4]
-                1f -> DateManager.dayNameList[3]
-                2f -> DateManager.dayNameList[2]
-                3f -> DateManager.dayNameList[1]
-                4f -> DateManager.dayNameList[0]
+                0f -> DateInitializer.getDefaultDayNameList()[4]
+                1f -> DateInitializer.getDefaultDayNameList()[3]
+                2f -> DateInitializer.getDefaultDayNameList()[2]
+                3f -> DateInitializer.getDefaultDayNameList()[1]
+                4f -> DateInitializer.getDefaultDayNameList()[0]
                 else -> throw IllegalArgumentException("Only the following values are available: " +
                         "0,1,2,3,4")
             }

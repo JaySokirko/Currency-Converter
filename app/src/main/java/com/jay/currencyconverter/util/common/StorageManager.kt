@@ -7,7 +7,8 @@ import com.jay.currencyconverter.util.common.Constant.COMMON
 
 object StorageManager {
 
-    private val context: Context = BaseApplication.baseComponent.application.baseContext
+    private val context: Context = BaseApplication.baseComponent.application.applicationContext
+
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences(COMMON, Context.MODE_PRIVATE)
 

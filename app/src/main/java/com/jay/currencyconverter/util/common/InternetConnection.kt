@@ -1,23 +1,24 @@
 package com.jay.currencyconverter.util.common
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkInfo
-import android.os.Build
 import com.jay.currencyconverter.BaseApplication
-//todo apply it
+import com.jay.currencyconverter.util.common.Constant.ABOVE_API_22
+
 object InternetConnection {
 
-    val context: Context = BaseApplication.baseComponent.application.baseContext
+    val context: Context = BaseApplication.baseComponent.application.applicationContext
 
     private val connectivityManager: ConnectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     
+    @SuppressLint("NewApi")
     fun isInternetConnectionEnabled(): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
+        if (ABOVE_API_22) {
             val network: Network = connectivityManager.activeNetwork ?: return false
 
             val networkCapabilities: NetworkCapabilities =

@@ -1,5 +1,7 @@
 package com.jay.currencyconverter.util.common
 
+import android.os.Build
+
 object Constant {
     const val BANKS_EXCHANGE_URL = "https://resources.finance.ua"
     const val NBU_URL = "https://bank.gov.ua"
@@ -13,11 +15,12 @@ object Constant {
     const val CURRENCY_ABR_DEFAULT = "USD"
     const val LAST_CHECKED_POSITION = "lastCheckedPosition"
     const val MAIN_CHECKBOX_CHECKED = "mainCheckBoxChecked"
-    const val ERASE_ALL_HINT_ALREADY_SHOWN = "eraseHintAlreadyShown"
     const val PREVIOUS_OPENED_ACTIVITY = "previousOpenedActivity"
     const val SELECTED_LANGUAGE = "selectedLanguage"
     const val ENGLISH_LANGUAGE = "en"
     const val UKRAINIAN_LANGUAGE = "default"
+    const val ERASE_ALL_HINT = "eraseHintAlreadyShown"
+    const val OPEN_CALCULATOR_HINT_NOT_SHOWN = "openCalculatorHint"
 
     const val CURRENCIES_NOT_CHOSEN = 0
     const val CURRENCIES_CHOSEN = 1
@@ -25,7 +28,10 @@ object Constant {
     const val CANCEL_BASE_CURRENCY_CHOICE = 1
     const val CANCEL_CONVERSION_CURRENCY_CHOICE = 2
     const val NBU_ACTIVITY = 0
-    const val ORGANIZATION_ACTIVITY =1
+    const val ORGANIZATION_ACTIVITY = 1
+    const val SCROLL_BOTTOM = 1
 
     const val ERASE_HINT_SHOULD_BE_SHOWN = true
+
+    val ABOVE_API_22 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
 }

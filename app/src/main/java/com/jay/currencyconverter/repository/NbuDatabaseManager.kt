@@ -23,7 +23,7 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
     private val disposable = CompositeDisposable()
 
     init {
-        onDatabaseEntityUpdated()
+        publishDataBaseEntities()
     }
 
     fun putData(itemsList: List<NbuCurrency>) {
@@ -70,9 +70,7 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
             displayedCurrenciesList.put(currency, true)
         }
 
-        insertAll(entityList, onComplete = {
-            currenciesToDisplay.onNext(displayedCurrenciesList)
-        })
+        insertAll(entityList, onComplete = { currenciesToDisplay.onNext(displayedCurrenciesList) })
     }
 
     private fun onDatabaseIsNotEmpty(itemsList: List<NbuCurrency>, entityList: List<NbuEntity>) {
@@ -110,7 +108,7 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
                 it.currency.currencyAbbreviation == currency.currencyAbbreviation
             }
             if (entity == null){
-                entityToInsert.add(NbuEntity(currency, displayedCurrenciesList[currency]!!))
+                entityToInsert.add(NbuEntity(currency, displayedCurrenciesList[currency] ?: false))
             }
         }
 
@@ -124,9 +122,7 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
     private fun insertAll(entityToInsert: MutableList<NbuEntity>, onComplete: (() -> Unit)? = null) {
         val subscribe: Disposable = Completable.fromAction { database.insertAll(entityToInsert) }
             .subscribeOn(Schedulers.io())
-            .subscribe {
-                onComplete?.let { it() }
-            }
+            .subscribe { onComplete?.let { it() } }
 
         disposable.add(subscribe)
     }
@@ -134,15 +130,12 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
     private fun updateAll(entityToUpdate: List<NbuEntity>, onComplete: (() -> Unit)? = null) {
         val subscribe: Disposable = Completable.fromAction { database.updateAll(entityToUpdate) }
             .subscribeOn(Schedulers.io())
-            .subscribe {
-                onComplete?.let { it() }
-                onDatabaseEntityUpdated()
-            }
+            .subscribe { onComplete?.let { it(); publishDataBaseEntities() } }
 
         disposable.add(subscribe)
     }
 
-    private fun onDatabaseEntityUpdated() {
+    private fun publishDataBaseEntities() {
         val subscribe: Disposable = database.getAll()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { result: List<NbuEntity> ->
@@ -156,7 +149,7 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
                     }
                 }
 
-                Log.d(TAG, "onDatabaseEntityChanged: " + displayedCurrenciesList.size)
+                Log.d(TAG, "DB private onDatabaseEntityUpdated: " + displayedCurrenciesList.size)
                 currenciesToDisplay.onNext(displayedCurrenciesList)
             }
 

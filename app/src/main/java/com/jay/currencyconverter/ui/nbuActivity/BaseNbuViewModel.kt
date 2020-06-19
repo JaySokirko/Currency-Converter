@@ -16,7 +16,7 @@ open class BaseNbuViewModel : ViewModel(), LifecycleObserver {
 
     val nbuExchangeRate: NbuExchangeRate = NbuExchangeRate()
     val currencies: Currencies = Currencies()
-    val context: Context = BaseApplication.baseComponent.application.baseContext
+    val context: Context = BaseApplication.baseComponent.application.applicationContext
     val disposable = CompositeDisposable()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)

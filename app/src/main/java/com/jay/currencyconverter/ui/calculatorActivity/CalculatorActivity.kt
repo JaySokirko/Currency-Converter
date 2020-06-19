@@ -25,7 +25,7 @@ import com.jay.currencyconverter.ui.adapter.currencyButtonsAdapter.HorizontalCur
 import com.jay.currencyconverter.util.common.Constant.CURRENCIES
 import com.jay.currencyconverter.util.common.Constant.CURRENCIES_CHOSEN
 import com.jay.currencyconverter.util.common.Constant.CURRENCIES_NOT_CHOSEN
-import com.jay.currencyconverter.util.common.Constant.ERASE_ALL_HINT_ALREADY_SHOWN
+import com.jay.currencyconverter.util.common.Constant.ERASE_ALL_HINT
 import com.jay.currencyconverter.util.common.Constant.ERASE_HINT_SHOULD_BE_SHOWN
 import com.jay.currencyconverter.util.common.Constant.NBU_CURRENCIES
 import com.jay.currencyconverter.util.common.Constant.ORGANIZATION
@@ -135,7 +135,7 @@ class CalculatorActivity : AppCompatActivity() {
                                          Snackbar.LENGTH_INDEFINITE)
 
                 snackBar.setAction(android.R.string.ok) {
-                        StorageManager.saveVariable(ERASE_ALL_HINT_ALREADY_SHOWN, true)
+                        StorageManager.saveVariable(ERASE_ALL_HINT, true)
                 }.show()
             }
         })

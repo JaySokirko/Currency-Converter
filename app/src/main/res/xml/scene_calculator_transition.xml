@@ -34,11 +34,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/x2"
-            android:layout_marginEnd="@dimen/x"
             app:layout_constraintBottom_toBottomOf="@+id/call_phone_btn"
-            app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/call_phone_btn">
+            app:layout_constraintTop_toTopOf="@+id/call_phone_btn"
+            app:layout_constraintEnd_toStartOf="@+id/call_phone_btn"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp">
         </Constraint>
 
         <Constraint
@@ -66,12 +67,13 @@
             android:id="@+id/call_phone_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/x2"
             android:layout_marginEnd="@dimen/x2"
             app:icon="@drawable/ic_phone_call"
             app:iconGravity="end"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/x2"
+            app:layout_constraintStart_toEndOf="@id/guideline_centre" />
 
         <Constraint
             android:id="@+id/result_title"
@@ -92,6 +94,16 @@
             app:layout_constraintStart_toEndOf="@+id/result_title"
             app:layout_constraintTop_toTopOf="@+id/result_title" >
         </Constraint>
+        <Constraint
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/x"
+            android:layout_marginEnd="@dimen/x2"
+            android:alpha="0"
+            android:id="@+id/cancel_all_btn"
+            app:layout_constraintStart_toEndOf="@+id/guideline_1" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">

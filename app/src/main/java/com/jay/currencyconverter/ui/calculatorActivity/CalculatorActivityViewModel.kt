@@ -21,7 +21,7 @@ import com.jay.currencyconverter.util.common.Constant.CANCEL_BASE_CURRENCY_CHOIC
 import com.jay.currencyconverter.util.common.Constant.CANCEL_CONVERSION_CURRENCY_CHOICE
 import com.jay.currencyconverter.util.common.Constant.CURRENCIES_CHOSEN
 import com.jay.currencyconverter.util.common.Constant.CURRENCIES_NOT_CHOSEN
-import com.jay.currencyconverter.util.common.Constant.ERASE_ALL_HINT_ALREADY_SHOWN
+import com.jay.currencyconverter.util.common.Constant.ERASE_ALL_HINT
 import com.jay.currencyconverter.util.common.Constant.ERASE_HINT_SHOULD_BE_SHOWN
 import com.jay.currencyconverter.util.common.CurrencyCalculator
 import com.jay.currencyconverter.util.common.ObservableFieldWrapper
@@ -60,7 +60,7 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver,
     val baseCurrencyCancelBtnIcon: ObservableField<Drawable> = ObservableField()
     val conversionCurrencyCancelBtnIcon: ObservableField<Drawable> = ObservableField()
 
-    private val context: Context = BaseApplication.baseComponent.application.baseContext
+    private val context: Context = BaseApplication.baseComponent.application.applicationContext
     private val disposable = CompositeDisposable()
     private val baseCurrencyChangeListener: ValueChangeListener<Currency> = ValueChangeListener()
     private val conversionCurrencyChangeListener: ValueChangeListener<Currency> = ValueChangeListener()
@@ -291,7 +291,7 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver,
             enteredValue.setField(current.removeLastChar())
         }
 
-        if (!StorageManager.getVariable(ERASE_ALL_HINT_ALREADY_SHOWN, default = false)) {
+        if (!StorageManager.getVariable(ERASE_ALL_HINT, default = false)) {
             eraseHintShouldBeShown.postValue(ERASE_HINT_SHOULD_BE_SHOWN)
         }
 

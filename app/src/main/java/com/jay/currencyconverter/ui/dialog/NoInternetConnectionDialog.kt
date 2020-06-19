@@ -7,26 +7,30 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.jay.currencyconverter.R
+import kotlin.system.exitProcess
+
 
 class NoInternetConnectionDialog : DialogFragment() {
 
-    lateinit var clickListener: OnDialogButtonsClickListener
+    private lateinit var listener: OnDialogButtonsClickListener
 
     fun setOnDialogButtonsClickListener(listener: OnDialogButtonsClickListener) {
-        clickListener = listener
+        this.listener = listener
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(requireContext())
 
+        isCancelable = false
+
         builder.apply {
-            setTitle("No internet connection")
+            setTitle(getString(R.string.no_internet_connection))
 
             setIcon(ContextCompat.getDrawable(context, R.drawable.ic_no_internet))
 
-            setPositiveButton("Settings") { _, _ -> clickListener.openSettings() }
+            setPositiveButton(getString(R.string.open_settings)) { _, _ -> listener.openSettings() }
 
-            setNegativeButton("Exit") { _, _ -> clickListener.exit() }
+            setNegativeButton(getString(R.string.exit)) { _, _ -> exitProcess(0) }
         }
 
         return builder.create()
@@ -34,6 +38,5 @@ class NoInternetConnectionDialog : DialogFragment() {
 
     interface OnDialogButtonsClickListener {
         fun openSettings()
-        fun exit()
     }
 }

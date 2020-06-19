@@ -10,10 +10,7 @@ import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.ResponseWrapper
 import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
 import com.jay.currencyconverter.util.*
-import com.jay.currencyconverter.util.common.ConnectionErrorHandler
-import com.jay.currencyconverter.util.common.Constant
-import com.jay.currencyconverter.util.common.DateManager
-import com.jay.currencyconverter.util.common.StorageManager
+import com.jay.currencyconverter.util.common.*
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -55,7 +52,8 @@ class AppbarViewModel: BaseNbuViewModel() {
         StorageManager.saveVariable(Constant.CURRENCY_ABR, currencyAbbreviation)
 
         val zip: Observable<Unit> =
-            Observable.zip(nbuExchangeRate.createRequestList(currencyAbbreviation, DateManager.dateList))
+            Observable.zip(nbuExchangeRate.createRequestList(currencyAbbreviation,
+                                                             DateInitializer.getDefaultDateList()))
             { response ->
                 response.forEach { list: Any ->
                     listOfNbuLists.add(list as ArrayList<NbuCurrency>)
@@ -101,8 +99,6 @@ class AppbarViewModel: BaseNbuViewModel() {
         } else {
             chartExchangeRate.postValue(ResponseWrapper(error = error))
         }
-        //TODO remove
-        Log.d(TAG, "getPreviousExchangeRate: " + error.message)
     }
 
     private fun extractChartExchangeRate(list: MutableList<ArrayList<NbuCurrency>>): MutableList<Double> {

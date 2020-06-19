@@ -7,7 +7,7 @@ import com.jay.currencyconverter.BaseApplication
 
 object SmoothScroller {
 
-    private val context: Context = BaseApplication.baseComponent.application.baseContext
+    private val context: Context = BaseApplication.baseComponent.application.applicationContext
 
     private val smoothScroller: RecyclerView.SmoothScroller = object : LinearSmoothScroller(context) {
         override fun getVerticalSnapPreference(): Int = SNAP_TO_START

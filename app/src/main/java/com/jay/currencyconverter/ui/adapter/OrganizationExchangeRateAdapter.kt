@@ -6,7 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.OnLifecycleEvent
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.jay.currencyconverter.R
@@ -17,16 +20,18 @@ import com.jay.currencyconverter.ui.adapter.viewHolder.BaseViewHolder
 import com.jay.currencyconverter.util.common.Filter
 import kotlinx.coroutines.*
 
-class OrganizationExchangeRateAdapter : RecyclerView.Adapter<BaseViewHolder<CommonOrganization>>() {
+class OrganizationExchangeRateAdapter : RecyclerView.Adapter<BaseViewHolder<CommonOrganization>>(),
+    LifecycleObserver {
 
     val clickEvent: MutableLiveData<CommonOrganization> = MutableLiveData()
 
+
     private val initialOrganizationList: MutableList<CommonOrganization> = mutableListOf()
     private val filteredOrganizationList: MutableList<CommonOrganization> = mutableListOf()
+    private val filter: Filter<CommonOrganization> = Filter()
     private val adapterJob: CompletableJob = Job()
     private val uiScope: CoroutineScope = CoroutineScope(Dispatchers.Main + adapterJob)
     private val diffUtil = OrganizationDiffUtil()
-    private val filter: Filter<CommonOrganization> = Filter()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<CommonOrganization> {
         val view: View = LayoutInflater.from(parent.context)
@@ -80,23 +85,7 @@ class OrganizationExchangeRateAdapter : RecyclerView.Adapter<BaseViewHolder<Comm
 
         override fun bind(item: CommonOrganization) {
             clearViews()
-
-            bankTitle.text = item.title
-
-            item.currencies?.let { currencies ->
-
-                currencies.getAllNotNullCurrencies().forEach { currency ->
-
-                    val currencyView = CurrencyView(context)
-                        currencyView.apply {
-                        currency.getName(context)?.let { name -> setTitle(name) }
-                        currency.getImage(context)?.let { image -> setImage(image) }
-                        currency.bid?.let { bid -> setBid(bid) }
-                        currency.ask?.let { ask -> setAsk(ask) }
-                    }
-                    container.addView(currencyView)
-                }
-            }
+            uiScope.launch { prepareUi(item) }
         }
 
         private fun clearViews() {
@@ -104,13 +93,28 @@ class OrganizationExchangeRateAdapter : RecyclerView.Adapter<BaseViewHolder<Comm
             container.removeAllViews()
         }
 
-        private suspend fun create() {
+        private fun prepareUi(item: CommonOrganization) {
+            bankTitle.text = item.title
 
+            item.currencies?.let { currencies ->
+                currencies.getAllNotNullCurrencies().forEach { currency ->
+
+                    val currencyView = CurrencyView(context)
+                    currencyView.apply {
+                        currency.getName(context)?.let { name -> setTitle(name) }
+                        currency.bid?.let { bid -> setBid(bid) }
+                        currency.ask?.let { ask -> setAsk(ask) }
+                        currency.getImage(context)?.let { image -> setImage(image) }
+                    }
+                    container.addView(currencyView)
+                }
+            }
         }
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy(){
         adapterJob.cancel()
-        uiScope.cancel()
+        uiScope.coroutineContext.cancel()
     }
 }

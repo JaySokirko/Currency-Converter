@@ -4,17 +4,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
-import com.jay.currencyconverter.ui.adapter.viewHolder.BaseViewHolder
-import com.jay.currencyconverter.ui.adapter.viewHolder.CurrencyBaseViewHolder
+import com.jay.currencyconverter.ui.adapter.viewHolder.AnimatedViewHolder
+import com.jay.currencyconverter.ui.adapter.viewHolder.NbuCurrencyBaseViewHolder
 import com.jay.currencyconverter.util.common.Constant.LAST_CHECKED_POSITION
 import com.jay.currencyconverter.util.common.StorageManager
 
 
-class ChartCurrencyAdapter : RecyclerView.Adapter<BaseViewHolder<NbuCurrency>>() {
+class ChartCurrencyAdapter : AnimatedRecyclerAdapter<NbuCurrency>() {
 
     val chartCurrencyChosen: MutableLiveData<NbuCurrency> = MutableLiveData()
 
@@ -22,14 +21,14 @@ class ChartCurrencyAdapter : RecyclerView.Adapter<BaseViewHolder<NbuCurrency>>()
     private val currencyList: MutableList<NbuCurrency> = mutableListOf()
     private var currentChartCurrency: NbuCurrency? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<NbuCurrency> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnimatedViewHolder<NbuCurrency> {
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_currency_choice, parent, false)
 
         return ChartCurrencyVH(view)
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder<NbuCurrency>, position: Int) {
+    override fun onBindViewHolder(holder: AnimatedViewHolder<NbuCurrency>, position: Int) {
         holder.bind(currencyList[position])
     }
 
@@ -45,7 +44,7 @@ class ChartCurrencyAdapter : RecyclerView.Adapter<BaseViewHolder<NbuCurrency>>()
         notifyDataSetChanged()
     }
 
-    private inner class ChartCurrencyVH(itemView: View) : CurrencyBaseViewHolder(itemView) {
+    private inner class ChartCurrencyVH(itemView: View) : NbuCurrencyBaseViewHolder(itemView) {
 
         override fun bind(item: NbuCurrency) {
             super.bind(item)
@@ -55,6 +54,8 @@ class ChartCurrencyAdapter : RecyclerView.Adapter<BaseViewHolder<NbuCurrency>>()
                 currentChartCurrency = item
             }
             checkBoxList.add(checkBox)
+
+//            setAnimation(itemView, layoutPosition)
         }
 
         init {
@@ -63,15 +64,20 @@ class ChartCurrencyAdapter : RecyclerView.Adapter<BaseViewHolder<NbuCurrency>>()
                 setAllCheckboxUnchecked()
                 checkBox.isChecked = true
 
-                if (currentChartCurrency != currencyList[layoutPosition]) {
+                if (currentCurrencyNotSelected()) {
                     chartCurrencyChosen.postValue(currencyList[layoutPosition])
+                    currentChartCurrency = currencyList[layoutPosition]
                 }
-                currentChartCurrency = currencyList[layoutPosition]
             }
+        }
+
+        private fun currentCurrencyNotSelected(): Boolean{
+            return currentChartCurrency != currencyList[layoutPosition]
+        }
+
+        private fun setAllCheckboxUnchecked(){
+            checkBoxList.forEach { it.isChecked = false }
         }
     }
 
-    private fun setAllCheckboxUnchecked(){
-        checkBoxList.forEach { it.isChecked = false }
-    }
 }

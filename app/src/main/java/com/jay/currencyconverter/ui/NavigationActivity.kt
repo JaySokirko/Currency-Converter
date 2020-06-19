@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -19,33 +20,41 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.jay.currencyconverter.BuildConfig
 import com.jay.currencyconverter.R
+import com.jay.currencyconverter.ui.dialog.DialogBuilder
+import com.jay.currencyconverter.ui.dialog.ErrorDialog
+import com.jay.currencyconverter.ui.dialog.NoInternetConnectionDialog
 import com.jay.currencyconverter.ui.nbuActivity.NbuActivity
 import com.jay.currencyconverter.ui.organizationActivity.OrganizationActivity
-import com.jay.currencyconverter.util.common.Constant
 import com.jay.currencyconverter.util.common.Constant.ENGLISH_LANGUAGE
 import com.jay.currencyconverter.util.common.Constant.NBU_ACTIVITY
 import com.jay.currencyconverter.util.common.Constant.ORGANIZATION_ACTIVITY
 import com.jay.currencyconverter.util.common.Constant.PREVIOUS_OPENED_ACTIVITY
 import com.jay.currencyconverter.util.common.Constant.SELECTED_LANGUAGE
 import com.jay.currencyconverter.util.common.Constant.UKRAINIAN_LANGUAGE
+import com.jay.currencyconverter.util.common.InternetConnection
 import com.jay.currencyconverter.util.common.StorageManager
 import com.jay.currencyconverter.util.ui.Localization
 
 
 abstract class NavigationActivity : AppCompatActivity(),
-    NavigationView.OnNavigationItemSelectedListener {
+    NavigationView.OnNavigationItemSelectedListener,
+    NoInternetConnectionDialog.OnDialogButtonsClickListener {
 
-    protected lateinit var mainContentView: View
-    private lateinit var nawDrawer: DrawerLayout
-    private lateinit var inflater: LayoutInflater
-    private lateinit var navigationView: NavigationView
+    protected val errorDialog = ErrorDialog()
+    protected val noInternetConnectionDialog = NoInternetConnectionDialog()
+    protected val dialogBuilder: DialogBuilder = DialogBuilder()
+    protected var mainContentView: View? = null
+    private var nawDrawer: DrawerLayout? = null
+    private var inflater: LayoutInflater? = null
+    private var navigationView: NavigationView? = null
     private var backgroundAnimation: AnimationDrawable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_navigation)
 
-        Localization.setLocale(this, Localization.language);
+        Localization.setLocale(this, Localization.language)
+        noInternetConnectionDialog.setOnDialogButtonsClickListener(this)
 
         inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         nawDrawer = findViewById(R.id.drawer_layout)
@@ -86,20 +95,33 @@ abstract class NavigationActivity : AppCompatActivity(),
     }
 
     override fun onBackPressed() {
-        if (nawDrawer.isDrawerOpen(GravityCompat.START)) {
-            nawDrawer.closeDrawer(GravityCompat.START)
+        if (nawDrawer?.isDrawerOpen(GravityCompat.START) == true) {
+            nawDrawer?.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }
     }
 
+    /**@see NoInternetConnectionDialog.OnDialogButtonsClickListener.openSettings*/
+    override fun openSettings() {
+        startActivity(Intent(Settings.ACTION_SETTINGS))
+    }
+
+    protected fun checkInternetConnection(onIsConnected : () -> Unit) {
+        if (!InternetConnection.isInternetConnectionEnabled()){
+            noInternetConnectionDialog.show(supportFragmentManager, this.localClassName)
+        } else {
+            onIsConnected()
+        }
+    }
+
     protected fun initContent(contentLayoutId: Int, toolbarLayoutId: Int) {
         val mainContainer: FrameLayout = findViewById(R.id.main_container)
-        mainContentView = inflater.inflate(contentLayoutId, mainContainer, false)
+        mainContentView = inflater?.inflate(contentLayoutId, mainContainer, false)
         mainContainer.addView(mainContentView)
 
         val toolBarContainer: FrameLayout = findViewById(R.id.app_bar_container)
-        val toolBarContentView: View = inflater.inflate(toolbarLayoutId, toolBarContainer, false)
+        val toolBarContentView: View? = inflater?.inflate(toolbarLayoutId, toolBarContainer, false)
         toolBarContainer.addView(toolBarContentView)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
@@ -117,7 +139,7 @@ abstract class NavigationActivity : AppCompatActivity(),
             syncState()
         }
 
-        navigationView.apply {
+        navigationView?.apply {
             setNavigationItemSelectedListener(this@NavigationActivity)
             itemIconTintList = null
             menu.getItem(StorageManager.getVariable(PREVIOUS_OPENED_ACTIVITY,
@@ -126,10 +148,10 @@ abstract class NavigationActivity : AppCompatActivity(),
     }
 
     private fun initDrawerHeader( ) {
-        val headerView: View = navigationView.getHeaderView(0)
-        val parentView: ConstraintLayout = headerView.findViewById(R.id.draw_header_parent)
+        val headerView: View? = navigationView?.getHeaderView(0)
+        val parentView: ConstraintLayout? = headerView?.findViewById(R.id.draw_header_parent)
 
-        backgroundAnimation = parentView.background as AnimationDrawable
+        backgroundAnimation = parentView?.background as AnimationDrawable
         backgroundAnimation?.setEnterFadeDuration(5000)
         backgroundAnimation?.setExitFadeDuration(2000)
         backgroundAnimation?.start()
@@ -139,19 +161,19 @@ abstract class NavigationActivity : AppCompatActivity(),
 
     private fun launchNbuActivity() {
         StorageManager.saveVariable(PREVIOUS_OPENED_ACTIVITY, NBU_ACTIVITY)
-        nawDrawer.closeDrawer(GravityCompat.START)
+        nawDrawer?.closeDrawer(GravityCompat.START)
         startActivity(Intent(this, NbuActivity::class.java).addFlags(FLAG_ACTIVITY_SINGLE_TOP))
     }
 
     private fun launchOrganizationActivity() {
         StorageManager.saveVariable(PREVIOUS_OPENED_ACTIVITY, ORGANIZATION_ACTIVITY)
-        nawDrawer.closeDrawer(GravityCompat.START)
+        nawDrawer?.closeDrawer(GravityCompat.START)
         startActivity(Intent(this, OrganizationActivity::class.java)
                           .addFlags(FLAG_ACTIVITY_SINGLE_TOP))
     }
 
     private fun setEnglishLanguage() {
-        nawDrawer.closeDrawer(GravityCompat.START)
+        nawDrawer?.closeDrawer(GravityCompat.START)
 
         val englishAlreadyChosen: Boolean = StorageManager.getVariable(
             SELECTED_LANGUAGE, UKRAINIAN_LANGUAGE) == ENGLISH_LANGUAGE
@@ -163,7 +185,7 @@ abstract class NavigationActivity : AppCompatActivity(),
     }
 
     private fun setUkrainianLanguage() {
-        nawDrawer.closeDrawer(GravityCompat.START)
+        nawDrawer?.closeDrawer(GravityCompat.START)
 
         val ukrainianAlreadyChosen = StorageManager.getVariable(
             SELECTED_LANGUAGE, UKRAINIAN_LANGUAGE) == UKRAINIAN_LANGUAGE

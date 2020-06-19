@@ -29,7 +29,6 @@ class MainContentViewModel : BaseNbuViewModel() {
     fun getExchangeRate() {
         progressVisibility.set(View.VISIBLE)
         Log.d(TAG, "getExchangeRate: ")
-
         val subscribe: Disposable = nbuExchangeRate.getExchangeRate()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
@@ -44,36 +43,38 @@ class MainContentViewModel : BaseNbuViewModel() {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     private fun onResume() {
-        Log.d(TAG, "onResume: ")
         onCurrenciesToDisplayPrepared()
     }
 
     private fun onExchangeRateLoadFinished(result: List<NbuCurrency>) {
-        Log.d(TAG, "view model onExchangeRateLoadFinished: " + result.size)
         nbuDataBaseManager.putData(result)
 
         result.find { it.currencyAbbreviation == context.resources.getString(R.string.USD) }?.let {usdCurrency ->
             actualDate.set("${context.resources.getString(R.string.actual_date)} ${usdCurrency.exchangeDate}")
         }
+
+        progressVisibility.set(View.GONE)
+        Log.d(TAG, "onExchangeRateLoadFinished: ")
     }
 
     private fun onCurrenciesToDisplayPrepared() {
         val subscribe: Disposable = nbuDataBaseManager.currenciesToDisplay
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {listToDisplay ->
-                Log.d(TAG, "onCurrenciesToDisplayPrepared: " +  listToDisplay.size)
-                exchangeRateObserver.postValue(ResponseWrapper(listToDisplay))
-                progressVisibility.set(View.GONE)
-            }
+            .subscribe (
+                { exchangeRateObserver.postValue(ResponseWrapper(data = it))
+                    Log.d(TAG, "onCurrenciesToDisplayPrepared: result")},
+                { exchangeRateObserver.postValue(ResponseWrapper(error = it))
+                    Log.d(TAG, "onCurrenciesToDisplayPrepared: error")})
 
         disposable.add(subscribe)
     }
 
     private fun onExchangeRateLoadError(error: Throwable) {
+        progressVisibility.set(View.GONE)
+
         if (isFirstRequest) {
             ConnectionErrorHandler.onSslHandshakeAborted(error) {
-                Log.d(TAG, "onExchangeRateLoadError: " + error.message)
                 getExchangeRate()
                 isFirstRequest = false
             }
@@ -81,7 +82,7 @@ class MainContentViewModel : BaseNbuViewModel() {
         else {
             exchangeRateObserver.postValue(ResponseWrapper(error = error))
         }
-        Log.d(TAG, "onExchangeRateLoadError: " + error.message)
+        Log.d(TAG, "onExchangeRateLoadError: ")
     }
 
 

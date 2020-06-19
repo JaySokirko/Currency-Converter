@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- x = 4dp -->
+
     <dimen name="x">4dp</dimen>
     <dimen name="x2">8dp</dimen>
     <dimen name="x3">12dp</dimen>
@@ -17,7 +17,7 @@
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="app_bar_expanded_height">280dp</dimen>
 
-    <!-- text_x = 2dp -->
+    <dimen name="text_x5">10dp</dimen>
     <dimen name="text_x6">12dp</dimen>
     <dimen name="text_x7">14dp</dimen>
     <dimen name="text_x8">16dp</dimen>
@@ -29,14 +29,14 @@
     <dimen name="text_x14">28dp</dimen>
     <dimen name="text_x15">30dp</dimen>
 
-    <!--durationX = 100-->
+
     <integer name="durationX2">200</integer>
     <integer name="durationX4">400</integer>
     <integer name="calculator_max_input_values">9</integer>
     <integer name="text_increase_duration">300</integer>
     <integer name="text_reduce_duration">400</integer>
 
-    <item name="text_increase_step" format="float" type="dimen">2.5</item>
+    <item name="text_increase_step" format="float" type="dimen">2.0</item>
 
 
 

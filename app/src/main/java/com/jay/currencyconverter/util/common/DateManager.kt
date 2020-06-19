@@ -9,18 +9,17 @@ import java.util.*
 
 object DateManager {
 
-    val dateList: MutableList<String> = mutableListOf()
-    val dayNameList: MutableList<String> = mutableListOf()
-    val dateFormat: SimpleDateFormat = SimpleDateFormat("yyyyMMdd")
+    var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyyMMdd")
+    val currentDate: String = dateFormat.format(Date())
 
-    private val currentDate: String = dateFormat.format(Date())
-    private val context: Context = BaseApplication.baseComponent.application.baseContext
+    private val context: Context = BaseApplication.baseComponent.application.applicationContext
 
     /**
      * Allows to get a short weekday name depends on an input date
      * @throws IllegalStateException
-     * @param date the calendar date in which needs get a short weekday name
-     * @param dateFormat the format which will be parsing to get a weekday. For instance "dd/MM/yyyy"
+     * @param date the calendar date in which needs get the short weekday name
+     * @param dateFormat the format which will be parsing to get the weekday.
+     * For instance "dd/MM/yyyy"
      * @return the short weekday name
      */
     @Throws(exceptionClasses = [IllegalStateException::class])
@@ -50,79 +49,5 @@ object DateManager {
         val calendar: Calendar = Calendar.getInstance()
         calendar.add(Calendar.DATE, amount)
         return dateFormat.format(calendar.time)
-    }
-
-    //todo remove it from here
-    init {
-        dateList.add(
-            currentDate
-        )
-        dateList.add(
-            getDate(
-                -1,
-                dateFormat
-            )
-        )
-        dateList.add(
-            getDate(
-                -2,
-                dateFormat
-            )
-        )
-        dateList.add(
-            getDate(
-                -3,
-                dateFormat
-            )
-        )
-        dateList.add(
-            getDate(
-                -4,
-                dateFormat
-            )
-        )
-
-        dayNameList.add(
-            getDayName(
-                currentDate,
-                dateFormat
-            )
-        )
-        dayNameList.add(
-            getDayName(
-                getDate(
-                    -1,
-                    dateFormat
-                ),
-                dateFormat
-            )
-        )
-        dayNameList.add(
-            getDayName(
-                getDate(
-                    -2,
-                    dateFormat
-                ),
-                dateFormat
-            )
-        )
-        dayNameList.add(
-            getDayName(
-                getDate(
-                    -3,
-                    dateFormat
-                ),
-                dateFormat
-            )
-        )
-        dayNameList.add(
-            getDayName(
-                getDate(
-                    -4,
-                    dateFormat
-                ),
-                dateFormat
-            )
-        )
     }
 }
