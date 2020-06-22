@@ -1,6 +1,5 @@
 package com.jay.currencyconverter.ui.nbuActivity
 
-import android.util.Log
 import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
@@ -9,8 +8,11 @@ import androidx.lifecycle.MutableLiveData
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.ResponseWrapper
 import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
-import com.jay.currencyconverter.util.*
-import com.jay.currencyconverter.util.common.*
+import com.jay.currencyconverter.util.common.ConnectionErrorHandler
+import com.jay.currencyconverter.util.common.Constant
+import com.jay.currencyconverter.util.common.DateInitializer
+import com.jay.currencyconverter.util.common.StorageManager
+import com.jay.currencyconverter.util.roundToFloat
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -30,6 +32,7 @@ class AppbarViewModel: BaseNbuViewModel() {
     private val listOfNbuLists: MutableList<ArrayList<NbuCurrency>> = mutableListOf()
     private var isFirstRequest: Boolean = true
     private val defaultAbbr: String = context.resources.getString(R.string.USD)
+    private val dateInitializer = DateInitializer()
 
     init {
         currencyAbbreviation.set(defaultAbbr)
@@ -53,7 +56,7 @@ class AppbarViewModel: BaseNbuViewModel() {
 
         val zip: Observable<Unit> =
             Observable.zip(nbuExchangeRate.createRequestList(currencyAbbreviation,
-                                                             DateInitializer.getDefaultDateList()))
+                                                             dateInitializer.getDefaultDateList()))
             { response ->
                 response.forEach { list: Any ->
                     listOfNbuLists.add(list as ArrayList<NbuCurrency>)

@@ -1,6 +1,5 @@
 package com.jay.currencyconverter.repository
 
-import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -8,7 +7,6 @@ import com.jay.currencyconverter.BaseApplication
 import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
 import com.jay.currencyconverter.repository.room.NbuDao
 import com.jay.currencyconverter.repository.room.NbuEntity
-import com.jay.currencyconverter.util.TAG
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -148,8 +146,6 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
                         displayedCurrenciesList[currency] = entity.isShouldDisplayed
                     }
                 }
-
-                Log.d(TAG, "DB private onDatabaseEntityUpdated: " + displayedCurrenciesList.size)
                 currenciesToDisplay.onNext(displayedCurrenciesList)
             }
 

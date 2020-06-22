@@ -9,7 +9,7 @@ import com.jay.currencyconverter.ui.nbuActivity.NbuActivity
 import com.jay.currencyconverter.ui.organizationActivity.OrganizationActivity
 import com.jay.currencyconverter.util.common.Constant.NBU_ACTIVITY
 import com.jay.currencyconverter.util.common.Constant.ORGANIZATION_ACTIVITY
-import com.jay.currencyconverter.util.common.Constant.PREVIOUS_OPENED_ACTIVITY
+import com.jay.currencyconverter.util.common.Constant.OPENED_ACTIVITY
 import com.jay.currencyconverter.util.common.StorageManager
 
 class LaunchActivity : AppCompatActivity() {
@@ -17,7 +17,7 @@ class LaunchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        when (StorageManager.getVariable(PREVIOUS_OPENED_ACTIVITY, default = NBU_ACTIVITY)) {
+        when (StorageManager.getVariable(OPENED_ACTIVITY, default = ORGANIZATION_ACTIVITY)) {
             NBU_ACTIVITY -> {
                 startActivity(Intent(this, NbuActivity::class.java)
                                   .addFlags(FLAG_ACTIVITY_CLEAR_TASK or

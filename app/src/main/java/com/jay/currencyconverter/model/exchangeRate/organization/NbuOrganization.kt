@@ -13,6 +13,10 @@ class NbuOrganization() : Organization {
     override var title: String? = context.resources.getString(R.string.nbu_title)
     override var phone: String? = "044 230 1844"
 
+    fun initTile(context: Context){
+        title = context.resources.getString(R.string.nbu_title)
+    }
+
     constructor(parcel: Parcel) : this() {
         title = parcel.readString()
         phone = parcel.readString()

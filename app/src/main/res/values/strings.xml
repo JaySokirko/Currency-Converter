@@ -25,13 +25,17 @@
     <string name="tel">Тел:</string>
     <string name="sum">Сума:</string>
     <string name="result">Результат:</string>
-    <string name="erase_all_hint">Утримуйте кнопку "C", щоб видалити всі</string>
+    <string name="erase_all_hint">Утримуйте кнопку щоб видалити все</string>
     <string name="cancel">Скасувати</string>
     <string name="currency_search_hint">Знайти валюту</string>
     <string name="nbu_title">Національний банк України</string>
     <string name="search_organization">Знайти організацію</string>
-
-    <!--currencies name-->
+    <string name="open_calculator_hint">Клацніть організацію, щоб відкрити калькулятор валют</string>
+    <string name="app_theme">Тема додатка</string>
+    <string name="displayed_currencies_settings_hint">Налаштування списку валют, що відображаються</string>
+    <string name="chart_settings_hint">Оберіть валюту для відображення на графіку</string>
+    <string name="choose_base_currency_calculator_hint">Спочатку оберіть базову валюту</string>
+       <!--currencies name-->
     <string name="uah">Гривня</string>
     <string name="uae_dirhams">Дирхами ОАЕ</string>
     <string name="armenian_dramas">Вірменські драми</string>
@@ -146,5 +150,8 @@
     <string name="thu">Чт</string>
     <string name="fri">Пт</string>
     <string name="sat">Сб</string>
+
+    <string name="language">Мова</string>
+
 
 </resources>

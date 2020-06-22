@@ -1,6 +1,7 @@
 package com.jay.currencyconverter.ui.adapter.currencyButtonsAdapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import com.jakewharton.rxbinding.view.RxView
 import com.jay.currencyconverter.BaseApplication
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.customView.CustomMaterialButton
+import com.jay.currencyconverter.model.AdapterView
 import com.jay.currencyconverter.model.CurrencyChoice
 import com.jay.currencyconverter.model.exchangeRate.Currency
 import com.jay.currencyconverter.model.exchangeRate.CurrencyType
@@ -27,7 +29,8 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 class HorizontalCurrencyButtonsAdapter : RecyclerView.Adapter<BaseViewHolder<Currency>>(),
     LifecycleObserver {
 
-    val currencyButtonClick: MutableLiveData<CurrencyChoice> = MutableLiveData()
+    val currencyButtonClickObserver: MutableLiveData<CurrencyChoice> = MutableLiveData()
+    val onAdapterViewsAttachedObserver: MutableLiveData<Boolean> = MutableLiveData()
 
     private val currencyList: MutableList<Currency> = ArrayList()
     private val buttonsBehaviour = CurrencyButtonsBehaviour()
@@ -35,6 +38,7 @@ class HorizontalCurrencyButtonsAdapter : RecyclerView.Adapter<BaseViewHolder<Cur
     private val diffUtil = CurrencyDiffUtil()
     private val context: Context = BaseApplication.baseComponent.application.baseContext
     private var reduceTextDuration = 0L
+    private var attachedViewsCounter = 0
 
     init {
         reduceTextDuration = context.resources.getInteger(R.integer.text_reduce_duration).toLong()
@@ -56,6 +60,12 @@ class HorizontalCurrencyButtonsAdapter : RecyclerView.Adapter<BaseViewHolder<Cur
     override fun getItemId(position: Int): Long = position.toLong()
 
     override fun getItemViewType(position: Int): Int = position
+
+    override fun onViewAttachedToWindow(holder: BaseViewHolder<Currency>) {
+        attachedViewsCounter++
+        if (attachedViewsCounter > 1) onAdapterViewsAttachedObserver.postValue(true)
+        super.onViewAttachedToWindow(holder)
+    }
 
     fun setItems(organizationCurrencies: List<Currency?>) {
         diffUtil.setData(oldList = currencyList, newList = organizationCurrencies.filterNotNull())
@@ -108,7 +118,6 @@ class HorizontalCurrencyButtonsAdapter : RecyclerView.Adapter<BaseViewHolder<Cur
 
             conversionCurrencyBtn.text = item.getAbr(itemView.context)
             conversionCurrencyBtn.icon = item.getImage(itemView.context)
-
         }
 
         private fun onBaseCurrencyBtnClick() {
@@ -117,7 +126,7 @@ class HorizontalCurrencyButtonsAdapter : RecyclerView.Adapter<BaseViewHolder<Cur
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     buttonsBehaviour.onBaseButtonClick(baseCurrencyBtn)
-                    currencyButtonClick.postValue(
+                    currencyButtonClickObserver.postValue(
                         CurrencyChoice(
                             currencyList[layoutPosition],
                             CurrencyType.BASE,
@@ -131,7 +140,7 @@ class HorizontalCurrencyButtonsAdapter : RecyclerView.Adapter<BaseViewHolder<Cur
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     buttonsBehaviour.onConversionButtonClick(conversionCurrencyBtn)
-                    currencyButtonClick.postValue(
+                    currencyButtonClickObserver.postValue(
                         CurrencyChoice(
                             currencyList[layoutPosition],
                             CurrencyType.CONVERSION,

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="exist_organizations_titles">
+        <item>A-Bank</item>
+        <item>Agroprosperis Bank</item>
+        <item>Айбокс Банк</item>
+        <item>Аккордбанк</item>
+        <item>Альпари Банк</item>
+        <item>Альтбанк</item>
+        <item>Альфа-Банк</item>
+        <item>Альянс Банк</item>
+        <item>Аркада</item>
+        <item>Артада</item>
+        <item>Асвио Банк</item>
+        <item>БТА Банк</item>
+        <item>Банк 3\/4</item>
+        <item>Банк Сич</item>
+        <item>Глобус</item>
+        <item>Грант</item>
+        <item>Европочта</item>
+        <item>Европромбанк</item>
+        <item>Земельный Капитал</item>
+        <item>Идея Банк</item>
+        <item>Инвестиций и Сбережений</item>
+        <item>Индустриалбанк</item>
+        <item>Клиринговый Дом</item>
+        <item>КомИнвестБанк</item>
+        <item>Коммерческий Индустриальный Банк</item>
+        <item>Конкорд</item>
+        <item>Креди Агриколь Банк</item>
+        <item>Кредит Европа Банк</item>
+        <item>Кредитвест Банк</item>
+        <item>Кредобанк</item>
+        <item>Кристалбанк</item>
+        <item>Львов Банк</item>
+        <item>МТБ Банк (Марфин Банк)</item>
+        <item>Маржа</item>
+        <item>Мегабанк</item>
+        <item>Международный Инвестиционный Банк</item>
+        <item>МетаБанк</item>
+        <item>Мисто Банк</item>
+        <item>ОКСИ Банк</item>
+        <item>ОТП Банк</item>
+        <item>Ощадбанк</item>
+        <item>ПОВ №19</item>
+        <item>ПОВ №24</item>
+        <item>ПОВ №45</item>
+        <item>ПОВ №9</item>
+        <item>ПУМБ</item>
+        <item>Первый Инвестиционный Банк</item>
+        <item>Пивденный</item>
+        <item>Пиреус Банк </item>
+        <item>Поликомбанк</item>
+        <item>Полтава-Банк</item>
+        <item>Портал</item>
+        <item>Правэкс Банк</item>
+        <item>ПриватБанк</item>
+        <item>Радабанк</item>
+        <item>Райффайзен Банк Аваль</item>
+        <item>Сбербанк</item>
+        <item>ТОВ ФК Магнат</item>
+        <item>Таскомбанк</item>
+        <item>Траст-капитал</item>
+        <item>Укргазбанк</item>
+        <item>Укрсиббанк</item>
+        <item>Укрстройинвестбанк</item>
+        <item>Укрэксимбанк</item>
+        <item>Универсал Банк</item>
+        <item>ФК «Премиум Финанс»</item>
+        <item>ФК ДСД ФИНАНС</item>
+        <item>Форвард</item>
+        <item>Юнекс Банк</item>
+    </string-array>
+
+</resources>

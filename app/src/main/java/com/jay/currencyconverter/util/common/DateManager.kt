@@ -7,12 +7,10 @@ import java.lang.IllegalStateException
 import java.text.SimpleDateFormat
 import java.util.*
 
-object DateManager {
+class DateManager {
 
     var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyyMMdd")
     val currentDate: String = dateFormat.format(Date())
-
-    private val context: Context = BaseApplication.baseComponent.application.applicationContext
 
     /**
      * Allows to get a short weekday name depends on an input date
@@ -23,7 +21,7 @@ object DateManager {
      * @return the short weekday name
      */
     @Throws(exceptionClasses = [IllegalStateException::class])
-    fun getDayName(date: String, dateFormat: SimpleDateFormat) : String {
+    fun getDayName(context: Context, date: String, dateFormat: SimpleDateFormat) : String {
         val calendar: Calendar = Calendar.getInstance()
         calendar.time = dateFormat.parse(date)
         return when(calendar[Calendar.DAY_OF_WEEK]) {

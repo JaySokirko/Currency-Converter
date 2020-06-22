@@ -11,7 +11,6 @@ import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.ResponseWrapper
 import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
 import com.jay.currencyconverter.repository.NbuDatabaseManager
-import com.jay.currencyconverter.util.TAG
 import com.jay.currencyconverter.util.common.ConnectionErrorHandler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -28,7 +27,7 @@ class MainContentViewModel : BaseNbuViewModel() {
 
     fun getExchangeRate() {
         progressVisibility.set(View.VISIBLE)
-        Log.d(TAG, "getExchangeRate: ")
+
         val subscribe: Disposable = nbuExchangeRate.getExchangeRate()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
@@ -50,11 +49,10 @@ class MainContentViewModel : BaseNbuViewModel() {
         nbuDataBaseManager.putData(result)
 
         result.find { it.currencyAbbreviation == context.resources.getString(R.string.USD) }?.let {usdCurrency ->
-            actualDate.set("${context.resources.getString(R.string.actual_date)} ${usdCurrency.exchangeDate}")
+            actualDate.set(usdCurrency.exchangeDate)
         }
 
         progressVisibility.set(View.GONE)
-        Log.d(TAG, "onExchangeRateLoadFinished: ")
     }
 
     private fun onCurrenciesToDisplayPrepared() {
@@ -62,10 +60,8 @@ class MainContentViewModel : BaseNbuViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe (
-                { exchangeRateObserver.postValue(ResponseWrapper(data = it))
-                    Log.d(TAG, "onCurrenciesToDisplayPrepared: result")},
-                { exchangeRateObserver.postValue(ResponseWrapper(error = it))
-                    Log.d(TAG, "onCurrenciesToDisplayPrepared: error")})
+                { exchangeRateObserver.postValue(ResponseWrapper(data = it)) },
+                { exchangeRateObserver.postValue(ResponseWrapper(error = it)) })
 
         disposable.add(subscribe)
     }
@@ -82,7 +78,6 @@ class MainContentViewModel : BaseNbuViewModel() {
         else {
             exchangeRateObserver.postValue(ResponseWrapper(error = error))
         }
-        Log.d(TAG, "onExchangeRateLoadError: ")
     }
 
 

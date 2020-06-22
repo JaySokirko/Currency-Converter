@@ -113,7 +113,7 @@ class OrganizationExchangeRateAdapter : RecyclerView.Adapter<BaseViewHolder<Comm
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroy(){
+    fun onActivityDestroyed(){
         adapterJob.cancel()
         uiScope.coroutineContext.cancel()
     }

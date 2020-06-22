@@ -174,15 +174,27 @@
                 app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
                 android:src="@drawable/ic_calculator" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/x2"
-                android:layout_marginTop="@dimen/x2"
-                android:text="@{mainContentVM.actualDate}"
-                android:textSize="@dimen/text_x6"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                tools:text="Actual date: 09.06.2020" />
+                android:orientation="horizontal"
+                android:layout_marginStart="@dimen/x2"
+                android:layout_marginTop="@dimen/x2">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/actual_date"
+                    android:textSize="@dimen/text_x6" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/x2"
+                    android:text="@{mainContentVM.actualDate}"
+                    android:textSize="@dimen/text_x6" />
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/nbu_exchange_rate_list"

@@ -73,8 +73,8 @@
     <string name="middle">Middle:</string>
     <string name="actual_date">Exchange rate on the date:</string>
     <string name="exchange_rate">Exchange rate:</string>
-    <string name="choose_base_currency_hint">choose base currency</string>
-    <string name="choose_conversion_currency_hint">select quoted currency</string>
+    <string name="choose_base_currency_hint">Choose base currency</string>
+    <string name="choose_conversion_currency_hint">Choose quoted currency</string>
     <string name="tel">Phone:</string>
     <string name="sum">Amount:</string>
     <string name="result">Result:</string>
@@ -87,4 +87,10 @@
     <string name="no_internet_connection">No internet connection</string>
     <string name="open_settings">Settings</string>
     <string name="exit">Exit</string>
+    <string name="open_calculator_hint">Click the organization to open currencies calculator</string>
+    <string name="app_theme">App theme</string>
+    <string name="language">Language</string>
+    <string name="displayed_currencies_settings_hint">Displayed currencies list settings</string>
+    <string name="chart_settings_hint">Choose currency to display on chart</string>
+    <string name="choose_base_currency_calculator_hint">Firstly choose base currency</string>
 </resources>

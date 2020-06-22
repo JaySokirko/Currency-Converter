@@ -41,7 +41,7 @@
                         android:focusableInTouchMode="true"
                         android:hint="@string/search_organization"
                         app:boxStrokeColor="@color/colorPrimary"
-                        app:endIconDrawable="@drawable/ic_cancel"
+                        app:endIconDrawable="@drawable/ic_cancel_circle"
                         app:endIconMode="clear_text"
                         app:layout_collapseMode="parallax"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -64,7 +64,7 @@
             </com.google.android.material.appbar.AppBarLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/banks_exchange_rate_list"
+                android:id="@+id/organizations_exchange_rate_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/x"

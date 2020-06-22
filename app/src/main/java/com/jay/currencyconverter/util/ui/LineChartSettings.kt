@@ -20,6 +20,7 @@ import com.jay.currencyconverter.util.common.DateInitializer
  * Documentation: https://weeklycoding.com/mpandroidchart-documentation/
  */
 class LineChartSettings(
+    private val activityContext: Context,
     private val lineChart: LineChart,
     private val exchangeRateList: MutableList<Double>) {
 
@@ -102,14 +103,16 @@ class LineChartSettings(
         return list
     }
 
-    class XAxisValueFormatter : ValueFormatter() {
+    inner class XAxisValueFormatter : ValueFormatter() {
+        private val dateInitializer = DateInitializer()
+
         override fun getFormattedValue(value: Float): String {
             return when (value) {
-                0f -> DateInitializer.getDefaultDayNameList()[4]
-                1f -> DateInitializer.getDefaultDayNameList()[3]
-                2f -> DateInitializer.getDefaultDayNameList()[2]
-                3f -> DateInitializer.getDefaultDayNameList()[1]
-                4f -> DateInitializer.getDefaultDayNameList()[0]
+                0f -> dateInitializer.getDefaultDayNameList(activityContext)[4]
+                1f -> dateInitializer.getDefaultDayNameList(activityContext)[3]
+                2f -> dateInitializer.getDefaultDayNameList(activityContext)[2]
+                3f -> dateInitializer.getDefaultDayNameList(activityContext)[1]
+                4f -> dateInitializer.getDefaultDayNameList(activityContext)[0]
                 else -> throw IllegalArgumentException("Only the following values are available: " +
                         "0,1,2,3,4")
             }

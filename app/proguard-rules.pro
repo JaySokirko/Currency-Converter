@@ -20,3 +20,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -keepclassmembers,allowobfuscation class * {@com.google.gson.annotations.SerializedName <fields>;}
+-keep public class rx.internal.util** { *; }
+-keep public class com.github.mikephil.charting** { *; }
+

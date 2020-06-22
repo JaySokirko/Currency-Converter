@@ -15,7 +15,6 @@ import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
 import com.jay.currencyconverter.repository.NbuDatabaseManager
 import com.jay.currencyconverter.ui.adapter.viewHolder.BaseViewHolder
 import com.jay.currencyconverter.ui.adapter.viewHolder.NbuCurrencyBaseViewHolder
-import com.jay.currencyconverter.util.TAG
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
@@ -43,7 +42,6 @@ class DisplayedCurrenciesAdapter : RecyclerView.Adapter<BaseViewHolder<NbuCurren
             checkedPositions.clear()
             repeat(itemCount) { checkedPositions.add(isChecked) }
 
-            Log.d(TAG, "DisplayedCurrenciesAdapter constructor ")
             nbuDatabaseManager.updateAll(isChecked)
         }
         disposable.add(subscribe)

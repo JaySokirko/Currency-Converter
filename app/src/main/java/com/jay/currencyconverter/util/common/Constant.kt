@@ -15,12 +15,13 @@ object Constant {
     const val CURRENCY_ABR_DEFAULT = "USD"
     const val LAST_CHECKED_POSITION = "lastCheckedPosition"
     const val MAIN_CHECKBOX_CHECKED = "mainCheckBoxChecked"
-    const val PREVIOUS_OPENED_ACTIVITY = "previousOpenedActivity"
+    const val OPENED_ACTIVITY = "previousOpenedActivity"
     const val SELECTED_LANGUAGE = "selectedLanguage"
     const val ENGLISH_LANGUAGE = "en"
     const val UKRAINIAN_LANGUAGE = "default"
-    const val ERASE_ALL_HINT = "eraseHintAlreadyShown"
+    const val CALCULATOR_HINTS_NOT_SHOWN = "calculatorHintsNotShown"
     const val OPEN_CALCULATOR_HINT_NOT_SHOWN = "openCalculatorHint"
+    const val DISPLAYED_CURRENCIES_SETTINGS_HINT_NOT_SHOWN = "displayedCurrenciesSettingsNotShown"
 
     const val CURRENCIES_NOT_CHOSEN = 0
     const val CURRENCIES_CHOSEN = 1
@@ -31,7 +32,6 @@ object Constant {
     const val ORGANIZATION_ACTIVITY = 1
     const val SCROLL_BOTTOM = 1
 
-    const val ERASE_HINT_SHOULD_BE_SHOWN = true
-
     val ABOVE_API_22 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+    val ABOVE_API_23 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
 }

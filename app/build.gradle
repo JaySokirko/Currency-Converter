@@ -45,6 +45,14 @@ android {
         }
     }
 
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+
+
     final String packageSuffixCommon = "com.jay.currencyconverter"
 
     // for each of the flavours should be added configuration for signingConfig
@@ -129,6 +137,11 @@ dependencies {
 
     //showcase view
     implementation 'com.github.mreram:showcaseview:1.1'
+
+    //leakcanary
+    def leekcanary_ver = '2.4'
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leekcanary_ver"
+    implementation "com.squareup.leakcanary:leakcanary-object-watcher-android:$leekcanary_ver"
 
     kapt 'com.android.databinding:compiler:3.1.4'
 
