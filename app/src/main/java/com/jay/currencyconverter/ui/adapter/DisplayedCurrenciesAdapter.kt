@@ -1,5 +1,6 @@
 package com.jay.currencyconverter.ui.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,7 @@ import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
 import com.jay.currencyconverter.repository.NbuDatabaseManager
 import com.jay.currencyconverter.ui.adapter.viewHolder.BaseViewHolder
-import com.jay.currencyconverter.ui.adapter.viewHolder.CurrencyBaseViewHolder
+import com.jay.currencyconverter.ui.adapter.viewHolder.NbuCurrencyBaseViewHolder
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
@@ -74,7 +75,7 @@ class DisplayedCurrenciesAdapter : RecyclerView.Adapter<BaseViewHolder<NbuCurren
         notifyDataSetChanged()
     }
 
-    private inner class DisplayedCurrencyVH(itemView: View) : CurrencyBaseViewHolder(itemView) {
+    private inner class DisplayedCurrencyVH(itemView: View) : NbuCurrencyBaseViewHolder(itemView) {
 
         override fun bind(item: NbuCurrency) {
             super.bind(item)

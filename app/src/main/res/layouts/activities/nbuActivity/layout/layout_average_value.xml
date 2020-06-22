@@ -22,8 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{appbarVM.currencyAbbreviation}"
-            android:textSize="11dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:textSize="@dimen/text_x6"
             tools:text="USD" />
 
         <Space
@@ -34,8 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/middle"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-            android:textSize="11dp" />
+            android:textSize="@dimen/text_x6" />
 
         <Space
             android:layout_width="5dp"
@@ -45,8 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{appbarVM.averageExchangeRateValue}"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-            android:textSize="11dp"
+            android:textSize="@dimen/text_x6"
             tools:text="28.8899" />
     </LinearLayout>
 </layout>

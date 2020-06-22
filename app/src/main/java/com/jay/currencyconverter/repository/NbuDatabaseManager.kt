@@ -1,6 +1,5 @@
 package com.jay.currencyconverter.repository
 
-import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -8,7 +7,6 @@ import com.jay.currencyconverter.BaseApplication
 import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
 import com.jay.currencyconverter.repository.room.NbuDao
 import com.jay.currencyconverter.repository.room.NbuEntity
-import com.jay.currencyconverter.util.TAG
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -23,7 +21,7 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
     private val disposable = CompositeDisposable()
 
     init {
-        onDatabaseEntityUpdated()
+        publishDataBaseEntities()
     }
 
     fun putData(itemsList: List<NbuCurrency>) {
@@ -70,9 +68,7 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
             displayedCurrenciesList.put(currency, true)
         }
 
-        insertAll(entityList, onComplete = {
-            currenciesToDisplay.onNext(displayedCurrenciesList)
-        })
+        insertAll(entityList, onComplete = { currenciesToDisplay.onNext(displayedCurrenciesList) })
     }
 
     private fun onDatabaseIsNotEmpty(itemsList: List<NbuCurrency>, entityList: List<NbuEntity>) {
@@ -110,7 +106,7 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
                 it.currency.currencyAbbreviation == currency.currencyAbbreviation
             }
             if (entity == null){
-                entityToInsert.add(NbuEntity(currency, displayedCurrenciesList[currency]!!))
+                entityToInsert.add(NbuEntity(currency, displayedCurrenciesList[currency] ?: false))
             }
         }
 
@@ -124,9 +120,7 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
     private fun insertAll(entityToInsert: MutableList<NbuEntity>, onComplete: (() -> Unit)? = null) {
         val subscribe: Disposable = Completable.fromAction { database.insertAll(entityToInsert) }
             .subscribeOn(Schedulers.io())
-            .subscribe {
-                onComplete?.let { it() }
-            }
+            .subscribe { onComplete?.let { it() } }
 
         disposable.add(subscribe)
     }
@@ -134,15 +128,12 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
     private fun updateAll(entityToUpdate: List<NbuEntity>, onComplete: (() -> Unit)? = null) {
         val subscribe: Disposable = Completable.fromAction { database.updateAll(entityToUpdate) }
             .subscribeOn(Schedulers.io())
-            .subscribe {
-                onComplete?.let { it() }
-                onDatabaseEntityUpdated()
-            }
+            .subscribe { onComplete?.let { it(); publishDataBaseEntities() } }
 
         disposable.add(subscribe)
     }
 
-    private fun onDatabaseEntityUpdated() {
+    private fun publishDataBaseEntities() {
         val subscribe: Disposable = database.getAll()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { result: List<NbuEntity> ->
@@ -155,8 +146,6 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
                         displayedCurrenciesList[currency] = entity.isShouldDisplayed
                     }
                 }
-
-                Log.d(TAG, "onDatabaseEntityChanged: " + displayedCurrenciesList.size)
                 currenciesToDisplay.onNext(displayedCurrenciesList)
             }
 

@@ -1,18 +1,29 @@
 <resources>
-    <!-- Base application theme. -->
-    <style name="BaseTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Customize your theme here. -->
+
+    <style name="BaseThemeLight" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textViewStyle">@style/TextBaseStyle</item>
+        <item name="android:textViewStyle">@style/TextBaseStyleLight</item>
+        <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
     </style>
 
-    <style name="TextBaseStyle" parent="@android:style/Widget.TextView">
+    <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
+    </style>
+
+    <style name="TextBaseStyleLight" parent="@android:style/Widget.TextView">
         <item name="android:textColor">@color/colorPrimaryDark</item>
     </style>
 
-    <style name="NestedAppbar" parent="BaseTheme">
+    <style name="TextBaseStyleDark" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="NestedAppbar" parent="BaseThemeLight">
         <item name="android:windowContentOverlay">@null</item>
         <item name="elevation">0dp</item>
     </style>
@@ -23,7 +34,7 @@
         <item name="android:focusable">true</item>
     </style>
 
-    <style name="BaseTheme.NoActionBar">
+    <style name="BaseThemeLight.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

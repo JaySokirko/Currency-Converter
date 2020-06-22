@@ -98,6 +98,7 @@ class CurrencyButtonsBehaviour {
                 isConversionButtonsShouldBeEnabled = true
             }
             else {
+                enableButtons(baseButtons)
                 setNoPressedState(conversionButtons)
                 disableButtons(conversionButtons)
                 baseBtn = null

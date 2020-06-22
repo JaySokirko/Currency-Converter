@@ -1,14 +1,12 @@
 package com.jay.currencyconverter.ui.organizationActivity
 
-import android.util.Log
 import android.view.View
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.*
 import com.jay.currencyconverter.model.ResponseWrapper
-import com.jay.currencyconverter.model.exchangeRate.organization.CommonOrganizations
 import com.jay.currencyconverter.model.exchangeRate.organization.CommonOrganization
+import com.jay.currencyconverter.model.exchangeRate.organization.CommonOrganizations
 import com.jay.currencyconverter.repository.exchangeRate.BankExchangeRate
-import com.jay.currencyconverter.util.TAG
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -37,12 +35,9 @@ class OrganizationActivityViewModel : ViewModel(), LifecycleObserver {
                     exchangeObserver.postValue(ResponseWrapper(data = result.organizations))
                 },
 
-                { error: Throwable -> exchangeObserver.postValue(ResponseWrapper(error = error))
-                    Log.d(TAG, "getExchangeRate: " + error.message)
-                },
+                { error: Throwable -> exchangeObserver.postValue(ResponseWrapper(error = error)) },
 
-                { progressVisibility.set(View.GONE) }
-            )
+                { progressVisibility.set(View.GONE) })
 
         disposable.add(subscribe)
     }

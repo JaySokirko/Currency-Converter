@@ -18,14 +18,14 @@
             android:title="@string/organization_exchange" />
     </group>
 
-    <item android:title="Язык">
+    <item android:title="@string/language">
         <menu
             android:id="@+id/language"
             android:checkableBehavior="all">
             <item
                 android:id="@+id/ua_lang"
                 android:icon="@drawable/ic_ukraine_flag"
-                android:title="Ukrainian" />
+                android:title="Українська" />
             <item
                 android:id="@+id/en_lang"
                 android:icon="@drawable/ic_usa_flag"
@@ -34,6 +34,7 @@
     </item>
 
     <item
+        android:visible="false"
         android:checkable="false"
         android:id="@+id/settings"
         android:icon="@drawable/ic_settings_menu"

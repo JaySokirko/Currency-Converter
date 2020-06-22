@@ -8,10 +8,14 @@ import com.jay.currencyconverter.R
 
 class NbuOrganization() : Organization {
 
-    private val context: Context = BaseApplication.baseComponent.application.baseContext
+    private val context: Context = BaseApplication.baseComponent.application.applicationContext
 
     override var title: String? = context.resources.getString(R.string.nbu_title)
     override var phone: String? = "044 230 1844"
+
+    fun initTile(context: Context){
+        title = context.resources.getString(R.string.nbu_title)
+    }
 
     constructor(parcel: Parcel) : this() {
         title = parcel.readString()

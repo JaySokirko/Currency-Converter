@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/x2"
             android:layout_marginTop="@dimen/x2"
+            android:textSize="@dimen/text_x8"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="bank title" />

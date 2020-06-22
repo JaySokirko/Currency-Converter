@@ -3,70 +3,87 @@
 
     <string name="numbers_pattern" translatable="false">"#,###,###,###.####"</string>
 
-    <string name="bid">Покупка</string>
-    <string name="ask">Продажа</string>
-
+    <string name="no_internet_connection">Немає інтернет-з’єднання</string>
     <string name="error_dialog_title">Оу…</string>
-    <string name="two_currencies_should_chosen_message">Минимум две валюты должно быть выбрано</string>
-    <string name="one_currency_should_chosen_message">Минимум одна валюта должнра быть выбрана</string>
-    <string name="setup_currency_list">настроить список валют</string>
+    <string name="two_currencies_should_chosen_message">Мінімум дві валюти має бути обрано</string>
+    <string name="one_currency_should_chosen_message">Мінімум одна валюта повинна бути обрана</string>
+    <string name="setup_currency_list">Налаштувати список валют</string>
     <string name="currency_should_chosen_positive_btn_text">OK</string>
-    <string name="error_dialog_message">Возникла ошибка при загрузке данных</string>
-    <string name="error_dialog_positive_btn">Перезагрузить</string>
-    <string name="error_dialog_negative_btn">Выход</string>
-    <string name="load_previous_exchange_error">Возникла ошибка при загрузке данных</string>
-    <string name="reload">Повторить загрузку</string>
-    <string name="mark_all">Выделить все</string>
-
-    <!--currencies name-->
+    <string name="error_dialog_message">Виникла помилка при завантаженні даних</string>
+    <string name="error_dialog_positive_btn">Перезавантажити</string>
+    <string name="error_dialog_negative_btn">Вихід</string>
+    <string name="load_previous_exchange_error">Виникла помилка при завантаженні даних</string>
+    <string name="reload">Повторити завантаження</string>
+    <string name="mark_all">Виділити все</string>
+    <string name="open_settings">Налаштування</string>
+    <string name="exit">Вихід</string>
+    <string name="middle">Середній:</string>
+    <string name="actual_date">Курс на дату:</string>
+    <string name="exchange_rate">Курс обміну:</string>
+    <string name="choose_base_currency_hint">Оберіть базову валюту</string>
+    <string name="choose_conversion_currency_hint">Оберіть валюту котирування</string>
+    <string name="tel">Тел:</string>
+    <string name="sum">Сума:</string>
+    <string name="result">Результат:</string>
+    <string name="erase_all_hint">Утримуйте кнопку щоб видалити все</string>
+    <string name="cancel">Скасувати</string>
+    <string name="currency_search_hint">Знайти валюту</string>
+    <string name="nbu_title">Національний банк України</string>
+    <string name="search_organization">Знайти організацію</string>
+    <string name="open_calculator_hint">Клацніть організацію, щоб відкрити калькулятор валют</string>
+    <string name="app_theme">Тема додатка</string>
+    <string name="displayed_currencies_settings_hint">Налаштування списку валют, що відображаються</string>
+    <string name="chart_settings_hint">Оберіть валюту для відображення на графіку</string>
+    <string name="choose_base_currency_calculator_hint">Спочатку оберіть базову валюту</string>
+       <!--currencies name-->
     <string name="uah">Гривня</string>
-    <string name="uae_dirhams">дирхамы ОАЭ</string>
-    <string name="armenian_dramas">армянские драмы</string>
-    <string name="australian_dollars">австралийские доллары</string>
-    <string name="azerbaijani_manats">азербайджанские манаты</string>
-    <string name="bulgarian_lev">болгарские левы</string>
-    <string name="brazilian_reals">бразильские реалы</string>
-    <string name="belorussian_rubles">беларуские рубли</string>
-    <string name="canadian_dollars">канадские доллары</string>
-    <string name="swiss_francs">швейцарские франки</string>
-    <string name="chilean_pesos">чилийские песо</string>
-    <string name="yuan">юани</string>
-    <string name="czech_crowns">чешские кроны</string>
-    <string name="danish_kroner">датские кроны</string>
-    <string name="algerian_dinars">алжирские динары</string>
-    <string name="egyptian_pounds">египетские фунты</string>
-    <string name="euro">евро</string>
-    <string name="pounds">фунты стерлингов</string>
-    <string name="georgian_lari">грузинские лари</string>
-    <string name="hong_kong_dollars">гонконгские доллары</string>
-    <string name="croatian_coons">хорватские куны</string>
-    <string name="hungarian_forints">венгерские форинты</string>
-    <string name="israeli_shekels">израильские шекели</string>
-    <string name="indian_rupees">индийские рупии</string>
-    <string name="iraqi_dinars">иракские динары</string>
-    <string name="japanese_yen">японские иены</string>
-    <string name="kgs_of_kyrgyzstan">сомы Кыргызстана</string>
-    <string name="south_korean_won">воны Южной Кореи</string>
-    <string name="kuwaiti_dinars">кувейтские динары</string>
-    <string name="kazakh_tenge">казахские тенге</string>
-    <string name="lebanese_pounds">ливанские фунты</string>
-    <string name="moldovan_lei">молдавские леи</string>
-    <string name="mexican_new_pesos">мексиканские новые песо</string>
-    <string name="norwegian_kroner">норвежские кроны</string>
-    <string name="new_zealand_dollars">новозеландские доллары</string>
-    <string name="pakistani_rupees">пакистанские рупии</string>
-    <string name="polish_zloty">польские злотые</string>
-    <string name="new_romanian_leu">новые румынские леи</string>
-    <string name="rub">российские рубли</string>
-    <string name="rials_of_saudi_arabia">риалы Саудовской Аравии</string>
-    <string name="swedish_kroner">шведские кроны</string>
-    <string name="singapore_dollars">сингапурские доллары</string>
-    <string name="thai_baht">таиландские баты</string>
-    <string name="tajik_somons">таджикские сомоны</string>
-    <string name="turkish_lira">турецкие лиры</string>
-    <string name="taiwan_dollars">тайваньские доллары</string>
-    <string name="usd">доллары США</string>
-    <string name="vietnamese_dongs">вьетнамские донги</string>
+    <string name="uae_dirhams">Дирхами ОАЕ</string>
+    <string name="armenian_dramas">Вірменські драми</string>
+    <string name="australian_dollars">Австралійські долари</string>
+    <string name="azerbaijani_manats">Азербайджанські манати</string>
+    <string name="bulgarian_lev">Болгарські леви</string>
+    <string name="brazilian_reals">Бразильські реали</string>
+    <string name="belorussian_rubles">Білоруські рублі</string>
+    <string name="canadian_dollars">Канадські долари</string>
+    <string name="swiss_francs">Швейцарські франки</string>
+    <string name="chilean_pesos">Чилійські песо</string>
+    <string name="yuan">Юані</string>
+    <string name="czech_crowns">Чеські крони</string>
+    <string name="danish_kroner">Датські крони</string>
+    <string name="algerian_dinars">Алжирські динари</string>
+    <string name="egyptian_pounds">Єгипетські фунти</string>
+    <string name="euro">Євро</string>
+    <string name="pounds">Фунти стерлінгів</string>
+    <string name="georgian_lari">Грузинські ларі</string>
+    <string name="hong_kong_dollars">Гонконгські долари</string>
+    <string name="croatian_coons">Хорватські куни</string>
+    <string name="hungarian_forints">Угорські форинти</string>
+    <string name="israeli_shekels">Ізраїльські шекелі</string>
+    <string name="indian_rupees">Індійські рупії</string>
+    <string name="iraqi_dinars">Іракські динари</string>
+    <string name="japanese_yen">Японські ієни</string>
+    <string name="kgs_of_kyrgyzstan">Киргизькі соми</string>
+    <string name="south_korean_won">Південнокорейські вони</string>
+    <string name="kuwaiti_dinars">Кувейтські динари</string>
+    <string name="kazakh_tenge">Казахські тенге</string>
+    <string name="lebanese_pounds">Ліванські фунти</string>
+    <string name="moldovan_lei">Молдавські леї</string>
+    <string name="mexican_new_pesos">Мексиканські песо</string>
+    <string name="norwegian_kroner">Норвезькі крони</string>
+    <string name="new_zealand_dollars">Новозеландські долари</string>
+    <string name="pakistani_rupees">Пакистанські рупії</string>
+    <string name="polish_zloty">Польські злоті</string>
+    <string name="new_romanian_leu">Нові румунські леї</string>
+    <string name="rub">Російські рублі</string>
+    <string name="rials_of_saudi_arabia">Саудівські ріали</string>
+    <string name="swedish_kroner">Шведські крони</string>
+    <string name="singapore_dollars">Сінгапурські долари</string>
+    <string name="thai_baht">Таїландські бати</string>
+    <string name="tajik_somons">Таджицькі сомони</string>
+    <string name="turkish_lira">Турецькі ліри</string>
+    <string name="taiwan_dollars">Тайванські долари</string>
+    <string name="usd">Долари США</string>
+    <string name="vietnamese_dongs">В\'єтнамські донги</string>
 
     <!--currencies abbreviation-->
     <string name="UAH" translatable="false">UAH</string>
@@ -120,34 +137,21 @@
 
     <!--drawer menu-->
     <string name="nbu_exchange">Курс НБУ</string>
-    <string name="organization_exchange">Банковский курс</string>
-
+    <string name="organization_exchange">Банківський курс</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Налаштування</string>
 
     <!--weekday short name-->
-    <string name="sun">sun</string>
-    <string name="mon">mon</string>
-    <string name="tue">tue</string>
-    <string name="wed">wed</string>
-    <string name="thu">thu</string>
-    <string name="fri">fri</string>
-    <string name="sat">sat</string>
+    <string name="sun">Нд</string>
+    <string name="mon">Пн</string>
+    <string name="tue">Вт</string>
+    <string name="wed">Ср</string>
+    <string name="thu">Чт</string>
+    <string name="fri">Пт</string>
+    <string name="sat">Сб</string>
 
+    <string name="language">Мова</string>
 
-    <string name="middle">Средний:</string>
-    <string name="actual_date">Курс на дату: </string>
-    <string name="exchange_rate">Курс обмена:</string>
-    <string name="choose_base_currency_hint">выберите базовую валюту</string>
-    <string name="choose_conversion_currency_hint">выберите котируемую валюту</string>
-    <string name="tel">Тел:</string>
-    <string name="sum">Сумма:</string>
-    <string name="result">Результат:</string>
-    <string name="erase_all_hint">Долгое нажатие на кнопку "C", чтобы удалить все</string>
-    <string name="cancel">отмена</string>
-    <string name="currency_search_hint">Найти валюту</string>
-    <string name="nbu_title">Национальный банк Украины</string>
-    <string name="search_organization">Найти организацию</string>
 
 </resources>

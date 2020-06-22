@@ -8,7 +8,7 @@ import com.jay.currencyconverter.BaseApplication
 
 object TextSizeAnimation {
 
-    val context: Context = BaseApplication.baseComponent.application.baseContext
+    val context: Context = BaseApplication.baseComponent.application.applicationContext
 
     fun TextView.getTextSizeInSP(): Float{
         val px: Float = this.textSize

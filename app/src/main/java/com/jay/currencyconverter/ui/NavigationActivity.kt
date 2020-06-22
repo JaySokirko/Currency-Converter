@@ -1,53 +1,68 @@
 package com.jay.currencyconverter.ui
 
-import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import android.view.LayoutInflater
+import android.provider.Settings
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.jakewharton.rxbinding.view.RxMenuItem
 import com.jay.currencyconverter.BuildConfig
 import com.jay.currencyconverter.R
+import com.jay.currencyconverter.ui.dialog.DialogBuilder
+import com.jay.currencyconverter.ui.dialog.ErrorDialog
+import com.jay.currencyconverter.ui.dialog.NoInternetConnectionDialog
 import com.jay.currencyconverter.ui.nbuActivity.NbuActivity
 import com.jay.currencyconverter.ui.organizationActivity.OrganizationActivity
-import com.jay.currencyconverter.util.common.Constant
+import com.jay.currencyconverter.ui.settingsActivity.SettingsActivity
 import com.jay.currencyconverter.util.common.Constant.ENGLISH_LANGUAGE
 import com.jay.currencyconverter.util.common.Constant.NBU_ACTIVITY
+import com.jay.currencyconverter.util.common.Constant.OPENED_ACTIVITY
 import com.jay.currencyconverter.util.common.Constant.ORGANIZATION_ACTIVITY
-import com.jay.currencyconverter.util.common.Constant.PREVIOUS_OPENED_ACTIVITY
 import com.jay.currencyconverter.util.common.Constant.SELECTED_LANGUAGE
 import com.jay.currencyconverter.util.common.Constant.UKRAINIAN_LANGUAGE
+import com.jay.currencyconverter.util.common.InternetConnection
 import com.jay.currencyconverter.util.common.StorageManager
 import com.jay.currencyconverter.util.ui.Localization
+import rx.android.schedulers.AndroidSchedulers
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 
-abstract class NavigationActivity : AppCompatActivity(),
-    NavigationView.OnNavigationItemSelectedListener {
+abstract class NavigationActivity : BaseActivity(),
+    NavigationView.OnNavigationItemSelectedListener,
+    NoInternetConnectionDialog.OnDialogButtonsClickListener {
 
-    protected lateinit var mainContentView: View
-    private lateinit var nawDrawer: DrawerLayout
-    private lateinit var inflater: LayoutInflater
-    private lateinit var navigationView: NavigationView
-    private var backgroundAnimation: AnimationDrawable? = null
+    protected val errorDialog = ErrorDialog()
+    protected val noInternetConnectionDialog = NoInternetConnectionDialog()
+    protected val dialogBuilder: DialogBuilder = DialogBuilder()
+    protected var isDataAlreadyLoaded = false
+    protected var mainContentView: View? = null
+
+    private var nawDrawer: DrawerLayout? = null
+    private var navigationView: NavigationView? = null
+    private var navHeaderAnimation: AnimationDrawable? = null
+    private var actionBarItemClickListener: ActionBarItemClickListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_navigation)
 
-        Localization.setLocale(this, Localization.language);
+        noInternetConnectionDialog.setOnDialogButtonsClickListener(this)
+        navigationMenuCheckedItemPositions.push(StorageManager.getVariable(OPENED_ACTIVITY,
+                ORGANIZATION_ACTIVITY))
 
-        inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         nawDrawer = findViewById(R.id.drawer_layout)
         navigationView = findViewById(R.id.navigation_view)
 
@@ -55,13 +70,23 @@ abstract class NavigationActivity : AppCompatActivity(),
     }
 
     override fun onResume() {
+        navHeaderAnimation?.start()
+        setCheckedNavigationViewItem(navigationMenuCheckedItemPositions.peek())
         super.onResume()
-        backgroundAnimation?.start()
     }
 
     override fun onPause() {
         super.onPause()
-        backgroundAnimation?.stop()
+        navHeaderAnimation?.stop()
+    }
+
+    override fun onBackPressed() {
+        if (nawDrawer?.isDrawerOpen(GravityCompat.START) == true) {
+            nawDrawer?.closeDrawer(GravityCompat.START)
+        } else {
+            navigationMenuCheckedItemPositions.pop()
+            super.onBackPressed()
+        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -79,30 +104,60 @@ abstract class NavigationActivity : AppCompatActivity(),
                 setUkrainianLanguage()
             }
             R.id.settings -> {
-
+                launchSettingsActivity()
             }
         }
         return true
     }
 
-    override fun onBackPressed() {
-        if (nawDrawer.isDrawerOpen(GravityCompat.START)) {
-            nawDrawer.closeDrawer(GravityCompat.START)
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.app_bar_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.update -> {
+                RxMenuItem.clicks(item)
+                    .throttleFirst(1500, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe {
+                        actionBarItemClickListener ?: throw NullPointerException("listener must be set")
+                        actionBarItemClickListener?.onUpdate()
+                    }
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    /**@see NoInternetConnectionDialog.OnDialogButtonsClickListener.openSettings*/
+    override fun openSettings() {
+        startActivity(Intent(Settings.ACTION_SETTINGS))
+    }
+
+    protected fun setActionBarItemClickListener(listener: ActionBarItemClickListener){
+        actionBarItemClickListener = listener
+    }
+
+    protected fun checkInternetConnection(onIsConnected : () -> Unit) {
+        if (!InternetConnection.isInternetConnectionEnabled()){
+            noInternetConnectionDialog.show(supportFragmentManager, this.localClassName)
         } else {
-            super.onBackPressed()
+            onIsConnected()
         }
     }
 
-    protected fun initContent(contentLayoutId: Int, toolbarLayoutId: Int) {
+    protected fun initContent(contentLayoutId: Int, toolbarLayoutId: Int = R.layout.default_toolbar) {
         val mainContainer: FrameLayout = findViewById(R.id.main_container)
-        mainContentView = inflater.inflate(contentLayoutId, mainContainer, false)
+        mainContentView = inflater?.inflate(contentLayoutId, mainContainer, false)
         mainContainer.addView(mainContentView)
 
         val toolBarContainer: FrameLayout = findViewById(R.id.app_bar_container)
-        val toolBarContentView: View = inflater.inflate(toolbarLayoutId, toolBarContainer, false)
+        val toolBarContentView: View? = inflater?.inflate(toolbarLayoutId, toolBarContainer, false)
         toolBarContainer.addView(toolBarContentView)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar);
         initNavigation(toolbar)
     }
 
@@ -112,46 +167,56 @@ abstract class NavigationActivity : AppCompatActivity(),
                               toolbar,
                               R.string.navigation_drawer_open,
                               R.string.navigation_drawer_close)
-            .apply {
+                .apply {
             drawerArrowDrawable.color = resources.getColor(R.color.white)
             syncState()
         }
 
-        navigationView.apply {
+        navigationView?.apply {
             setNavigationItemSelectedListener(this@NavigationActivity)
             itemIconTintList = null
-            menu.getItem(StorageManager.getVariable(PREVIOUS_OPENED_ACTIVITY,
-                    default = NBU_ACTIVITY)).isChecked = true
         }
     }
 
     private fun initDrawerHeader( ) {
-        val headerView: View = navigationView.getHeaderView(0)
-        val parentView: ConstraintLayout = headerView.findViewById(R.id.draw_header_parent)
+        val headerView: View? = navigationView?.getHeaderView(0)
+        val parentView: ConstraintLayout? = headerView?.findViewById(R.id.draw_header_parent)
 
-        backgroundAnimation = parentView.background as AnimationDrawable
-        backgroundAnimation?.setEnterFadeDuration(5000)
-        backgroundAnimation?.setExitFadeDuration(2000)
-        backgroundAnimation?.start()
+        navHeaderAnimation = parentView?.background as AnimationDrawable
+        navHeaderAnimation?.setEnterFadeDuration(5000)
+        navHeaderAnimation?.setExitFadeDuration(2000)
+        navHeaderAnimation?.start()
 
         headerView.findViewById<TextView>(R.id.version).text = BuildConfig.VERSION_NAME
     }
 
     private fun launchNbuActivity() {
-        StorageManager.saveVariable(PREVIOUS_OPENED_ACTIVITY, NBU_ACTIVITY)
-        nawDrawer.closeDrawer(GravityCompat.START)
-        startActivity(Intent(this, NbuActivity::class.java).addFlags(FLAG_ACTIVITY_SINGLE_TOP))
+        StorageManager.saveVariable(OPENED_ACTIVITY, NBU_ACTIVITY)
+
+        nawDrawer?.closeDrawer(GravityCompat.START)
+
+        startActivity(Intent(this, NbuActivity::class.java)
+                          .addFlags(FLAG_ACTIVITY_SINGLE_TOP))
     }
 
     private fun launchOrganizationActivity() {
-        StorageManager.saveVariable(PREVIOUS_OPENED_ACTIVITY, ORGANIZATION_ACTIVITY)
-        nawDrawer.closeDrawer(GravityCompat.START)
+        StorageManager.saveVariable(OPENED_ACTIVITY, ORGANIZATION_ACTIVITY)
+
+        nawDrawer?.closeDrawer(GravityCompat.START)
+
         startActivity(Intent(this, OrganizationActivity::class.java)
                           .addFlags(FLAG_ACTIVITY_SINGLE_TOP))
     }
 
+    private fun launchSettingsActivity() {
+        nawDrawer?.closeDrawer(GravityCompat.START)
+
+        startActivity(Intent(this, SettingsActivity::class.java)
+            .addFlags(FLAG_ACTIVITY_SINGLE_TOP))
+    }
+
     private fun setEnglishLanguage() {
-        nawDrawer.closeDrawer(GravityCompat.START)
+        nawDrawer?.closeDrawer(GravityCompat.START)
 
         val englishAlreadyChosen: Boolean = StorageManager.getVariable(
             SELECTED_LANGUAGE, UKRAINIAN_LANGUAGE) == ENGLISH_LANGUAGE
@@ -163,7 +228,7 @@ abstract class NavigationActivity : AppCompatActivity(),
     }
 
     private fun setUkrainianLanguage() {
-        nawDrawer.closeDrawer(GravityCompat.START)
+        nawDrawer?.closeDrawer(GravityCompat.START)
 
         val ukrainianAlreadyChosen = StorageManager.getVariable(
             SELECTED_LANGUAGE, UKRAINIAN_LANGUAGE) == UKRAINIAN_LANGUAGE
@@ -172,6 +237,18 @@ abstract class NavigationActivity : AppCompatActivity(),
 
         Localization.setLocale(this, UKRAINIAN_LANGUAGE)
         recreate()
+    }
+
+    private fun setCheckedNavigationViewItem(position: Int){
+        navigationView?.menu?.getItem(position)?.isChecked = true
+    }
+
+    interface ActionBarItemClickListener {
+        fun onUpdate()
+    }
+
+    companion object {
+        private val navigationMenuCheckedItemPositions: Stack<Int> = Stack()
     }
 }
 

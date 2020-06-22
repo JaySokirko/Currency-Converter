@@ -47,7 +47,7 @@ class CurrencyView : LinearLayoutCompat {
     }
 
     private fun init() {
-        rootLayout = inflater.inflate(R.layout.view_bankcurrency_layout, this, false) as ViewGroup
+        rootLayout = inflater.inflate(R.layout.view_organization_currency_layout, this, false) as ViewGroup
         addView(rootLayout)
 
         title = rootLayout.findViewById(R.id.currency_title)
