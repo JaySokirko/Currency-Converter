@@ -80,7 +80,7 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver,
         observeOrganization()
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onActivityStopped() {
         disposable.clear()
     }
