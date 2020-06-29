@@ -1,12 +1,10 @@
-package com.jay.currencyconverter.repository
+package com.jay.currencyconverter.repository.database.nbu
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import com.jay.currencyconverter.BaseApplication
 import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
-import com.jay.currencyconverter.repository.room.NbuDao
-import com.jay.currencyconverter.repository.room.NbuEntity
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -64,7 +62,12 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
         val entityList: MutableList<NbuEntity> = mutableListOf()
 
         itemsList.forEach { currency ->
-            entityList.add(NbuEntity(currency ,isShouldDisplayed = true))
+            entityList.add(
+                NbuEntity(
+                    currency,
+                    isShouldDisplayed = true
+                )
+            )
             displayedCurrenciesList.put(currency, true)
         }
 
@@ -106,7 +109,12 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
                 it.currency.currencyAbbreviation == currency.currencyAbbreviation
             }
             if (entity == null){
-                entityToInsert.add(NbuEntity(currency, displayedCurrenciesList[currency] ?: false))
+                entityToInsert.add(
+                    NbuEntity(
+                        currency,
+                        displayedCurrenciesList[currency] ?: false
+                    )
+                )
             }
         }
 
@@ -159,6 +167,7 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
 
     companion object {
         private val database: NbuDao = BaseApplication.dataBase.nbuDao()
-        val instance = NbuDatabaseManager()
+        val instance =
+            NbuDatabaseManager()
     }
 }

@@ -1,4 +1,4 @@
-package com.jay.currencyconverter.repository.room
+package com.jay.currencyconverter.repository.database.nbu
 
 import androidx.room.*
 import io.reactivex.Flowable
