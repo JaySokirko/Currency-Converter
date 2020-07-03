@@ -79,7 +79,7 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
 
         itemsList.forEach { currency: NbuCurrency ->
             val currentEntity: NbuEntity? =
-                entityList.find { currency.currencyAbbreviation == it.currency.currencyAbbreviation }
+                entityList.find { currency.currencyAbbreviation == it.currency?.currencyAbbreviation }
 
             if (currentEntity == null) {
                 displayedCurrenciesList.put(currency, true)
@@ -97,7 +97,7 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
 
         entityList.forEach { entity: NbuEntity ->
             val currency: NbuCurrency? = displayedCurrenciesList.keys.find {
-                it.currencyAbbreviation == entity.currency.currencyAbbreviation
+                it.currencyAbbreviation == entity.currency?.currencyAbbreviation
             }
             if (currency != null) {
                 entityToUpdate.add(entity)
@@ -106,7 +106,7 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
 
         displayedCurrenciesList.keys.forEach {currency ->
             val entity: NbuEntity? = entityList.find {
-                it.currency.currencyAbbreviation == currency.currencyAbbreviation
+                it.currency?.currencyAbbreviation == currency.currencyAbbreviation
             }
             if (entity == null){
                 entityToInsert.add(
@@ -148,7 +148,7 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
 
                 result.forEach { entity ->
                     val currency: NbuCurrency? = displayedCurrenciesList.keys.find { currency ->
-                        entity.currency.currencyAbbreviation == currency.currencyAbbreviation
+                        entity.currency?.currencyAbbreviation == currency.currencyAbbreviation
                     }
                     if (currency != null){
                         displayedCurrenciesList[currency] = entity.isShouldDisplayed
@@ -167,7 +167,6 @@ class NbuDatabaseManager private constructor() : LifecycleObserver {
 
     companion object {
         private val database: NbuDao = BaseApplication.dataBase.nbuDao()
-        val instance =
-            NbuDatabaseManager()
+        val instance = NbuDatabaseManager()
     }
 }
