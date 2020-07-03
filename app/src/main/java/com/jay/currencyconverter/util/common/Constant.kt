@@ -22,6 +22,7 @@ object Constant {
     const val CALCULATOR_HINTS_NOT_SHOWN = "calculatorHintsNotShown"
     const val OPEN_CALCULATOR_HINT_NOT_SHOWN = "openCalculatorHint"
     const val DISPLAYED_CURRENCIES_SETTINGS_HINT_NOT_SHOWN = "displayedCurrenciesSettingsNotShown"
+    const val SSL_HAND_SHAKE_ABORTED_MSG = "SSL handshake aborted"
 
     const val CURRENCIES_NOT_CHOSEN = 0
     const val CURRENCIES_CHOSEN = 1

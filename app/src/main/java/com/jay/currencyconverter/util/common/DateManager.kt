@@ -10,6 +10,10 @@ import java.util.*
 class DateManager {
 
     var dateFormat: SimpleDateFormat = SimpleDateFormat("yyyyMMdd")
+
+    /**
+     * Returns current date in format yyyyMMdd. For example 20200703
+     */
     val currentDate: String = dateFormat.format(Date())
 
     /**
@@ -20,8 +24,12 @@ class DateManager {
      * For instance "dd/MM/yyyy"
      * @return the short weekday name
      */
-    @Throws(exceptionClasses = [IllegalStateException::class])
-    fun getDayName(context: Context, date: String, dateFormat: SimpleDateFormat) : String {
+    @Throws(exceptionClasses = [IllegalStateException::class, NullPointerException::class])
+    fun getDayName(
+        context: Context,
+        date: String,
+        dateFormat: SimpleDateFormat = this.dateFormat
+    ) : String {
         val calendar: Calendar = Calendar.getInstance()
         calendar.time = dateFormat.parse(date)
         return when(calendar[Calendar.DAY_OF_WEEK]) {
@@ -39,7 +47,8 @@ class DateManager {
     /**
      * Allows to get a special date depending on the deviation from the current date.
      * @param amount the deviation from the current date.
-     * For instance if today is 12.12.2020 and amount is "-2" the method will return 10.12.2020.
+     * For instance if today is 12.12.2020 and amount is "-2" the method will return 10122020
+     * which means 10.12.2020
      * @param dateFormat the format in which the method will return the date
      * @return the formatted specific date
      */
