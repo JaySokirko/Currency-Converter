@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
 
 @Entity
-class NbuEntity(@Embedded var currency: NbuCurrency, var isShouldDisplayed: Boolean) {
+data class NbuEntity(@Embedded var currency: NbuCurrency? = null, var isShouldDisplayed: Boolean) {
 
     @PrimaryKey(autoGenerate = true)
     var id = 0L
