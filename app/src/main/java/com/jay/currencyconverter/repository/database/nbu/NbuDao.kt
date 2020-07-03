@@ -33,10 +33,4 @@ interface NbuDao {
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun updateAll(nbu: List<NbuEntity>)
-
-    @Delete
-    fun delete(nbu: NbuEntity)
-
-    @Delete
-    fun deleteAll(nbu: List<NbuEntity>)
 }

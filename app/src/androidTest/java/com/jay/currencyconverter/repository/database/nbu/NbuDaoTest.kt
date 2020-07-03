@@ -5,6 +5,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
 import com.jay.currencyconverter.repository.database.DataBase
 import io.reactivex.android.schedulers.AndroidSchedulers
+import org.junit.AfterClass
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.BeforeClass
@@ -33,6 +34,12 @@ class NbuDaoTest {
             repeat(INITIAL_DATA_BASE_SIZE) { index ->
                 entityList.add(index, NbuEntity(NbuCurrency(), true))
             }
+        }
+
+        @AfterClass
+        @JvmStatic
+        fun clear(){
+            db.close()
         }
     }
 
