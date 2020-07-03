@@ -13,17 +13,11 @@ interface NbuDao {
     @Query("SELECT * FROM NbuEntity")
     fun getAllSingle(): Single<List<NbuEntity>>
 
-    @Query("SELECT * FROM NbuEntity WHERE abbr = :abbr")
-    fun getCurrencyByAbbreviation(abbr: String): Single<NbuEntity>
-
-    @Query("SELECT * FROM NbuEntity WHERE abbr IN (:abbr)")
-    fun getCurrenciesByAbbreviationList(abbr: List<String>): Single<List<NbuEntity>>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(nbu: NbuEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(all: List<NbuEntity>)
+    fun insertAll(all: MutableList<NbuEntity>)
 
     @Query("UPDATE NbuEntity SET isShouldDisplayed = :isShouldDisplayed WHERE abbr =:abbr")
     fun update(abbr: String, isShouldDisplayed: Boolean)
