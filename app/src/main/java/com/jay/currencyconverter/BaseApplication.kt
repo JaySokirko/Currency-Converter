@@ -7,7 +7,7 @@ import com.jay.currencyconverter.di.base.BaseModule
 import com.jay.currencyconverter.di.base.DaggerBaseComponent
 import com.jay.currencyconverter.di.network.DaggerNetworkComponent
 import com.jay.currencyconverter.di.network.NetworkComponent
-import com.jay.currencyconverter.repository.room.DataBase
+import com.jay.currencyconverter.repository.database.DataBase
 
 class BaseApplication : Application() {
 

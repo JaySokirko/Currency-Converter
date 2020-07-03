@@ -12,7 +12,7 @@ import com.jay.currencyconverter.databinding.ActivityNbuBinding
 import com.jay.currencyconverter.di.nbuActivity.DaggerNbuActivityComponent
 import com.jay.currencyconverter.model.ResponseWrapper
 import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
-import com.jay.currencyconverter.repository.NbuDatabaseManager
+import com.jay.currencyconverter.repository.database.nbu.NbuDatabaseManager
 import com.jay.currencyconverter.ui.NavigationActivity
 import com.jay.currencyconverter.ui.adapter.ChartCurrencyAdapter
 import com.jay.currencyconverter.ui.adapter.DisplayedCurrenciesAdapter

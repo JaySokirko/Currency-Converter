@@ -1,6 +1,5 @@
 package com.jay.currencyconverter.ui.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,7 @@ import com.google.android.material.checkbox.MaterialCheckBox
 import com.jakewharton.rxbinding.view.RxView
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
-import com.jay.currencyconverter.repository.NbuDatabaseManager
+import com.jay.currencyconverter.repository.database.nbu.NbuDatabaseManager
 import com.jay.currencyconverter.ui.adapter.viewHolder.BaseViewHolder
 import com.jay.currencyconverter.ui.adapter.viewHolder.NbuCurrencyBaseViewHolder
 import io.reactivex.disposables.CompositeDisposable

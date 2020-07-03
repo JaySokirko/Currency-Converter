@@ -1,6 +1,5 @@
 package com.jay.currencyconverter.ui.nbuActivity
 
-import android.util.Log
 import android.view.View
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
@@ -10,7 +9,7 @@ import androidx.lifecycle.OnLifecycleEvent
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.ResponseWrapper
 import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
-import com.jay.currencyconverter.repository.NbuDatabaseManager
+import com.jay.currencyconverter.repository.database.nbu.NbuDatabaseManager
 import com.jay.currencyconverter.util.common.ConnectionErrorHandler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

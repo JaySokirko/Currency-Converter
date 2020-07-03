@@ -19,4 +19,6 @@ interface CurrencyExchangeRateApi {
     fun getNbuExchangeByCurrencyAndDate(@Query("valcode") code: String,
                                         @Query("date") date: String ): Observable<MutableList<NbuCurrency>>
 
+
+
 }
