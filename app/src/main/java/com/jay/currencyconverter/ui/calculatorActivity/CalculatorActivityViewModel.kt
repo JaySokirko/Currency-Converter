@@ -24,7 +24,7 @@ import com.jay.currencyconverter.util.common.CurrencyCalculator
 import com.jay.currencyconverter.util.common.NumberFormatter
 import com.jay.currencyconverter.util.common.ObservableFieldWrapper
 import com.jay.currencyconverter.util.common.ValueChangeListener
-import com.jay.currencyconverter.util.executeIfNotNull
+import com.jay.currencyconverter.util.executeIfParamsNotNull
 import com.jay.currencyconverter.util.removeLastChar
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -187,7 +187,7 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver,
             conversionCurrencyCancelBtnIcon.set(conversionCurrencyChangeListener.value?.getImage(context))
         }
 
-        executeIfNotNull(baseCurrencyChangeListener.value, conversionCurrencyChangeListener.value)
+        executeIfParamsNotNull(baseCurrencyChangeListener.value, conversionCurrencyChangeListener.value)
         { baseCurrency, conversionCurrency ->
             isCurrenciesChosen.set(true)
             setupExchangeRate(baseCurrency.rate.toString(), conversionCurrency.rate.toString())
@@ -299,7 +299,7 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver,
     }
 
     private fun setupExchangeRate(baseCurrencyRate: String?, conversionCurrencyRate: String?) {
-        executeIfNotNull(baseCurrencyRate, conversionCurrencyRate) { baseRate, conversionRate ->
+        executeIfParamsNotNull(baseCurrencyRate, conversionCurrencyRate) { baseRate, conversionRate ->
 
             exchangeRateText.set(CurrencyCalculator.calculateExchangeRate(
                 baseRate.toBigDecimal(),
@@ -309,7 +309,7 @@ class CalculatorActivityViewModel : ViewModel(), LifecycleObserver,
     }
 
     private fun calculateResult() {
-        executeIfNotNull(exchangeRateText.get(), enteredValue.get()) { exchangeRate, enteredValue ->
+        executeIfParamsNotNull(exchangeRateText.get(), enteredValue.get()) { exchangeRate, enteredValue ->
 
             if (!isCurrenciesChosen.get()) return
 

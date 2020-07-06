@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.cardview.widget.CardView
 import androidx.lifecycle.LifecycleObserver
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -63,7 +62,7 @@ class NbuExchangeRateAdapter : AnimatedRecyclerAdapter<NbuCurrency>(), Lifecycle
         private val abr: AppCompatTextView = itemView.findViewById(R.id.currency_abr)
         private val name: AppCompatTextView = itemView.findViewById(R.id.currency_name)
         private val rate: AppCompatTextView = itemView.findViewById(R.id.rate)
-        override val rootView: CardView = itemView.findViewById(R.id.root_view)
+        override val rootView: View = itemView.findViewById(R.id.root_view)
 
         override fun bind(item: NbuCurrency) {
 

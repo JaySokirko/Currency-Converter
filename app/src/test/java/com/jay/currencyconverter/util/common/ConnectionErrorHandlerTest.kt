@@ -1,19 +1,21 @@
 package com.jay.currencyconverter.util.common
 
 import com.jay.currencyconverter.util.common.Constant.SSL_HAND_SHAKE_ABORTED_MSG
+import junitparams.JUnitParamsRunner
+import junitparams.Parameters
 import org.junit.After
-import org.junit.Assert
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.junit.runner.RunWith
 
-import org.junit.Assert.*
-import org.junit.Before
-
+@RunWith(JUnitParamsRunner::class)
 class ConnectionErrorHandlerTest {
 
-    var isErrorHandled = false
+    private var isErrorHandled = false
 
     @After
-    fun after() {
+    fun afterEach() {
         isErrorHandled = false
     }
 

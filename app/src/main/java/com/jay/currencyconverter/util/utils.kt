@@ -3,7 +3,8 @@ package com.jay.currencyconverter.util
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-inline fun <T1 : Any, T2 : Any, R : Any> executeIfNotNull(p1: T1?, p2: T2?, execute: (T1, T2) -> R?): R? {
+inline fun <T1 : Any, T2 : Any, R : Any> executeIfParamsNotNull(p1: T1?, p2: T2?,
+                                                                execute: (T1, T2) -> R?): R? {
     return if (p1 != null && p2 != null) execute(p1, p2) else null
 }
 

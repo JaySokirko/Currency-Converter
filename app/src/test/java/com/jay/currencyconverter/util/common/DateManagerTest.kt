@@ -13,7 +13,7 @@ class DateManagerTest {
 
     @Test
     fun getDate() {
-        val date = dateManager.getDate(0, dateManager.dateFormat)
+        val date: String = dateManager.getDate(0, dateManager.dateFormat)
         Assert.assertEquals(date, dateManager.currentDate)
     }
 }

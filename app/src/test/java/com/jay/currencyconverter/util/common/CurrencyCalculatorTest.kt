@@ -1,9 +1,8 @@
 package com.jay.currencyconverter.util.common
 
 import com.jay.currencyconverter.util.round
+import org.junit.Assert.assertEquals
 import org.junit.Test
-
-import org.junit.Assert.*
 import java.math.BigDecimal
 
 class CurrencyCalculatorTest {
