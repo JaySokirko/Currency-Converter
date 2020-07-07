@@ -23,7 +23,7 @@ import rx.subscriptions.CompositeSubscription
 import java.util.concurrent.TimeUnit
 
 
-class DisplayedCurrenciesAdapter : RecyclerView.Adapter<BaseViewHolder<NbuCurrency>>(), LifecycleObserver {
+class DisplayedCurrenciesAdapter : RecyclerView.Adapter<NbuCurrencyBaseViewHolder>(), LifecycleObserver {
 
     val mainCheckboxClickEvent: PublishSubject<Boolean> = PublishSubject.create()
 
@@ -46,14 +46,14 @@ class DisplayedCurrenciesAdapter : RecyclerView.Adapter<BaseViewHolder<NbuCurren
         disposable.add(subscribe)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<NbuCurrency> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NbuCurrencyBaseViewHolder {
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_currency_choice, parent, false)
 
         return DisplayedCurrencyVH(view)
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder<NbuCurrency>, position: Int) {
+    override fun onBindViewHolder(holder: NbuCurrencyBaseViewHolder, position: Int) {
         holder.bind(currencyList[position])
     }
 

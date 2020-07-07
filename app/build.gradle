@@ -15,7 +15,7 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+                arguments = ["room.schemaLocation": "$projectDir/databaseSchema".toString()]
             }
         }
     }
@@ -73,14 +73,14 @@ android {
         prod {
             applicationId = "$packageSuffixCommon"
             signingConfig signingConfigs.release
-            versionCode = 2
-            versionName = "1.0.1 beta"
+            versionCode = 3
+            versionName = "1.0.2 beta"
         }
     }
 
     sourceSets {
-        //This will give access to the Schemas folder for testing
-        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+        //This will give access to the database schema folder for testing
+        androidTest.assets.srcDirs += files("$projectDir/databaseSchema".toString())
 
         prod {
             res.srcDirs =

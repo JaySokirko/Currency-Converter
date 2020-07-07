@@ -8,13 +8,12 @@ import com.google.android.material.checkbox.MaterialCheckBox
 import com.jay.currencyconverter.R
 import com.jay.currencyconverter.model.exchangeRate.NbuCurrency
 
-open class NbuCurrencyBaseViewHolder(itemView: View) : AnimatedViewHolder<NbuCurrency>(itemView) {
+open class NbuCurrencyBaseViewHolder(itemView: View) : BaseViewHolder<NbuCurrency>(itemView) {
 
     protected val currencyIcon: AppCompatImageView = itemView.findViewById(R.id.currency_image)
     protected val currencyAbr: AppCompatTextView = itemView.findViewById(R.id.currency_abr)
     protected val currencyName: AppCompatTextView = itemView.findViewById(R.id.currency_name)
     protected val checkBox: MaterialCheckBox = itemView.findViewById(R.id.currency_choice_check_box)
-    override val rootView: CardView = itemView.findViewById(R.id.root_view)
 
     override fun bind(item: NbuCurrency) {
 

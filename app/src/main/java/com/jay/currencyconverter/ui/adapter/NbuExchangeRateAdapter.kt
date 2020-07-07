@@ -70,8 +70,6 @@ class NbuExchangeRateAdapter : AnimatedRecyclerAdapter<NbuCurrency>(), Lifecycle
             abr.text = item.currencyAbbreviation
             name.text = item.getName(itemView.context)
             rate.text = item.rate.toString()
-
-            setAnimation(item.getAbr(itemView.context))
         }
     }
 }

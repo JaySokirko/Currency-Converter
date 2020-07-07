@@ -27,6 +27,9 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_organization.*
 import kotlinx.android.synthetic.main.default_toolbar.*
 import rx.android.schedulers.AndroidSchedulers
+import java.util.concurrent.Executor
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
