@@ -11,4 +11,5 @@ object ViewHelper {
         Observable.interval(10, 100, TimeUnit.SECONDS)
             .subscribe { if (view.isVisible) onAppear() }
     }
+    
 }
