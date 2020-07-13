@@ -49,9 +49,9 @@ abstract class NavigationActivity : BaseActivity(),
     protected var isDataAlreadyLoaded = false
     protected var mainContentView: View? = null
 
+    private var navHeaderAnimation: AnimationDrawable? = null
     private var nawDrawer: DrawerLayout? = null
     private var navigationView: NavigationView? = null
-    private var navHeaderAnimation: AnimationDrawable? = null
     private var actionBarItemClickListener: ActionBarItemClickListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +60,7 @@ abstract class NavigationActivity : BaseActivity(),
         setContentView(R.layout.activity_navigation)
 
         noInternetConnectionDialog.setOnDialogButtonsClickListener(this)
+
         navigationMenuCheckedItemPositions.push(StorageManager.getVariable(OPENED_ACTIVITY,
                 ORGANIZATION_ACTIVITY))
 
